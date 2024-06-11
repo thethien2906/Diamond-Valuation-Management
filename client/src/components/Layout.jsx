@@ -6,9 +6,6 @@ import "../App.css"; // Reuse the CSS styles from Home.jsx
 const Layout = ({ children }) => {
   return (
     <div className="home-container">
-      <div className="banner">
-        <h1>SAYGEXDIAMOND</h1>
-      </div>
 
       <nav className="navbar">
         <ul>

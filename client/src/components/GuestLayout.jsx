@@ -6,10 +6,6 @@ import "../App.css"; // Reuse the CSS styles from Home.jsx
 const GuestLayout = ({ children }) => {
   return (
     <div className="home-container">
-      <div className="banner">
-        <h1>SAYGEXDIAMOND</h1>
-      </div>
-
       <nav className="navbar">
         <ul>
           <li><Link to="/about-us-guest">ABOUT US</Link></li>

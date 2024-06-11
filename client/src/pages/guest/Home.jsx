@@ -5,9 +5,6 @@ import '../../App.css'; // Import your CSS file for styling
 const Home = () => {
   return (
     <div className="home-container">
-      <div className="banner">
-        <h1>SAYGEXDIAMOND</h1>
-      </div>
 
       <nav className="navbar">
         <ul>
