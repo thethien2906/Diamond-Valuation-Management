@@ -1,4 +1,5 @@
-// Client/src/pages/ConsultingServices.jsx
+// ConsultingServicesGuest.jsx
+
 import React, { useContext } from "react";
 import GuestLayout from "../../components/GuestLayout";
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +12,7 @@ import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'; // Import AutoAwesomeIcon from Material-UI
 
 const tiers = [
   {
@@ -30,6 +32,7 @@ const tiers = [
     accuracy: 'Higher',
     buttonText: 'Book Appointment',
     buttonVariant: 'contained',
+    recommended: true, // Add recommended flag for Godlike tier
   },
   {
     title: 'Legendary!',
@@ -107,6 +110,14 @@ const ConsultingServicesGuest = () => {
                     <Typography component="h3" variant="h6">
                       {tier.title}
                     </Typography>
+                    {tier.recommended && (
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <AutoAwesomeIcon sx={{ mr: 1 }} /> {/* Icon with margin */}
+                        <Typography variant="body2" color="inherit">
+                          Recommended
+                        </Typography>
+                      </Box>
+                    )}
                   </Box>
                   <Box
                     sx={{
