@@ -13,11 +13,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 
-const logoStyle = {
-  width: '140px',
-  height: 'auto',
-  cursor: 'pointer',
-};
 const Layout = ({ children }) => {
     const [drawerOpen, setDrawerOpen] = React.useState(false);
 

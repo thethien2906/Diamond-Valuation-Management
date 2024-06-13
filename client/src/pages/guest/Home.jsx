@@ -13,12 +13,6 @@ import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import '../../App.css'; // Import your CSS file for additional styling
 
-const logoStyle = {
-  width: '140px',
-  height: 'auto',
-  cursor: 'pointer',
-};
-
 const Home = () => {
   const [drawerOpen, setDrawerOpen] = React.useState(false);
 

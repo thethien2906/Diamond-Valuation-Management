@@ -8,10 +8,6 @@ export default function CustomerDashboard() {
     const {user} = useContext(UserContext)
     return (
         <CustomerLayout>
-        <div>
-            <h1>Dashboard</h1>
-            {!!user && <h2>Hello {user.name}</h2>}
-        </div>
         </CustomerLayout>
     )
 }

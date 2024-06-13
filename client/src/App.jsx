@@ -1,3 +1,4 @@
+// Client/src/App.js
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 
@@ -10,7 +11,7 @@ import { UserContextProvider } from './context/userContext';
 import { ConsultantContextProvider } from './context/ConsultantContext';
 import CustomerDashboard from './pages/customer/CustomerDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
-import ConsultantDashboard from './pages/consultant/ConsultantDashboard';
+import ConsultantDashboardLayout from './pages/consultant/ConsultantDashboardLayout';
 import AppraiserDashboard from './pages/appraiser/AppraiserDashboard';
 import ManagerDashboard from './pages/manager/ManagerDashboard';
 
@@ -22,13 +23,11 @@ import AboutUsGuest from './pages/guest/AboutUsGuest';
 import ConsultingServicesGuest from './pages/guest/ConsultingServicesGuest';
 import ValuationTool from './pages/guest/ValuationTool';
 
-
-
 import BookingForm from './pages/customer/BookingForm';
 import AboutUsCustomer from './pages/customer/AboutUsCustomer';
 import ConsultingServicesCustomer from './pages/customer/ConsultingServicesCustomer';
 
-
+import PendingRequests from './pages/consultant/PendingRequests';
 import RequestViewDetail from './pages/consultant/RequestViewDetail';
 import AppointmentCalendar from './pages/consultant/AppointmentCalendar';
 
@@ -45,30 +44,33 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           
-          {/* Dashboard (this one is public, assuming it's a general overview) */}
           <Route path="/dashboard" element={<CustomerDashboard />} />
 
-          {/* Routes for Role-Specific Dashboards */}
-          <Route path="/admin/users" element={<ViewUsers />} /> 
-          <Route path="/admin/staff" element={<ViewStaffs />} /> 
-          <Route path="/admin" element={<AdminDashboard />} />
-          <Route path="/consultant" element={<ConsultantDashboard />} />
+          {/* Nested routes under AdminDashboard */}
+          <Route path="/admin" element={<AdminDashboard />}>
+            <Route path="users" element={<ViewUsers />} />
+            <Route path="staff" element={<ViewStaffs />} />
+            <Route path="add-user" element={<AddingForm />} />
+          </Route>
+
+          {/* Nested routes under ConsultantDashboard */}
+          <Route path="/consultant" element={<ConsultantDashboardLayout />}>
+            <Route index element={<PendingRequests />} />
+            <Route path="requests/:bookingId" element={<RequestViewDetail />} />
+            <Route path="appointments" element={<AppointmentCalendar />} />
+          </Route>
+
           <Route path="/appraiser" element={<AppraiserDashboard />} />
           <Route path="/manager" element={<ManagerDashboard />} />
-
-          <Route path="/admin/add-user" element={<AddingForm />} />
-
+          
           <Route path="/about-us-guest" element={<AboutUsGuest />} />
           <Route path="/consulting-services-guest" element={<ConsultingServicesGuest />} />
           <Route path="/valuation-tool" element={<ValuationTool />} />
 
           <Route path="/about-us-customer" element={<AboutUsCustomer />} />
           <Route path="/consulting-services-customer" element={<ConsultingServicesCustomer />} />
-          {/* <Route path="/valuation-tool" element={<ValuationTool />} /> */}
-
+          
           <Route path="/booking" element={<BookingForm />} />
-          <Route path="/consultant/requests/:bookingId" element={<RequestViewDetail />} /> 
-          <Route path="/consultant/appointments" element={<AppointmentCalendar />} /> 
         </Routes>
       </ConsultantContextProvider>
     </UserContextProvider>

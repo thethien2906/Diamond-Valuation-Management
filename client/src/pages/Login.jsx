@@ -3,7 +3,6 @@ import { useNavigate, Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { UserContext } from "../context/userContext";
-
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -19,7 +18,6 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-
 // Footer component
 function Copyright(props) {
   return (
@@ -103,7 +101,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random?wallpapers)',
+            backgroundImage: 'url(/wp2271188-cristiano-ronaldo-celebration-wallpapers.jpg?url)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
