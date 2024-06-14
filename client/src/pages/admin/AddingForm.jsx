@@ -2,9 +2,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Input, Button } from '@chakra-ui/react'
-import { toast } from 'react-hot-toast'
-//chakra ui components
+import { TextField, Button, Box, Typography, MenuItem, Container, Grid } from '@mui/material';
+import { toast } from 'react-hot-toast';
 
 const AddingForm = () => {
   const navigate = useNavigate();
@@ -12,9 +11,8 @@ const AddingForm = () => {
     name: "",
     email: "",
     password: "",
-    role: "", // Default role is "user"
+    role: "",
   });
-  // const [role, setRole] = useState('user')
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -24,11 +22,10 @@ const AddingForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/users", formData); // Change the route to "/api/users"
+      await axios.post("/users", formData);
       navigate("/admin/staff");
     } catch (error) {
       console.error("Error adding user:", error);
-      // Handle errors here (display an error message to the user)
       if (error.response && error.response.data && error.response.data.message) {
         toast.error(error.response.data.message);
       } else {
@@ -38,70 +35,83 @@ const AddingForm = () => {
   };
 
   return (
-    <div className="mt-5">
-      <h2>Add New User</h2>
-      <form onSubmit={handleSubmit} className="mt-5">
-        <div className="my-3">
-          <label htmlFor="name">Name:</label>
-          <Input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            size='md'
-            className="w-50"
-          />
-        </div>
-
-        <div className="my-3">
-          <label htmlFor="email">Email:</label>
-          <Input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            size='md'
-            className="w-50"
-          />
-        </div>
-
-        <div className="my-3">
-          <label htmlFor="password">Password:</label>
-          <Input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            size='md'
-            className="w-50"
-          />
-        </div>
-
-        <div className="my-3">
-          <label htmlFor="role">Role:</label>
-          <select
-            id="role"
-            name="role"
-            value={formData.role}
-            onChange={handleChange}
-            className="w-50"
+    <Container maxWidth="md">
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        sx={{
+          mt: 5,
+          padding: 3,
+          boxShadow: 3,
+          borderRadius: 2,
+          backgroundColor: '#fff',
+        }}
+      >
+        <Typography variant="h4" component="h2" sx={{ mb: 4, textAlign: 'center' }}>
+          Add New User
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={3}>
+            <TextField
+              label="Name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <TextField
+              label="Email"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <TextField
+              label="Password"
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              fullWidth
+              variant="outlined"
+            />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <TextField
+              label="Role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              select
+              fullWidth
+              variant="outlined"
+            >
+              <MenuItem value="consultant">Consultant</MenuItem>
+              <MenuItem value="appraiser">Appraiser</MenuItem>
+              <MenuItem value="manager">Manager</MenuItem>
+              <MenuItem value="admin">Admin</MenuItem>
+            </TextField>
+          </Grid>
+        </Grid>
+        <Box sx={{ textAlign: 'center', mt: 3 }}>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
           >
-            
-            <option value="consultant">consultant</option>
-            <option value="appraiser">appraiser</option>
-            <option value="manager">manager</option>
-            <option value="admin">admin</option>
-          </select>
-        </div>
-
-        <Button colorScheme='blue' type="submit">Add</Button>
-      </form>
-    </div>
+            Add
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 };
 
 export default AddingForm;
-

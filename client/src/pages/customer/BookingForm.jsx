@@ -1,12 +1,19 @@
-// Client/src/pages/BookingForm.jsx
 import React, { useState, useEffect } from "react";
 import toast, { Toaster } from "react-hot-toast";
-import "../../App.css";
-import axios from "axios"; 
+import axios from "axios";
+import Container from "@mui/material/Container";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { useNavigate } from "react-router-dom";
+import { IconButton } from "@mui/material";
+
 const BookingForm = () => {
   const [formData, setFormData] = useState({
     name: "",
-    email: "", 
+    email: "",
     phoneNumber: "",
     identityCard: "",
     address: "",
@@ -15,8 +22,8 @@ const BookingForm = () => {
   });
 
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [consultantId, setConsultantId] = useState(null); 
-
+  const [consultantId, setConsultantId] = useState(null);
+  const navigate = useNavigate();
   useEffect(() => {
     // Fetch available consultant ID when the component mounts
     const fetchConsultantId = async () => {
@@ -94,35 +101,93 @@ const BookingForm = () => {
 
   const today = new Date().toISOString().split('T')[0];
 
+  const handleNavigateBack = () => {
+    navigate("/about-us-guest");
+  };
+
   return (
-    <div className="booking-form-container">
+    <Container maxWidth="sm">
       <Toaster />
-      <h2>Please fill out this form to book an appointment.</h2>
-      <p>We need your contact information to confirm your booking.</p>
-
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
-        <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} /> {/* Added email field */}
-        <input type="text" name="phoneNumber" placeholder="Phone Number" value={formData.phoneNumber} onChange={handleChange} />
-        <input type="text" name="address" placeholder="Address" value={formData.address} onChange={handleChange} />
-        <input type="text" name="identityCard" placeholder="Identity Card" value={formData.identityCard} onChange={handleChange} />
-        <input
-          type="date"
-          name="date"
-          value={formData.date}
-          onChange={handleChange}
-          min={today}
-        />
-        <input type="time" name="time" min="09:00" max="17:00" value={formData.time} onChange={handleChange} />
-        <button type="submit">BOOK</button>
-      </form>
-
-      {showConfirmation && (
-        <div className="confirmation-message">
-          Thank you for booking! We will call you back to confirm your appointment.
-        </div>
-      )}
-    </div>
+      <Box sx={{ mt: 8, mb: 4 }}>
+        <IconButton onClick={handleNavigateBack} sx={{ position: 'absolute', left: 50, top: 50 }}>
+          <ArrowBackIcon />
+        </IconButton>
+        <Typography variant="h4" component="h2" gutterBottom sx={{ textAlign: "center" }}>
+          Please fill out this form to book an appointment.
+        </Typography>
+        <Typography variant="body1" paragraph sx={{ textAlign: "center" }}>
+          We need your contact information to confirm your booking.
+        </Typography>
+        <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          <TextField
+            label="Name"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            fullWidth
+          />
+          <TextField
+            label="Email"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            fullWidth
+          />
+          <TextField
+            label="Phone Number"
+            name="phoneNumber"
+            value={formData.phoneNumber}
+            onChange={handleChange}
+            fullWidth
+          />
+          <TextField
+            label="Address"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            fullWidth
+          />
+          <TextField
+            label="Identity Card"
+            name="identityCard"
+            value={formData.identityCard}
+            onChange={handleChange}
+            fullWidth
+          />
+          <TextField
+            label="Date"
+            name="date"
+            type="date"
+            value={formData.date}
+            onChange={handleChange}
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ min: today }}
+            fullWidth
+          />
+          <TextField
+            label="Time"
+            name="time"
+            type="time"
+            value={formData.time}
+            onChange={handleChange}
+            InputLabelProps={{ shrink: true }}
+            inputProps={{ min: "09:00", max: "17:00" }}
+            fullWidth
+          />
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            BOOK
+          </Button>
+        </Box>
+        {showConfirmation && (
+          <Box sx={{ mt: 4 }}>
+            <Typography variant="body1" color="primary" sx={{ textAlign: "center" }}>
+              Thank you for booking! We will call you back to confirm your appointment.
+            </Typography>
+          </Box>
+        )}
+      </Box>
+    </Container>
   );
 };
 

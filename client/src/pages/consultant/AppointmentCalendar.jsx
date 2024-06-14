@@ -1,15 +1,30 @@
-// client/src/pages/AppointmentCalendar.jsx
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import {
+  Button,
+  Box,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Toolbar,
+  AppBar,
+  CircularProgress,
+  useTheme, // Import useTheme hook
+} from "@mui/material";
 
 const AppointmentCalendar = () => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const [approvedBookings, setApprovedBookings] = useState([]);
   const [showTable, setShowTable] = useState(false);
+  const theme = useTheme(); // Use the theme hook
 
   const fetchApprovedBookings = async () => {
     try {
@@ -20,16 +35,11 @@ const AppointmentCalendar = () => {
       setShowTable(true);
     } catch (error) {
       console.error("Error fetching appointments:", error);
-      // Handle error (display error message to user)
     }
   };
 
   const handleRefresh = () => {
-    fetchApprovedBookings(); // Call the fetch function when the button is clicked
-  };
-
-  const handleViewDetail = (bookingId) => {
-    navigate(`/consultant/requests/${bookingId}`);
+    fetchApprovedBookings();
   };
 
   const handleLogout = async () => {
@@ -43,50 +53,80 @@ const AppointmentCalendar = () => {
     }
   };
 
+  useEffect(() => {
+    fetchApprovedBookings();
+  }, []);
+
   return (
-    <div>
-      <button onClick={handleLogout}>Logout</button>
-
-      <h2>Approved Appointments</h2>
-      {!showTable && <button onClick={handleRefresh}>Refresh</button>}
-
-      {showTable && ( // Conditionally render the table
-        <>
-          {approvedBookings.length === 0 ? (
-            <p>No approved appointments.</p>
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Request ID</th>
-                  <th>Name</th>
-                  <th>Phone</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {approvedBookings.map((booking, index) => (
-                  <tr key={booking._id}>
-                    <td>{index + 1}</td>
-                    <td>{booking._id}</td>
-                    <td>{booking.name}</td>
-                    <td>{booking.phoneNumber}</td>
-                    <td>
-                      <Link to={`/consultant/requests/${booking._id}`}>
-                        View Detail
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </>
-      )}
-    </div>
+    <Box sx={{ display: 'flex' }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          bgcolor: 'background.default',
+          p: 3,
+          [theme.breakpoints.down('md')]: {
+            p: 1, // Reduce padding on smaller screens
+          },
+        }}
+      >
+        <Typography variant="h6" component="div">
+          Approved Appointments
+        </Typography>
+        {!showTable && (
+          <Button onClick={handleRefresh} variant="contained" sx={{ mt: 2 }}>
+            Refresh
+          </Button>
+        )}
+        {showTable && (
+          <Box sx={{ mt: 2 }}>
+            {approvedBookings.length === 0 ? (
+              <Typography variant="body1">No approved appointments.</Typography>
+            ) : (
+              <>
+                <Button onClick={handleRefresh} variant="contained" sx={{ mb: 2 }}>
+                  Refresh
+                </Button>
+                <TableContainer component={Paper}>
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>No</TableCell>
+                        <TableCell>Request ID</TableCell>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Phone</TableCell>
+                        <TableCell>Actions</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {approvedBookings.map((booking, index) => (
+                        <TableRow key={booking._id}>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>{booking._id}</TableCell>
+                          <TableCell>{booking.name}</TableCell>
+                          <TableCell>{booking.phoneNumber}</TableCell>
+                          <TableCell>
+                            <Button
+                              component={Link}
+                              to={`/consultant/requests/${booking._id}`}
+                              variant="contained"
+                              color="primary"
+                            >
+                              View Detail
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </>
+            )}
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 };
 
 export default AppointmentCalendar;
-
