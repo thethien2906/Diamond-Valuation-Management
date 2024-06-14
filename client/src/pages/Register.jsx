@@ -46,7 +46,7 @@ export default function Register() {
     e.preventDefault();
     const { name, email, password } = data;
     try {
-      const response = await axios.post('/register', { name, email, password });
+      const response = await axios.post('/auth/register', { name, email, password });
       if (response.data.error) {
         toast.error(response.data.error);
       } else {

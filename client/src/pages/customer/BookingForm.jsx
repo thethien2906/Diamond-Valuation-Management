@@ -102,7 +102,7 @@ const BookingForm = () => {
   const today = new Date().toISOString().split('T')[0];
 
   const handleNavigateBack = () => {
-    navigate("/about-us-guest");
+    navigate("/dashboard");
   };
 
   return (
