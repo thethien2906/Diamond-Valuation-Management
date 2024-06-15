@@ -35,6 +35,7 @@ const ViewRequest = () => {
       console.error("Error approving booking:", error);
     }
   };
+  
 
   const handleDeny = async (bookingId) => {
     try {

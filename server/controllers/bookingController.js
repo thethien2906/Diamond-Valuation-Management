@@ -1,6 +1,6 @@
 const Booking = require('../models/Booking');
 const User = require('../models/User');
-
+const transporter = require('../config/nodemailer');
 const createBooking = async (req, res) => {
   try {
     const bookingData = req.body;
@@ -67,17 +67,51 @@ const updateBooking = async (req, res) => {
   try {
     const bookingId = req.params.bookingId;
     const { status } = req.body;
+
     if (!status || !['approved', 'rejected'].includes(status)) {
       return res.status(400).json({ error: 'Invalid booking status.' });
     }
+
     const updatedBooking = await Booking.findByIdAndUpdate(
       bookingId,
       { status },
       { new: true }
     );
+
     if (!updatedBooking) {
       return res.status(404).json({ error: 'Booking not found.' });
     }
+
+    // Send email if the booking is approved
+    if (status === 'approved') {
+      const consultant = await User.findById(updatedBooking.consultantId);
+
+      if (!consultant) {
+        return res.status(404).json({ error: 'Consultant not found.' });
+      }
+
+      const meetingDetails = {
+        date: updatedBooking.date, // assuming the booking has a date field
+        time: updatedBooking.time, // assuming the booking has a time field
+        address: 'Lô E2a-7, Đường D1, Đ. D1, Long Thạnh Mỹ, Thành Phố Thủ Đức, Thành phố Hồ Chí Minh 700000', // replace with actual meeting address
+      };
+
+      const mailOptions = {
+        from: process.env.SMTP_USER,
+        to: updatedBooking.email,
+        subject: 'Booking Approved - Meeting Details',
+        text: `Dear ${updatedBooking.name},\n\nYour booking has been approved. Here are the meeting details:\n\nDate: ${meetingDetails.date}\nTime: ${meetingDetails.time}\nMeeting Address: ${meetingDetails.address}\n\nBest regards,\n${consultant.name}`
+      };
+
+      await transporter.sendMail(mailOptions, (error, info) => { 
+        if (error) {
+          console.error('Error sending email:', error);
+        } else {
+          console.log('Email sent:', info.response);
+        }
+      });
+    }
+
     res.json(updatedBooking);
   } catch (error) {
     console.error("Error updating booking:", error);
