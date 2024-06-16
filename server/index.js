@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
-
+const receiptRoutes = require('./routes/receiptRoutes');
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.log(err));
@@ -26,6 +26,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use('/auth', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', bookingRoutes);
+app.use('/api', receiptRoutes);
+
 
 const port = 3000;
 app.listen(port, () => {

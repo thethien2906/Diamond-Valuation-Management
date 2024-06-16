@@ -30,6 +30,9 @@ import ConsultingServicesCustomer from './pages/customer/ConsultingServicesCusto
 import PendingRequests from './pages/consultant/PendingRequests';
 import RequestViewDetail from './pages/consultant/RequestViewDetail';
 import AppointmentCalendar from './pages/consultant/AppointmentCalendar';
+import AppointmentViewDetail from './pages/consultant/AppointmentViewDetail';
+import GenerateReceiptForm from './pages/consultant/ReceiptForm';
+
 
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.withCredentials = true;
@@ -58,6 +61,9 @@ function App() {
             <Route index element={<PendingRequests />} />
             <Route path="requests/:bookingId" element={<RequestViewDetail />} />
             <Route path="appointments" element={<AppointmentCalendar />} />
+            <Route path="appointments/:bookingId" element={<AppointmentViewDetail />} />
+            <Route path="receipt-form/:bookingId" element={<GenerateReceiptForm />} />  {/* New route for ReceiptForm */}
+
           </Route>
 
           <Route path="/appraiser" element={<AppraiserDashboard />} />

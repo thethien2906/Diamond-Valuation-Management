@@ -51,17 +51,24 @@ const getPendingBookings = async (req, res) => {
 const getPendingBookingsByConsultant = async (req, res) => {
   try {
     const consultantId = req.params.consultantId;
-    const consultant = await User.findOne({ userID: consultantId });
+    const consultant = await User.findById(consultantId); // Changed to findById
+
     if (!consultant) {
       return res.status(404).json({ error: 'Consultant not found' });
     }
-    const pendingBookings = await Booking.find({ consultantId: consultant._id, status: 'pending' });
+
+    const pendingBookings = await Booking.find({
+      consultantId: consultant._id, 
+      status: 'pending'
+    });
+
     res.json(pendingBookings);
   } catch (error) {
     console.error("Error fetching pending bookings:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 const updateBooking = async (req, res) => {
   try {
