@@ -30,7 +30,8 @@ import ConsultingServicesCustomer from './pages/customer/ConsultingServicesCusto
 import PendingRequests from './pages/consultant/PendingRequests';
 import RequestViewDetail from './pages/consultant/RequestViewDetail';
 import AppointmentCalendar from './pages/consultant/AppointmentCalendar';
-
+import RequestView from './pages/consultant/RequestView';
+import Receipt from './pages/consultant/Receipt';
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.withCredentials = true;
 
@@ -56,6 +57,8 @@ function App() {
           {/* Nested routes under ConsultantDashboard */}
           <Route path="/consultant" element={<ConsultantDashboardLayout />}>
             <Route index element={<PendingRequests />} />
+            <Route path="requestView/:bookingId" element={<RequestView/>}/>
+            <Route path="receipt" element={<Receipt/>}/>
             <Route path="requests/:bookingId" element={<RequestViewDetail />} />
             <Route path="appointments" element={<AppointmentCalendar />} />
           </Route>
