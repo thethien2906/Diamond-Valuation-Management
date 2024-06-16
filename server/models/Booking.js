@@ -19,7 +19,7 @@ const bookingSchema = new Schema({
       consultantId: {
         type: Schema.Types.ObjectId, // Store the consultant's ObjectId
         ref: 'User',               // Reference to the User model
-        default: null,             // Set to null initially (unassigned)
+        default: null,             
       },
 });
 
