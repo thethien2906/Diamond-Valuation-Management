@@ -106,9 +106,18 @@ const AppointmentCalendar = () => {
                           <TableCell>{booking.name}</TableCell>
                           <TableCell>{booking.phoneNumber}</TableCell>
                           <TableCell>
-                            <Button
+                            {/* <Button
                               component={Link}
                               to={`/consultant/requests/${booking._id}`}
+                              variant="contained"
+                              color="primary"
+                            >
+                              View Detail
+                            </Button> */}
+                            
+                            <Button
+                              component={Link}
+                              to={`/consultant/appointments/${booking._id}`}
                               variant="contained"
                               color="primary"
                             >

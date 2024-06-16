@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ConsultantContext } from "../../context/ConsultantContext";
 import { toast } from "react-hot-toast";
 import {
   Box,
@@ -11,58 +10,39 @@ import {
   CircularProgress
 } from "@mui/material";
 
-const ViewRequestDetail = () => {
+const AppointmentViewDetail = () => {
   const { bookingId } = useParams();
   const [bookingDetails, setBookingDetails] = useState(null);
-  const { setPendingBookings } = useContext(ConsultantContext);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Assuming you want to navigate after generating receipt
 
   useEffect(() => {
     const fetchBookingDetails = async () => {
       try {
         const response = await axios.get(`/api/bookings/${bookingId}`);
         setBookingDetails(response.data);
-      } catch (error) { 
+      } catch (error) {
         console.error("Error fetching booking details:", error);
+        toast.error("Failed to fetch booking details"); // Add a toast error for user feedback
       }
     };
 
     fetchBookingDetails();
   }, [bookingId]);
 
-  const handleApprove = async () => {
-    try {
-      await axios.put(`/api/bookings/${bookingId}`, { status: "approved" });
-      toast.success("Booking approved successfully!");
-      navigate("/consultant/appointments");
-      setPendingBookings((prevBookings) =>
-        prevBookings.filter((booking) => booking._id !== bookingId)
-      );
-    } catch (error) {
-      console.error("Error approving booking:", error);
-    }
+  const handleGenerateReceipt = () => {
+    navigate(`/consultant/receipt-form/${bookingId}`); 
   };
 
-  const handleDeny = async () => {
-    try {
-      await axios.delete(`/api/bookings/${bookingId}`);
-      toast.success("Booking denied and deleted.");
-      navigate("/consultant/appointments");
-      setPendingBookings((prevBookings) =>
-        prevBookings.filter((booking) => booking._id !== bookingId)
-      );
-    } catch (error) {
-      console.error("Error denying booking:", error);
-    }
-  };
+
 
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" component="h2" gutterBottom>
-        Booking Details
+        Appointment Details
       </Typography>
       {bookingDetails ? (
         <Paper sx={{ p: 3, mt: 2 }}>
+          {/* Display booking details like in RequestViewDetail */}
           <Typography variant="h6">Name: {bookingDetails.name}</Typography>
           <Typography variant="body1">Email: {bookingDetails.email}</Typography>
           <Typography variant="body1">Phone Number: {bookingDetails.phoneNumber}</Typography>
@@ -70,21 +50,11 @@ const ViewRequestDetail = () => {
           <Typography variant="body1">Address: {bookingDetails.address}</Typography>
           <Typography variant="body1">Date: {bookingDetails.date}</Typography>
           <Typography variant="body1">Time: {bookingDetails.time}</Typography>
+
           <Box sx={{ mt: 3 }}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleApprove}
-              sx={{ mr: 2 }}
-            >
-              Approve
-            </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={handleDeny}
-            >
-              Deny
+            {/* Generate Receipt Button */}
+            <Button variant="contained" color="primary" onClick={handleGenerateReceipt}>
+              Generate Receipt
             </Button>
           </Box>
         </Paper>
@@ -97,4 +67,4 @@ const ViewRequestDetail = () => {
   );
 };
 
-export default ViewRequestDetail;
+export default AppointmentViewDetail;

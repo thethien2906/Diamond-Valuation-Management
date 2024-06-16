@@ -17,9 +17,9 @@ const bookingSchema = new Schema({
         default: 'pending' // Default status is 'pending'
       },
       consultantId: {
-        type: Schema.Types.ObjectId, 
-        ref: 'User',               
-        default: null,             
+        type: Schema.Types.ObjectId, // Store the consultant's ObjectId
+        ref: 'User',               // Reference to the User model
+        default: null,             // Set to null initially (unassigned)
       },
 });
 
