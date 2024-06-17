@@ -52,10 +52,24 @@ const getAvailableConsultant = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+const getAvailableAppraiser = async (req, res) => {
+  try {
+    const consultant = await User.findOne({ role: "Appraiser" });
+    if (!consultant) {
+      return res.status(404).json({ error: 'No consultant available' });
+    } else {
+      return res.json([consultant]);
+    }
+  } catch (error) {
+    console.error("Error fetching available consultant:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
 
 module.exports = {
   getUsers,
   createUser,
   deleteUser,
   getAvailableConsultant,
+  getAvailableAppraiser
 };

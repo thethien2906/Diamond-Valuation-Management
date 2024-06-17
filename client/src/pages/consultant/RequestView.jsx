@@ -35,6 +35,7 @@ const ViewRequest = () => {
       setError("Error viewing receipt");
     }
   };
+  
 
   const handleRemove = async (bookingId) => {
     try {

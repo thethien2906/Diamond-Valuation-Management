@@ -22,7 +22,7 @@ const ViewRequestDetail = () => {
       try {
         const response = await axios.get(`/api/bookings/${bookingId}`);
         setBookingDetails(response.data);
-      } catch (error) {
+      } catch (error) { 
         console.error("Error fetching booking details:", error);
       }
     };

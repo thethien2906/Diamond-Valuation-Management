@@ -119,6 +119,9 @@ const ConsultantDashboardLayout = () => {
           <ListItem button component={Link} to="/consultant">
             <ListItemText primary="Pending Requests" />
           </ListItem>
+          <ListItem button component={Link} to="/consultant/valuation-records">
+            <ListItemText primary="Record Tracking" />
+          </ListItem>
           <Divider />
         </List>
       </Drawer>

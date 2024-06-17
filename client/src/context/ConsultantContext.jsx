@@ -17,12 +17,12 @@ const ConsultantContextProvider = ({ children }) => {
       if (!user) return;
       try {
         const pendingRes = await axios.get(
-          `/api/consultants/${user.userID}/pending-bookings`
+          `/api/consultants/${user._id}/pending-bookings`
         );
         setPendingBookings(pendingRes.data);
 
         const approvedRes = await axios.get(
-          `/api/consultants/${user.userID}/appointments`
+          `/api/consultants/${user._id}/appointments`
         );
         setApprovedBookings(approvedRes.data);
       } catch (error) {
