@@ -52,13 +52,13 @@ const registerUser = async (req, res) => {
       }
       
       // Generate a unique userID
-      const userID = new mongoose.Types.ObjectId();
+      // const userID = new mongoose.Types.ObjectId();
       
       // Hash the password
       const hashedPassword = await hashPassword(password);
       
       // Create the user with generated userID
-      const user = await User.create({ userID, name, email, password: hashedPassword });
+      const user = await User.create({ name, email, password: hashedPassword });
       
       return res.status(201).json(user);
   } catch (error) {

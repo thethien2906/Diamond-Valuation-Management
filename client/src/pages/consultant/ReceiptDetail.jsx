@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useReactToPrint } from 'react-to-print'; 
 
@@ -13,8 +13,10 @@ import {
 import { toast } from 'react-hot-toast';
 
 const ReceiptDetail = () => {
-  const { receiptId } = useParams();
-  const [receipt, setReceipt] = useState(null);
+    const { receiptId } = useParams();
+    const [receipt, setReceipt] = useState(null);
+    const [creatingRecord, setCreatingRecord] = useState(false);
+    const navigate = useNavigate();
 
   useEffect(() => {
     const fetchReceiptData = async () => {
@@ -29,7 +31,19 @@ const ReceiptDetail = () => {
 
     fetchReceiptData();
   }, [receiptId]);
-
+  const handleCreateRecord = async () => {
+    setCreatingRecord(true);
+    try {
+      const response = await axios.post(`/api/valuation-records/${receiptId}`);
+      toast.success('Valuation record created successfully');
+    //   navigate(`/valuation-records/${response.data._id}`);
+    } catch (error) {
+      console.error('Error creating valuation record:', error);
+      toast.error('Failed to create valuation record');
+    } finally {
+      setCreatingRecord(false);
+    }
+  };
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
@@ -76,6 +90,15 @@ const ReceiptDetail = () => {
       <Box sx={{ mt: 3 }}>
           <Button variant="contained" color="primary" onClick={handlePrint}>
             Print Receipt
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handleCreateRecord}
+            sx={{ ml: 2 }}
+            disabled={creatingRecord}
+          >
+            {creatingRecord ? 'Creating Record...' : 'Create Record'}
           </Button>
         </Box>
     </Box>
