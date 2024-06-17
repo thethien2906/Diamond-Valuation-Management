@@ -23,7 +23,9 @@ const GenerateReceiptForm = () => {
   useEffect(() => {
     const fetchBookingData = async () => {
       try {
-        const response = await axios.get(`/api/bookings/${bookingId}`);
+        const response = await axios.get(`/api/bookings/${bookingId}`, {
+          params: { populate: 'consultantId' } // Tell the backend to populate
+        });
         setBooking(response.data);
       } catch (error) {
         console.error('Error fetching booking data:', error);
@@ -43,15 +45,28 @@ const GenerateReceiptForm = () => {
         amountPaid
       });
       toast.success('Receipt generated successfully');
-      console.log(response.data);
-      navigate('/consultant/appointments');
+      console.log('response.data', response.data); // check the response
+      navigate(`/consultant/receipts/${response.data._id}`); // Navigate to the receipt detail page
     } catch (error) {
       console.error('Error generating receipt:', error);
-      toast.error('Error generating receipt');
+  
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        const errorMessage = error.response.data.error || "Server error";
+        toast.error(errorMessage);
+      } else if (error.request) {
+        // The request was made but no response was received
+        toast.error('No response from server. Please try again later.');
+      } else {
+        // Something happened in setting up the request that triggered an error
+        toast.error('An error occurred. Please try again.');
+      }
     }
   };
+  
 
   if (!booking) return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}><CircularProgress /></Box>;
+  const consultantName = booking?.consultantId?.name || "Consultant Name Not Found"; 
 
   return (
     <Box sx={{ p: 3 }}>
@@ -60,14 +75,12 @@ const GenerateReceiptForm = () => {
       </Typography>
       <Paper sx={{ p: 3, mt: 2 }}>
         <form onSubmit={handleSubmit}>
-          <Typography variant="h6">Receipt Number: Auto-generated</Typography>
-          <Typography variant="body1">Issue Date: Auto-generated</Typography>
-          <Typography variant="body1">Customer Name: {booking.customerName}</Typography>
-          <Typography variant="body1">Phone: {booking.phone}</Typography>
+          <Typography variant="body1">Customer Name: {booking.name}</Typography>
+          <Typography variant="body1">Phone: {booking.phoneNumber}</Typography>
           <Typography variant="body1">Email: {booking.email}</Typography>
           <Typography variant="body1">Appointment Date: {booking.date}</Typography>
           <Typography variant="body1">Appointment Time: {booking.time}</Typography>
-          <Typography variant="body1">Consultant Name: {booking.consultantName}</Typography>
+          <Typography variant="body1">Consultant Name: {consultantName}</Typography>
           <TextField
             select
             label="Services"

@@ -26,10 +26,11 @@ const AppointmentCalendar = () => {
   const [showTable, setShowTable] = useState(false);
   const theme = useTheme(); // Use the theme hook
 
+  
   const fetchApprovedBookings = async () => {
     try {
       const response = await axios.get(
-        `/api/consultants/${user.userID}/appointments`
+        `/api/consultants/${user._id}/appointments`
       );
       setApprovedBookings(response.data);
       setShowTable(true);

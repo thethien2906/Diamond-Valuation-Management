@@ -21,10 +21,12 @@ const PendingRequests = () => {
   const [pendingBookings, setPendingBookings] = useState([]);
   const [showTable, setShowTable] = useState(false);
 
+  
   const fetchPendingBookings = async () => {
     try {
+      // Fetch using user._id (MongoDB ObjectId)
       const response = await axios.get(
-        `/api/consultants/${user.userID}/pending-bookings`
+        `/api/consultants/${user._id}/pending-bookings`
       );
       setPendingBookings(response.data);
       setShowTable(true);
