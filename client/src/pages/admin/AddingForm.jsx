@@ -22,7 +22,7 @@ const AddingForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("/users", formData);
+      await axios.post("/api/users", formData);
       navigate("/admin/staff");
     } catch (error) {
       console.error("Error adding user:", error);
@@ -96,7 +96,7 @@ const AddingForm = () => {
               <MenuItem value="consultant">Consultant</MenuItem>
               <MenuItem value="appraiser">Appraiser</MenuItem>
               <MenuItem value="manager">Manager</MenuItem>
-              <MenuItem value="admin">Admin</MenuItem>
+              {/* <MenuItem value="admin">Admin</MenuItem> */}
             </TextField>
           </Grid>
         </Grid>
