@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
   Box,
   Typography,
-  Button,
+  IconButton,
   Paper,
   CircularProgress,
   Table,
@@ -11,14 +11,18 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  TablePagination
 } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 const RecordView = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,6 +45,25 @@ const RecordView = () => {
     navigate(`/consultant/valuation-records/${recordId}`);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const getStatusColor = (status) => {
+    if (status === 'Completed') {
+      return 'green';
+    } else if (status === 'In Progress') {
+      return 'red';
+    } else {
+      return 'gray';
+    }
+  };
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
@@ -51,38 +74,61 @@ const RecordView = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
+      <Typography variant="h6" component="h2" gutterBottom>
         Valuation Records
       </Typography>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ mt: 3, boxShadow: 3 }}>
         <Table>
-          <TableHead>
+          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
             <TableRow>
-              <TableCell>Record Number</TableCell>
-              <TableCell>Customer Name</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Record Number</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>View</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {records.map((record) => (
-              <TableRow key={record._id}>
-                <TableCell>{record.recordNumber}</TableCell>
-                <TableCell>{record.customerName}</TableCell>
-                <TableCell>{record.status}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleViewRecord(record._id)}
-                  >
-                    View
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {records
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((record) => (
+                <TableRow key={record._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
+                  <TableCell>{record.recordNumber}</TableCell>
+                  <TableCell>{record.customerName}</TableCell>
+                  <TableCell>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Box
+                        sx={{
+                          width: 10,
+                          height: 10,
+                          borderRadius: '50%',
+                          backgroundColor: getStatusColor(record.status),
+                          mr: 1
+                        }}
+                      />
+                      {record.status}
+                    </Box>
+                  </TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="black"
+                      onClick={() => handleViewRecord(record._id)}
+                    >
+                      <RemoveRedEyeIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[6, 12, 24]}
+          component="div"
+          count={records.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </TableContainer>
     </Box>
   );

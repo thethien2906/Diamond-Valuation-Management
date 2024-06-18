@@ -58,7 +58,7 @@ const ViewRequestDetail = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
+      <Typography variant="h6" component="h2" gutterBottom>
         Booking Details
       </Typography>
       {bookingDetails ? (
