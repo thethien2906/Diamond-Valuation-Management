@@ -4,10 +4,12 @@ import axios from 'axios';
 import {
   Box,
   Typography,
-  Button,
-  Paper,
-  CircularProgress
+  CircularProgress,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails
 } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { toast } from 'react-hot-toast';
 
 const RecordViewDetail = () => {
@@ -33,7 +35,7 @@ const RecordViewDetail = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <CircularProgress />
       </Box>
     );
@@ -41,7 +43,7 @@ const RecordViewDetail = () => {
 
   if (!record) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <Typography variant="h6" component="h2">No record found</Typography>
       </Box>
     );
@@ -49,32 +51,68 @@ const RecordViewDetail = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
+      <Typography variant="h6" component="h2" gutterBottom>
         Valuation Record Details
       </Typography>
-      <Paper sx={{ p: 3, mt: 2 }}>
-        <Typography variant="body1">Record Number: {record.recordNumber}</Typography>
-        <Typography variant="body1">Customer Name: {record.customerName}</Typography>
-        <Typography variant="body1">Phone Number: {record.phoneNumber}</Typography>
-        <Typography variant="body1">Email: {record.email}</Typography>
-        <Typography variant="body1">Appointment Date: {new Date(record.appointmentDate).toLocaleDateString()}</Typography>
-        <Typography variant="body1">Appointment Time: {record.appointmentTime}</Typography>
-        <Typography variant="body1">Services: {record.services}</Typography>
-        <Typography variant="body1">Payment Method: {record.paymentMethod}</Typography>
-        <Typography variant="body1">Consultant ID: {record.consultantId}</Typography>
-        <Typography variant="body1">Appraiser ID: {record.appraiserId || 'Not assigned yet'}</Typography>
-        <Typography variant="body1">Shape and Cut: {record.shapeAndCut || 'Not filled yet'}</Typography>
-        <Typography variant="body1">Carat Weight: {record.caratWeight || 'Not filled yet'}</Typography>
-        <Typography variant="body1">Clarity: {record.clarity || 'Not filled yet'}</Typography>
-        <Typography variant="body1">Cut Grade: {record.cutGrade || 'Not filled yet'}</Typography>
-        <Typography variant="body1">Measurements: {record.measurements || 'Not filled yet'}</Typography>
-        <Typography variant="body1">Polish: {record.polish || 'Not filled yet'}</Typography>
-        <Typography variant="body1">Symmetry: {record.symmetry || 'Not filled yet'}</Typography>
-        <Typography variant="body1">Fluorescence: {record.fluorescence || 'Not filled yet'}</Typography>
-        <Typography variant="body1">Estimated Value: {record.estimatedValue || 'Not filled yet'}</Typography>
-        <Typography variant="body1">Valuation Method: {record.valuationMethod || 'Not filled yet'}</Typography>
-        <Typography variant="body1">Certificate Number: {record.certificateNumber || 'Not filled yet'}</Typography>
-      </Paper>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="record-content"
+          id="record-header"
+        >
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+            <Typography variant="body1">Record Number: {record.recordNumber}</Typography>
+            <Typography variant="body1">Customer Name: {record.customerName}</Typography>
+          </Box>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="customer-content"
+              id="customer-header"
+            >
+              <Typography variant="subtitle1">Customer Details</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box sx={{ width: '100%' }}>
+                <Typography variant="body2">Phone Number: {record.phoneNumber}</Typography>
+                <Typography variant="body2">Email: {record.email}</Typography>
+                <Typography variant="body2">Appointment Date: {new Date(record.appointmentDate).toLocaleDateString()}</Typography>
+                <Typography variant="body2">Appointment Time: {record.appointmentTime}</Typography>
+                <Typography variant="body2">Services: {record.services}</Typography>
+                <Typography variant="body2">Payment Method: {record.paymentMethod}</Typography>
+                <Typography variant="body2">Consultant ID: {record.consultantId}</Typography>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+          <Accordion sx={{ mt: 2 }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="diamond-content"
+              id="diamond-header"
+            >
+              <Typography variant="subtitle1">Diamond Details</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box sx={{ width: '100%' }}>
+                <Typography variant="body2">Appraiser ID: {record.appraiserId || 'Not assigned yet'}</Typography>
+                <Typography variant="body2">Shape and Cut: {record.shapeAndCut || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Carat Weight: {record.caratWeight || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Clarity: {record.clarity || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Cut Grade: {record.cutGrade || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Measurements: {record.measurements || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Polish: {record.polish || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Symmetry: {record.symmetry || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Fluorescence: {record.fluorescence || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Estimated Value: {record.estimatedValue || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Valuation Method: {record.valuationMethod || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Certificate Number: {record.certificateNumber || 'Not filled yet'}</Typography>
+              </Box>
+            </AccordionDetails>
+          </Accordion>
+        </AccordionDetails>
+      </Accordion>
     </Box>
   );
 };
