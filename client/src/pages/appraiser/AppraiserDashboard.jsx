@@ -13,7 +13,6 @@ import {
   ListItemText,
   IconButton,
   useTheme,
-  MenuItem,
   Divider,
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
@@ -83,9 +82,6 @@ const AppraiserDashboard = () => {
           <ListItem button onClick={toggleDrawer} component={Link} to="/appraiser">
             <ListItemText primary="View Assigned Task" />
           </ListItem>
-          {/* <ListItem button onClick={toggleDrawer} component={Link} to="/consultant">
-            <ListItemText primary="Pending Requests" />
-          </ListItem> */}
           <Divider />
           <ListItem button onClick={toggleDrawer} component={Link} to="/">
             <ListItemText primary="Return to Home" />

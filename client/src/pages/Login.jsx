@@ -101,7 +101,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(/wp2271188-cristiano-ronaldo-celebration-wallpapers.jpg?url)',
+            backgroundImage: 'url(/Diamond.jpg?url)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],

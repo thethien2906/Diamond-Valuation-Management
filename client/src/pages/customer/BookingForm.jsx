@@ -75,7 +75,6 @@ const BookingForm = () => {
       });
 
       if (response.ok) {
-        const data = await response.json();
         toast.success("Booking created successfully!");
         setShowConfirmation(true);
         setTimeout(() => setShowConfirmation(false), 3000);

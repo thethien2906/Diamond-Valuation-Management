@@ -20,7 +20,6 @@ import {
 } from "@mui/material";
 
 const AppointmentCalendar = () => {
-  const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const [approvedBookings, setApprovedBookings] = useState([]);
   const [showTable, setShowTable] = useState(false);
@@ -42,18 +41,6 @@ const AppointmentCalendar = () => {
   const handleRefresh = () => {
     fetchApprovedBookings();
   };
-
-  const handleLogout = async () => {
-    try {
-      await axios.post("/auth/logout");
-      setUser(null);
-      localStorage.removeItem("user");
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  };
-
   useEffect(() => {
     fetchApprovedBookings();
   }, []);
@@ -109,7 +96,7 @@ const AppointmentCalendar = () => {
                           <TableCell>
                             {/* <Button
                               component={Link}
-                              to={`/consultant/requests/${booking._id}`}
+                              to={`/consultant/requestView/${booking._id}`}
                               variant="contained"
                               color="primary"
                             >
