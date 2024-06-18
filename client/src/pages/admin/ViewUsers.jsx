@@ -10,7 +10,7 @@ const ViewUsers = () => {
     const fetchUsers = async () => {
       try {
         const response = await axios.get("/api/users");
-        const filteredUsers = response.data.filter(user => user.role === "user");
+        const filteredUsers = response.data.filter(user => user.role == "user");
         setUsers(filteredUsers);
       } catch (error) {
         console.error("Error fetching users:", error);

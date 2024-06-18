@@ -20,7 +20,6 @@ import {
 } from "@mui/material";
 
 const AppointmentCalendar = () => {
-  const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const [approvedBookings, setApprovedBookings] = useState([]);
   const [showTable, setShowTable] = useState(false);

@@ -36,12 +36,13 @@ import ReceiptDetail from './pages/consultant/ReceiptDetail';
 import RecordView from './pages/consultant/RecordView';
 import RecordViewDetail from './pages/consultant/RecordViewDetail';
 
-
 import TaskView from './pages/appraiser/TaskView';
 import ValuationRecordAppraiserDetail from './pages/appraiser/TaskViewDetail';
 import TaskDoneView from './pages/appraiser/TaskDoneView';
-import TaskDoneViewDetail from './pages/appraiser/TaskDoneViewDetail';import RequestView from './pages/consultant/RequestView';
+import TaskDoneViewDetail from './pages/appraiser/TaskDoneViewDetail';
+import RequestView from './pages/consultant/RequestView';
 import Receipt from './pages/consultant/Receipt';
+
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.withCredentials = true;
 
@@ -72,22 +73,20 @@ function App() {
             <Route path="requests/:bookingId" element={<RequestViewDetail />} />
             <Route path="appointments" element={<AppointmentCalendar />} />
             <Route path="appointments/:bookingId" element={<AppointmentViewDetail />} />
-            <Route path="receipt-form/:bookingId" element={<GenerateReceiptForm />} />  {/* New route for ReceiptForm */}
+            <Route path="receipt-form/:bookingId" element={<GenerateReceiptForm />} />
             <Route path="receipts/:receiptId" element={<ReceiptDetail />} />
-            <Route path="valuation-records" element={<RecordView />} /> 
-            <Route path="valuation-records/:recordId" element={<RecordViewDetail />} /> {/* Add this route */}
-
+            <Route path="valuation-records" element={<RecordView />} />
+            <Route path="valuation-records/:recordId" element={<RecordViewDetail />} />
           </Route>
 
-
-          
-          <Route path="/appraiser" element={<AppraiserDashboard />} />
-          <Route path="/appraiser/task-view" element={<TaskView />}/>
-          <Route path="/appraiser/valuation-records/:recordId" element={<ValuationRecordAppraiserDetail />} /> {/* Add this route */}
-          <Route path="/appraiser/task-done-view" element={<TaskDoneView />}/>
-          <Route path="/appraiser/task-view/:recordId" element={<TaskDoneViewDetail />} />
-            
-
+          {/* Nested routes under AppraiserDashboard */}
+          <Route path="/appraiser" element={<AppraiserDashboard />}>
+            <Route index element={<AppraiserDashboard />} />
+            <Route path="task-view" element={<TaskView />} />
+            <Route path="valuation-records/:recordId" element={<ValuationRecordAppraiserDetail />} />
+            <Route path="task-done-view" element={<TaskDoneView />} />
+            <Route path="task-view/:recordId" element={<TaskDoneViewDetail />} />
+          </Route>
 
           <Route path="/manager" element={<ManagerDashboard />} />
           

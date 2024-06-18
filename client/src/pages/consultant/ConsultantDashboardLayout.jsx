@@ -15,6 +15,7 @@ import {
   useTheme,
   MenuItem,
   Divider,
+  ListItemButton,
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import axios from "axios";
@@ -80,19 +81,19 @@ const ConsultantDashboardLayout = () => {
       >
         <Toolbar />
         <List>
-          <ListItem button onClick={toggleDrawer} component={Link} to="/consultant/appointments">
+          <ListItemButton  onClick={toggleDrawer} component={Link} to="/consultant/appointments">
             <ListItemText primary="View Appointment Calendar" />
-          </ListItem>
-          <ListItem button onClick={toggleDrawer} component={Link} to="/consultant">
+          </ListItemButton>
+          <ListItemButton  onClick={toggleDrawer} component={Link} to="/consultant">
             <ListItemText primary="Pending Requests" />
-          </ListItem>
+          </ListItemButton>
           <Divider />
-          <ListItem button onClick={toggleDrawer} component={Link} to="/">
+          <ListItemButton  onClick={toggleDrawer} component={Link} to="/">
             <ListItemText primary="Return to Home" />
-          </ListItem>
-          <ListItem button onClick={handleLogout}>
+          </ListItemButton>
+          <ListItemButton  onClick={handleLogout}>
             <ListItemText primary="Logout" />
-          </ListItem>
+          </ListItemButton>
         </List>
       </Drawer>
       
@@ -113,15 +114,15 @@ const ConsultantDashboardLayout = () => {
       >
         <Toolbar />
         <List>
-          <ListItem button component={Link} to="/consultant/appointments">
+          <ListItemButton component={Link} to="/consultant/appointments">
             <ListItemText primary="View Appointment Calendar" />
-          </ListItem>
-          <ListItem button component={Link} to="/consultant">
+          </ListItemButton>
+          <ListItemButton component={Link} to="/consultant">
             <ListItemText primary="Pending Requests" />
-          </ListItem>
-          <ListItem button component={Link} to="/consultant/valuation-records">
+          </ListItemButton>
+          <ListItemButton component={Link} to="/consultant/valuation-records">
             <ListItemText primary="Record Tracking" />
-          </ListItem>
+          </ListItemButton>
           <Divider />
         </List>
       </Drawer>
