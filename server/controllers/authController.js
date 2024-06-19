@@ -3,6 +3,8 @@ const User = require('../models/User')
 const  {hashPassword, comparePassword} = require('../helpers/auth')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
+const transporter = require('../config/nodemailer');
+const crypto = require('crypto');
 const test = (req, res) => {
     res.json('heehehe')
 }
@@ -50,22 +52,68 @@ const registerUser = async (req, res) => {
       if (existingEmail) {
           return res.status(400).json({ error: 'Email already exists' });
       }
+
+
+
+      const verificationToken = crypto.randomBytes(20).toString('hex'); 
+
       
-      // Generate a unique userID
-      // const userID = new mongoose.Types.ObjectId();
       
       // Hash the password
       const hashedPassword = await hashPassword(password);
       
       // Create the user with generated userID
-      const user = await User.create({ name, email, password: hashedPassword });
-      
+      const user = await User.create({ name, email, password: hashedPassword,isVerified: false,
+        verificationToken,
+        verificationTokenExpiry: Date.now() + 5 * 24 * 60 * 60 * 1000 // Expire in 5 days
+    }); 
+    const mailOptions = {
+      from: 'your_email@gmail.com', // Replace with your email
+      to: email,
+      subject: 'Verify your email address',
+      html: `
+          <p>To continue setting up your account, please verify your email address by clicking the button below:</p>
+          <a href="http://localhost:5173/verify/${verificationToken}"><button>Verify Email Address</button></a>
+          <p>This link will expire in 5 days. If you did not make this request, please disregard this email.</p>
+          <p>For help, contact us through our Help center.</p>
+      `
+  };
+      await transporter.sendMail(mailOptions);
       return res.status(201).json(user);
   } catch (error) {
       console.error(error);
       return res.status(500).json({ error: 'Server error' });
   }
 };
+// controllers/authController.js (or your verification route handler)
+// controllers/authController.js (or your verification route handler)
+const verifyEmail = async (req, res) => {
+  const token = req.params.token;
+  try {
+      const user = await User.findOne({ verificationToken: token });
+
+      if (!user) {
+          return res.status(400).json({ error: "Invalid token" }); 
+      }
+
+      // (Optional) Check for token expiry
+      if (user.verificationTokenExpiry && user.verificationTokenExpiry < Date.now()) {
+          return res.status(400).json({ error: "Token expired" });
+      }
+
+      user.IsVerified = 'true'; // Change IsVerified to 'true'
+      // user.verificationToken = undefined; // Clear the token (optional)
+      // user.verificationTokenExpiry = undefined; // Clear expiry (optional)
+
+      await user.save();
+      res.status(200).json({ message: "Email verified successfully" });
+
+  } catch (error) {
+      console.error('Error verifying email:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
 
 
 const loginUser = async (req, res) => {
@@ -76,7 +124,9 @@ const loginUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'No user found' });
     }
-
+    if (user.isEmailVerified=='false') {
+      return res.status(401).json({ error: 'Please Verify your email' });
+    }
     const match = await comparePassword(password, user.password);
 
     if (match) {
@@ -134,5 +184,6 @@ const logoutUser = (req, res) => {
     registerUser,
     loginUser,
     getProfile,
-    logoutUser, // Add logoutUser to the exported functions
+    logoutUser, 
+    verifyEmail
   };

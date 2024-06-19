@@ -51,7 +51,7 @@ export default function Register() {
         toast.error(response.data.error);
       } else {
         setData({ name: '', email: '', password: '' });
-        toast.success('Registered successfully! Please login');
+        toast.success('Registered successfully! Please verify through your email.');
         navigate('/login');
       }
     } catch (error) {

@@ -5,6 +5,7 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/guest/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
+import Verify from './pages/Verify';
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
 import { UserContextProvider } from './context/userContext';
@@ -55,7 +56,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          
+          <Route path="/verify/:token" element={<Verify />} />
           <Route path="/dashboard" element={<CustomerDashboard />} />
 
           {/* Nested routes under AdminDashboard */}
