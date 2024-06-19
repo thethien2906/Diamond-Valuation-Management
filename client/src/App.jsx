@@ -5,7 +5,10 @@ import { Routes, Route } from 'react-router-dom';
 import Home from './pages/guest/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
-import Verify from './pages/Verify';
+import Verify from './pages/MailVerify';
+import ForgotPassword from './pages/PasswordForgot';
+import ResetPassword from './pages/PasswordReset';
+import PasswordMailVerify from './pages/PasswordMailVerify';
 import axios from 'axios';
 import { Toaster } from 'react-hot-toast';
 import { UserContextProvider } from './context/userContext';
@@ -58,7 +61,9 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/verify/:token" element={<Verify />} />
           <Route path="/dashboard" element={<CustomerDashboard />} />
-
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<PasswordMailVerify />} />
+          <Route path="/reset-password/:userId" element={<ResetPassword />} />
           {/* Nested routes under AdminDashboard */}
           <Route path="/admin" element={<AdminDashboard />}>
             <Route path="users" element={<ViewUsers />} />

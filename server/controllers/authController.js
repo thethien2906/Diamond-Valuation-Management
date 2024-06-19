@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const transporter = require('../config/nodemailer');
 const crypto = require('crypto');
+const bcrypt = require('bcryptjs');
 const test = (req, res) => {
     res.json('heehehe')
 }
@@ -177,13 +178,78 @@ const logoutUser = (req, res) => {
   };
   
 
-
-
-  module.exports = {
+  const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    try {
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      const resetPasswordCode = crypto.randomBytes(3).toString('hex'); 
+      user.resetPasswordCode = resetPasswordCode;
+      await user.save();
+  
+      const mailOptions = {
+        from: process.env.SMTP_USER,
+        to: email,
+        subject: 'Password Reset Code',
+        text: `Your password reset code is: ${resetPasswordCode}`,
+      };
+  
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error('Error sending email:', error);
+          return res.status(500).json({ error: 'Failed to send email' });
+        } else {
+          console.log('Email sent:', info.response);
+          res.status(200).json({ message: 'Password reset code sent to email' });
+        }
+      });
+    } catch (error) {
+      console.error('Error in forgot password:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+  
+  const verifyResetCode = async (req, res) => {
+    const { email, resetCode } = req.body;
+    try {
+      const user = await User.findOne({ email, resetPasswordCode: resetCode });
+      if (!user) {
+        return res.status(400).json({ error: 'Invalid reset code' });
+      }
+      res.status(200).json({ userId: user._id });
+    } catch (error) {
+      console.error('Error in verify reset code:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+  
+  const resetPassword = async (req, res) => {
+    const { userId, newPassword } = req.body;
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+      user.resetPasswordCode = '';
+      await user.save();
+      res.status(200).json({ message: 'Password reset successful' });
+    } catch (error) {
+      console.error('Error in reset password:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+module.exports = {
     test,
     registerUser,
     loginUser,
     getProfile,
     logoutUser, 
-    verifyEmail
+    verifyEmail,
+    forgotPassword,
+    verifyResetCode,
+    resetPassword
   };

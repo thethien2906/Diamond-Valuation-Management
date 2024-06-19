@@ -27,6 +27,7 @@ const userSchema = new Schema({
       },
     verificationToken: String,
     verificationTokenExpiry: Date,
+    resetPasswordCode: { type: String, default: null },
 });
 
 const UserModel = mongoose.model('User', userSchema);
