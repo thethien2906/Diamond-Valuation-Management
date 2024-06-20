@@ -24,7 +24,7 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        ShineDiamond
+        DiamondScope
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -101,7 +101,7 @@ export default function SignInSide() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(/wp2271188-cristiano-ronaldo-celebration-wallpapers.jpg?url)',
+            backgroundImage: 'url(/Diamond.jpg?url)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -172,7 +172,7 @@ export default function SignInSide() {
               </Button>
               <Grid container>
                 <Grid item xs>
-                  <Link href="#" variant="body2">
+                <Link component={RouterLink} to="/forgot-password" variant="body2"> 
                     Forgot password?
                   </Link>
                 </Grid>

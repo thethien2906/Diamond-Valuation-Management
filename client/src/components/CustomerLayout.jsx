@@ -1,5 +1,4 @@
-// Client/src/components/CustomerLayout.jsx
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserContext } from "../context/userContext";
@@ -14,14 +13,25 @@ import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
+import Menu from '@mui/material/Menu';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const CustomerLayout = ({ children }) => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const toggleDrawer = (open) => () => {
     setDrawerOpen(open);
+  };
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const handleLogout = async () => {
@@ -101,6 +111,11 @@ const CustomerLayout = ({ children }) => {
                     VALUATION TOOL
                   </Typography>
                 </MenuItem>
+                <MenuItem component={Link} to="/record-tracking" sx={{ py: '6px', px: '12px', borderRadius: '30px' }}>
+                  <Typography variant="body2" color="text.primary">
+                    RECORD TRACKING
+                  </Typography>
+                </MenuItem>
               </Box>
             </Box>
             <Box
@@ -111,14 +126,36 @@ const CustomerLayout = ({ children }) => {
                 borderRadius: '30px',
               }}
             >
-              <Button
-                color="primary"
-                variant="text"
-                size="small"
-                onClick={handleLogout}
+              <IconButton
+                color="inherit"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
               >
-                SIGN OUT
-              </Button>
+                <AccountCircleIcon sx={{ color: 'black' }} />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                sx={{marginTop:'40px'}}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <Typography variant="body2" color="text.primary" sx={{ ml: 1, textAlign: 'center'}}>
+                  {user?.name}
+                </Typography>
+                <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
+              </Menu>
             </Box>
             <Box sx={{ display: { sm: '', md: 'none' } }}>
               <IconButton
@@ -147,6 +184,9 @@ const CustomerLayout = ({ children }) => {
                   </MenuItem>
                   <MenuItem component={Link} to="/valuation-tool">
                     VALUATION TOOL
+                  </MenuItem>
+                  <MenuItem component={Link} to="/record-tracking">
+                    RECORD TRACKING
                   </MenuItem>
                   <MenuItem onClick={handleLogout}>
                     SIGN OUT

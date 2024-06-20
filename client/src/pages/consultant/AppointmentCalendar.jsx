@@ -13,127 +13,134 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Toolbar,
-  AppBar,
   CircularProgress,
-  useTheme, // Import useTheme hook
+  useTheme,
+  IconButton,
+  TablePagination,
 } from "@mui/material";
+import RefreshIcon from '@mui/icons-material/Refresh';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 const AppointmentCalendar = () => {
-  const navigate = useNavigate();
-  const { user, setUser } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [approvedBookings, setApprovedBookings] = useState([]);
-  const [showTable, setShowTable] = useState(false);
-  const theme = useTheme(); // Use the theme hook
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Adjust rows per page as needed
+  const navigate = useNavigate();
+  const theme = useTheme();
 
   const fetchApprovedBookings = async () => {
     try {
       const response = await axios.get(
-        `/api/consultants/${user.userID}/appointments`
+        `/api/consultants/${user._id}/appointments`
       );
       setApprovedBookings(response.data);
-      setShowTable(true);
     } catch (error) {
       console.error("Error fetching appointments:", error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleViewBooking = (bookingId) => {
+    navigate(`/consultant/appointments/${bookingId}`);
   };
 
   const handleRefresh = () => {
+    setLoading(true);
     fetchApprovedBookings();
-  };
-
-  const handleLogout = async () => {
-    try {
-      await axios.post("/auth/logout");
-      setUser(null);
-      localStorage.removeItem("user");
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
   };
 
   useEffect(() => {
     fetchApprovedBookings();
   }, []);
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', p: 3 }}>
       <Box
-        component="main"
         sx={{
-          flexGrow: 1,
-          bgcolor: 'background.default',
-          p: 3,
-          [theme.breakpoints.down('md')]: {
-            p: 1, // Reduce padding on smaller screens
-          },
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 2,
         }}
       >
         <Typography variant="h6" component="div">
           Approved Appointments
         </Typography>
-        {!showTable && (
-          <Button onClick={handleRefresh} variant="contained" sx={{ mt: 2 }}>
-            Refresh
-          </Button>
-        )}
-        {showTable && (
-          <Box sx={{ mt: 2 }}>
-            {approvedBookings.length === 0 ? (
-              <Typography variant="body1">No approved appointments.</Typography>
-            ) : (
-              <>
-                <Button onClick={handleRefresh} variant="contained" sx={{ mb: 2 }}>
-                  Refresh
-                </Button>
-                <TableContainer component={Paper}>
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>No</TableCell>
-                        <TableCell>Request ID</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Phone</TableCell>
-                        <TableCell>Actions</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {approvedBookings.map((booking, index) => (
-                        <TableRow key={booking._id}>
-                          <TableCell>{index + 1}</TableCell>
-                          <TableCell>{booking._id}</TableCell>
-                          <TableCell>{booking.name}</TableCell>
-                          <TableCell>{booking.phoneNumber}</TableCell>
-                          <TableCell>
-                            {/* <Button
-                              component={Link}
-                              to={`/consultant/requests/${booking._id}`}
-                              variant="contained"
-                              color="primary"
-                            >
-                              View Detail
-                            </Button> */}
-                            
-                            <Button
-                              component={Link}
-                              to={`/consultant/appointments/${booking._id}`}
-                              variant="contained"
-                              color="primary"
-                            >
-                              View Detail
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-              </>
-            )}
-          </Box>
-        )}
+        <Button
+          onClick={handleRefresh}
+          variant="contained"
+          startIcon={<RefreshIcon />}
+          sx={{
+            backgroundColor: '#424242',
+            color: 'white',
+            '&:hover': {
+              backgroundColor: '#333333',
+            },
+          }}
+        >
+          Refresh
+        </Button>
       </Box>
+      {loading ? (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3 }}>
+          <Table>
+            <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableRow>
+                <TableCell sx={{ fontWeight: 'bold' }}>No</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Request ID</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Phone</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {approvedBookings
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((booking, index) => (
+                  <TableRow key={booking._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{booking._id}</TableCell>
+                    <TableCell>{booking.name}</TableCell>
+                    <TableCell>{booking.phoneNumber}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        color="black"
+                        onClick={() => handleViewBooking(booking._id)}
+                      >
+                        <RemoveRedEyeIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[6, 12, 24]}
+            component="div"
+            count={approvedBookings.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </TableContainer>
+      )}
     </Box>
   );
 };

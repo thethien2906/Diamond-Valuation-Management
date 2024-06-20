@@ -12,6 +12,7 @@ const createBooking = async (req, res) => {
       ...bookingData,
       status: "pending",
       consultantId: consultant._id,
+      customerId: bookingData.customerId, // Make sure userId is included
     });
     await newBooking.save();
     res.status(201).json({
@@ -24,10 +25,15 @@ const createBooking = async (req, res) => {
   }
 };
 
+module.exports = { createBooking };
+
+
 const getBookingById = async (req, res) => {
   try {
     const bookingId = req.params.bookingId;
-    const booking = await Booking.findById(bookingId);
+    // const booking = await Booking.findById(bookingId);
+    const booking = await Booking.findById(bookingId).populate('consultantId');
+
     if (!booking) {
       return res.status(404).json({ error: "Booking not found." });
     }
@@ -153,20 +159,25 @@ const getApprovedAppointments = async (req, res) => {
 const getConsultantAppointments = async (req, res) => {
   try {
     const consultantId = req.params.consultantId;
-    const consultant = await User.findOne({ userID: consultantId });
+
+    // Check if the consultant exists using findById
+    const consultant = await User.findById(consultantId);
     if (!consultant) {
-      return res.status(404).json({ error: "Consultant not found." });
+        return res.status(404).json({ error: "Consultant not found." });
     }
+
+    // Find approved appointments (query by consultant._id)
     const approvedAppointments = await Booking.find({
-      consultantId: consultant._id,
+      consultantId: consultant._id,  // Corrected to use consultant._id
       status: "approved",
     });
+
     res.json(approvedAppointments);
   } catch (error) {
     console.error("Error fetching approved appointments:", error);
     res.status(500).json({ error: "Internal server error" });
   }
-};
+}
 
 const getAllBookings = async (req, res) => {
   try {

@@ -19,7 +19,15 @@ const userSchema = new Schema({
         type: String,
         enum: ['user', 'consultant', 'appraiser', 'manager', 'admin'],
         default: 'user'
-    }
+    },
+    IsVerified: {
+        type: String,
+        enum: ['true', 'false'],
+        default: 'false' 
+      },
+    verificationToken: String,
+    verificationTokenExpiry: Date,
+    resetPasswordCode: { type: String, default: null },
 });
 
 const UserModel = mongoose.model('User', userSchema);
