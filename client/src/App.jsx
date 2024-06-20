@@ -40,6 +40,7 @@ import PendingRequests from './pages/consultant/PendingRequests';
 import RequestViewDetail from './pages/consultant/RequestViewDetail';
 import AppointmentCalendar from './pages/consultant/AppointmentCalendar';
 import AppointmentViewDetail from './pages/consultant/AppointmentViewDetail';
+import Receipt from './pages/consultant/Receipt';
 import GenerateReceiptForm from './pages/consultant/ReceiptForm';
 import ReceiptDetail from './pages/consultant/ReceiptDetail';
 import RecordView from './pages/consultant/RecordView';
@@ -50,7 +51,10 @@ import ValuationRecordAppraiserDetail from './pages/appraiser/TaskViewDetail';
 import TaskDoneView from './pages/appraiser/TaskDoneView';
 import TaskDoneViewDetail from './pages/appraiser/TaskDoneViewDetail';
 import RequestView from './pages/consultant/RequestView';
-import Receipt from './pages/consultant/Receipt';
+
+import ManagerCommitRequests from './pages/manager/CommitRequests';
+import ManagerCommitRequestDetail from './pages/manager/CommitRequestDetail';
+
 
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.withCredentials = true;
@@ -102,7 +106,10 @@ function App() {
           </Route>
 
           <Route path="/manager" element={<ManagerDashboard />} />
-          
+          <Route path="/manager/commit-requests" element={<ManagerCommitRequests />} />
+          <Route path="/manager/commit-requests/:commitId" element={<ManagerCommitRequestDetail />} />
+
+
           <Route path="/about-us-guest" element={<AboutUsGuest />} />
           <Route path="/consulting-services-guest" element={<ConsultingServicesGuest />} />
           <Route path="/valuation-tool" element={<ValuationTool />} />
