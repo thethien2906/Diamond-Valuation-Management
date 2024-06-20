@@ -30,6 +30,8 @@ import ValuationTool from './pages/guest/ValuationTool';
 import BookingForm from './pages/customer/BookingForm';
 import AboutUsCustomer from './pages/customer/AboutUsCustomer';
 import ConsultingServicesCustomer from './pages/customer/ConsultingServicesCustomer';
+import RecordTracking from './pages/customer/RecordTracking';
+import CommitRequest from './pages/customer/CommitRequest';
 
 import PendingRequests from './pages/consultant/PendingRequests';
 import RequestViewDetail from './pages/consultant/RequestViewDetail';
@@ -102,8 +104,9 @@ function App() {
 
           <Route path="/about-us-customer" element={<AboutUsCustomer />} />
           <Route path="/consulting-services-customer" element={<ConsultingServicesCustomer />} />
-          
           <Route path="/booking" element={<BookingForm />} />
+          <Route path="/record-tracking" element={<RecordTracking />} />
+          <Route path="/request-commit/:recordId" element={<CommitRequest />} />
         </Routes>
       </ConsultantContextProvider>
     </UserContextProvider>

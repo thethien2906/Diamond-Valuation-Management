@@ -1,4 +1,3 @@
-// Client/src/components/CustomerLayout.jsx
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -112,6 +111,11 @@ const CustomerLayout = ({ children }) => {
                     VALUATION TOOL
                   </Typography>
                 </MenuItem>
+                <MenuItem component={Link} to="/record-tracking" sx={{ py: '6px', px: '12px', borderRadius: '30px' }}>
+                  <Typography variant="body2" color="text.primary">
+                    RECORD TRACKING
+                  </Typography>
+                </MenuItem>
               </Box>
             </Box>
             <Box
@@ -180,6 +184,9 @@ const CustomerLayout = ({ children }) => {
                   </MenuItem>
                   <MenuItem component={Link} to="/valuation-tool">
                     VALUATION TOOL
+                  </MenuItem>
+                  <MenuItem component={Link} to="/record-tracking">
+                    RECORD TRACKING
                   </MenuItem>
                   <MenuItem onClick={handleLogout}>
                     SIGN OUT

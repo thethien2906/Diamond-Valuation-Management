@@ -8,6 +8,7 @@ const receiptSchema = new Schema({
   phone: { type: String },
   email: { type: String },
   consultantId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   appointmentDate: { type: Date, required: true },
   appointmentTime: { type: String, required: true },
   services: { 

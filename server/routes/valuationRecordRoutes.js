@@ -8,5 +8,7 @@ router.get('/valuation-records/:recordId', valuationRecordController.getRecordBy
 router.put('/valuation-records/:recordId', valuationRecordController.updateRecordById);
 router.get('/valuation-records-in-progress', valuationRecordController.getRecordsInProgress); // Add this line
 router.get('/valuation-records-completed', valuationRecordController.getRecordsCompleted); 
+router.get('/valuation-records/user/:customerId', valuationRecordController.getRecordsByUserId);
+router.post('/valuation-records/request-commitment/:recordId', valuationRecordController.requestCommitment); // Add this line
 
 module.exports = router;

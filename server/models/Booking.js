@@ -21,6 +21,11 @@ const bookingSchema = new Schema({
         ref: 'User',               // Reference to the User model
         default: null,             // Set to null initially (unassigned)
       },
+    customerId: {
+        type: Schema.Types.ObjectId, // Store the user's ObjectId
+        ref: 'User',               // Reference to the User model
+        default: null,             // Set to null initially (unassigned)
+      },
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);

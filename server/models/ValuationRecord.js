@@ -11,6 +11,7 @@ const valuationRecordSchema = new Schema({
   services: { type: String, required: true },
   paymentMethod: { type: String, required: true },
   consultantId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   appraiserId: { type: Schema.Types.ObjectId, ref: 'User' },
   shapeAndCut: { type: String },
   caratWeight: { type: Number },
@@ -23,6 +24,7 @@ const valuationRecordSchema = new Schema({
   estimatedValue: { type: Number },
   valuationMethod: { type: String },
   certificateNumber: { type: String },
+  commitmentRequested: { type: Boolean, default: false },
   status: { type: String, enum: ['In Progress', 'Completed','Sealed','Picked Up'], default: 'In Progress' }
 });
 

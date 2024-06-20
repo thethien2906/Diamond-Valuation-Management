@@ -40,6 +40,7 @@ const generateReceipt = async (req, res) => {
             appointmentDate: booking.date,
             appointmentTime: booking.time,
             consultantId: booking.consultantId._id,
+            customerId: booking.customerId,
             services,
             paymentMethod,
             amountPaid

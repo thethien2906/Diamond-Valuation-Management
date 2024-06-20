@@ -45,6 +45,7 @@ const createRecord = async (req, res) => {
       services: receipt.services,
       paymentMethod: receipt.paymentMethod,
       consultantId: receipt.consultantId,
+      customerId: receipt.customerId,
       appraiserId: appraiser._id,
       status: 'In Progress' // Set default status
     });
@@ -123,6 +124,37 @@ const updateRecordById = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+const getRecordsByUserId = async (req, res) => {
+  try {
+    const { customerId } = req.params;
+    const records = await ValuationRecord.find({ customerId });
+    if (records.length === 0) {
+      return res.status(404).json({ error: 'No records found for this user' });
+    }
+    res.status(200).json(records);
+  } catch (error) {
+    console.error('Error fetching records by user ID:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 
+const requestCommitment = async (req, res) => {
+  try {
+    const { recordId } = req.params;
+    const record = await ValuationRecord.findById(recordId);
 
-module.exports = { createRecord, getRecordsByStatus, getRecordById, updateRecordById, getRecordsInProgress, getRecordsCompleted, };
+    if (!record) {
+      return res.status(404).json({ error: 'Record not found' });
+    }
+
+    // Add logic for creating a commitment request (e.g., updating the record or notifying the consultant)
+    record.commitmentRequested = true; // Example field, you might need to add this to your model
+    await record.save();
+
+    res.status(200).json({ message: 'Commitment request submitted successfully' });
+  } catch (error) {
+    console.error('Error requesting commitment:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+module.exports = { createRecord, getRecordsByStatus, getRecordById, updateRecordById, getRecordsInProgress, getRecordsCompleted, getRecordsByUserId, requestCommitment };

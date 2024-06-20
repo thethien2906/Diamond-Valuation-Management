@@ -12,6 +12,7 @@ const createBooking = async (req, res) => {
       ...bookingData,
       status: "pending",
       consultantId: consultant._id,
+      customerId: bookingData.customerId, // Make sure userId is included
     });
     await newBooking.save();
     res.status(201).json({
@@ -23,6 +24,9 @@ const createBooking = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+module.exports = { createBooking };
+
 
 const getBookingById = async (req, res) => {
   try {
