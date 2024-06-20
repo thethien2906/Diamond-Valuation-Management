@@ -32,6 +32,9 @@ import AboutUsCustomer from './pages/customer/AboutUsCustomer';
 import ConsultingServicesCustomer from './pages/customer/ConsultingServicesCustomer';
 import RecordTracking from './pages/customer/RecordTracking';
 import CommitRequest from './pages/customer/CommitRequest';
+import CommitmentRequests from './pages/consultant/CommitmentRequestView';
+import CommitmentRequestDetail from './pages/consultant/CommitmentRequestViewDetail';
+
 
 import PendingRequests from './pages/consultant/PendingRequests';
 import RequestViewDetail from './pages/consultant/RequestViewDetail';
@@ -85,6 +88,8 @@ function App() {
             <Route path="receipts/:receiptId" element={<ReceiptDetail />} />
             <Route path="valuation-records" element={<RecordView />} />
             <Route path="valuation-records/:recordId" element={<RecordViewDetail />} />
+            <Route path="commit-requests" element={<CommitmentRequests />} />
+            <Route path="commit-requests/:commitId" element={<CommitmentRequestDetail />} />
           </Route>
 
           {/* Nested routes under AppraiserDashboard */}

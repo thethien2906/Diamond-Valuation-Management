@@ -201,6 +201,13 @@ const ConsultantDashboardLayout = () => {
             </ListItemIcon>
             <ListItemText primary="Record Tracking" />
           </ListItemButton>
+          <ListItemButton component={Link} to="/consultant/commit-requests">
+            <ListItemIcon>
+              <TrackChangesIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <ListItemText primary="Commitment Requests" />
+          </ListItemButton>
+          
         </List>
         <Box sx={{ p: 2, mt: 'auto', textAlign: 'center', bgcolor: '#343a40', color: '#717e87' }}>
           <Typography variant="body2" sx={{ fontSize: '1rem' }}>
