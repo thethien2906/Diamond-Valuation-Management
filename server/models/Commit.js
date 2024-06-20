@@ -12,6 +12,7 @@ const commitSchema = new Schema({
   phoneNumber: { type: String, required: true },
   email: { type: String, required: true },
   dateIssued: { type: Date, default: Date.now },
+
   status: { type: String, enum: ['Pending by Customer','Pending by Consultant', 'Approved', 'Rejected'], default: 'Pending By Customer' }
   
 });
