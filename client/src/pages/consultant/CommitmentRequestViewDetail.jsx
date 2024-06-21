@@ -5,12 +5,12 @@ import {
     Box, Typography, Paper, CircularProgress, Button
 } from '@mui/material';
 import { toast } from 'react-hot-toast';
-
+import { useNavigate } from 'react-router-dom';
 const CommitmentRequestViewDetail = () => {
     const { commitId } = useParams();
     const [commit, setCommit] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchRequest = async () => {
             try {
@@ -43,12 +43,13 @@ const CommitmentRequestViewDetail = () => {
     };
     const handleDenyRequest = async () => {
         try {
-            await axios.delete(`/api/commit-request/${commitId}`);
+            const response = await axios.put(`/api/commit-request/${commitId}/deny`); // Add consultantId if it's needed on the backend
+            
             toast.success('Commitment request denied and deleted successfully');
             navigate('/consultant/commit-requests'); // Redirect after deleting
         } catch (error) {
             console.error('Error denying commitment request:', error);
-            toast.error('Failed to deny commitment request');
+            
         }
     };
     if (loading) {
