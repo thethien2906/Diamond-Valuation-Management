@@ -13,11 +13,16 @@ const bookingSchema = new Schema({
     createdAt: { type: Date, default: Date.now },
     status: {
         type: String,
-        enum: ['pending', 'approved', 'rejected'], // Possible statuse
+        enum: ['pending', 'approved', 'rejected','done','completed'], // Possible statuses
         default: 'pending' // Default status is 'pending'
       },
       consultantId: {
         type: Schema.Types.ObjectId, // Store the consultant's ObjectId
+        ref: 'User',               // Reference to the User model
+        default: null,             // Set to null initially (unassigned)
+      },
+    customerId: {
+        type: Schema.Types.ObjectId, // Store the user's ObjectId
         ref: 'User',               // Reference to the User model
         default: null,             // Set to null initially (unassigned)
       },

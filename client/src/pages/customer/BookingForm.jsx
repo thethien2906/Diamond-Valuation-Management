@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import Container from "@mui/material/Container";
@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
+import { UserContext } from "../../context/userContext"; // Import the user context
 
 const BookingForm = () => {
   const [formData, setFormData] = useState({
@@ -24,6 +25,8 @@ const BookingForm = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [consultantId, setConsultantId] = useState(null);
   const navigate = useNavigate();
+  const { user } = useContext(UserContext); // Use the user context to get the current user
+
   useEffect(() => {
     // Fetch available consultant ID when the component mounts
     const fetchConsultantId = async () => {
@@ -62,6 +65,11 @@ const BookingForm = () => {
       return;
     }
 
+    if (!user) {
+      toast.error("User not logged in. Please log in to book an appointment.");
+      return;
+    }
+
     try {
       const response = await fetch('http://localhost:3000/api/bookings', {
         method: 'POST',
@@ -71,11 +79,11 @@ const BookingForm = () => {
         body: JSON.stringify({
           ...formData,
           consultantId,
+          customerId: user._id, // Include userId in the booking data
         }),
       });
 
       if (response.ok) {
-        const data = await response.json();
         toast.success("Booking created successfully!");
         setShowConfirmation(true);
         setTimeout(() => setShowConfirmation(false), 3000);

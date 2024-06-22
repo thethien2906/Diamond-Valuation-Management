@@ -51,7 +51,7 @@ export default function Register() {
         toast.error(response.data.error);
       } else {
         setData({ name: '', email: '', password: '' });
-        toast.success('Registered successfully! Please login');
+        toast.success('Registered successfully! Please verify through your email.');
         navigate('/login');
       }
     } catch (error) {
@@ -72,7 +72,7 @@ export default function Register() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(wp5912131-ronaldo-celebration-4k-wallpapers.jpg?url)',
+            backgroundImage: 'url(Diamond.jpg?url)',
             backgroundRepeat: 'no-repeat',
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
