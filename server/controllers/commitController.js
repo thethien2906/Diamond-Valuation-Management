@@ -1,6 +1,7 @@
 const Commit = require('../models/Commit');
 const ValuationRecord = require('../models/ValuationRecord');
-
+const transporter = require('../config/nodemailer');
+const User = require('../models/User');
 const createCommitRequest = async (req, res) => {
   try {
     const { recordId, reasonForLoss, customerName, phoneNumber, email } = req.body;
@@ -91,18 +92,104 @@ const updateCommitStatus = async (req, res) => {
       }
     
   }
-
-  const deleteCommit = async (req, res) => {
+  const getPendingByConsultantCommits = async (req, res) => {
     try {
-        const commitId = req.params.commitId;
-        const deletedCommit = await Commit.findByIdAndDelete(commitId);
-        if (!deletedCommit) {
-            return res.status(404).json({ error: 'Commitment statement not found' });
-        }
-        res.json({ message: 'Commitment statement deleted successfully' });
+      const commits = await Commit.find({ status: 'Pending by Consultant' });
+      res.status(200).json(commits);
     } catch (error) {
-        console.error('Error deleting commitment statement:', error);
-        res.status(500).json({ error: 'Internal server error' });
+      console.error('Error fetching commits:', error);
+      res.status(500).json({ error: 'Internal server error' });
     }
-};
-  module.exports = { createCommitRequest, updateCommitStatus, getCommitsByConsultant, getCommitById, deleteCommit };
+  };
+  const sendEmail = (email, subject, text) => {
+    const mailOptions = {
+      from: process.env.SMTP_USER,
+      to: email,
+      subject: subject,
+      text: text
+    };
+  
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+      } else {
+        console.log('Email sent:', info.response);
+      }
+    });
+  };
+  const updateCommitStatusByManager = async (req, res) => {
+    try {
+      const { commitId } = req.params;
+      const { status } = req.body;
+  
+      const commit = await Commit.findById(commitId);
+      if (!commit) {
+        return res.status(404).json({ error: 'Commitment request not found' });
+      }
+  
+      commit.status = status;
+      await commit.save();
+      
+      // Send email based on status change
+      const emailText = status === 'Approved' ? 
+        `Dear ${commit.customerName}, your commitment request has been approved.` :
+        `Dear ${commit.customerName}, your commitment request has been denied.`;
+      sendEmail(commit.email, `Commitment Request ${status}`, emailText);
+  
+      res.status(200).json({ message: 'Commitment request status updated successfully', commit });
+    } catch (error) {
+      console.error('Error updating commitment request status:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  };
+
+  const denyCommitRequest = async (req, res) => {
+    try {
+      const commitId = req.params.commitId;
+      
+      
+      // Find and update the commit
+      const commit = await Commit.findByIdAndUpdate(
+        commitId,
+        { status: 'Rejected' },
+        { new: true } 
+      ).populate('recordId');
+  
+      if (!commit) {
+        return res.status(404).json({ error: 'Commitment statement not found' });
+      }
+      
+      // Fetch the customer associated with the commit's valuation record
+      const valuationRecord = await ValuationRecord.findById(commit.recordId);
+      const customer = await User.findById(valuationRecord.customerId);
+  
+      if (!customer) {
+        return res.status(404).json({ error: 'Customer not found' });
+      }
+  
+      // Send email to the customer
+     
+      const mailOptions = {
+        from: process.env.SMTP_USER,
+          to: customer.email,
+          subject: 'Commitment Request Denied',
+          text: `
+        Dear ${customer.name},
+
+        Your commitment request has been denied by our consultant.
+
+        We apologize for any inconvenience this may cause. Please contact us for further assistance or to discuss alternative options.
+
+        Thank you for your understanding.
+    `
+      };
+  
+      await transporter.sendMail(mailOptions); // Send the email
+      await Commit.findByIdAndDelete(commitId);
+      res.json({ message: 'Commitment request denied and email sent to customer' });
+    } catch (error) {
+      console.error('Error denying commitment request:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  }
+  module.exports = { createCommitRequest, updateCommitStatus, getCommitsByConsultant, getCommitById, denyCommitRequest, getPendingByConsultantCommits, updateCommitStatusByManager };
