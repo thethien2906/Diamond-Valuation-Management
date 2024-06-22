@@ -95,7 +95,7 @@ const ManagerDashboard = ({ children }) => {
                     Commitment Request
                   </Typography>
                 </ListItemButton>
-                <ListItemButton component={Link} to="/manager-sealing-requests">
+                <ListItemButton component={Link} to="/manager/seal-requests">
                   <Typography variant="body2" color="text.primary">
                     Sealing Request
                   </Typography>

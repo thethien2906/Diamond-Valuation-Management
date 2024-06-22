@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
   Box,
@@ -7,7 +7,8 @@ import {
   CircularProgress,
   Accordion,
   AccordionSummary,
-  AccordionDetails
+  AccordionDetails,
+  Button
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { toast } from 'react-hot-toast';
@@ -16,6 +17,7 @@ const RecordViewDetail = () => {
   const { recordId } = useParams();
   const [record, setRecord] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecordData = async () => {
@@ -32,6 +34,10 @@ const RecordViewDetail = () => {
 
     fetchRecordData();
   }, [recordId]);
+
+  const handleSeal = () => {
+    navigate(`/consultant/record-sealing/${recordId}`);
+  };
 
   if (loading) {
     return (
@@ -113,6 +119,11 @@ const RecordViewDetail = () => {
           </Accordion>
         </AccordionDetails>
       </Accordion>
+      <Box sx={{ mt: 3 }}>
+        <Button variant="contained" color="secondary" onClick={handleSeal}>
+          Seal
+        </Button>
+      </Box>
     </Box>
   );
 };

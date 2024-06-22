@@ -59,7 +59,7 @@ const createRecord = async (req, res) => {
 };
 const getRecordsByStatus = async (req, res) => {
   try {
-    const statuses = ['In Progress', 'Completed'];
+    const statuses = ['In Progress', 'Completed','Sealed'];
     const records = await ValuationRecord.find({ status: { $in: statuses } });
     if (records.length === 0) {
       return res.status(200).json({ message: 'No records found' }); // Return a 200 with the message

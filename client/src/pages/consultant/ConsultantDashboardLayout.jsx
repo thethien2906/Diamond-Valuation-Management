@@ -207,6 +207,12 @@ const ConsultantDashboardLayout = () => {
             </ListItemIcon>
             <ListItemText primary="Commitment Requests" />
           </ListItemButton>
+          <ListItemButton component={Link} to="/consultant/seal-status">
+            <ListItemIcon>
+              <TrackChangesIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <ListItemText primary="Seal status" />
+          </ListItemButton>
           
         </List>
         <Box sx={{ p: 2, mt: 'auto', textAlign: 'center', bgcolor: '#343a40', color: '#717e87' }}>

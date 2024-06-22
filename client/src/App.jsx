@@ -45,6 +45,9 @@ import GenerateReceiptForm from './pages/consultant/ReceiptForm';
 import ReceiptDetail from './pages/consultant/ReceiptDetail';
 import RecordView from './pages/consultant/RecordView';
 import RecordViewDetail from './pages/consultant/RecordViewDetail';
+import RecordSealing from './pages/consultant/RecordSeal';
+import ConsulatantSealStatus from './pages/consultant/SealStatus';
+
 
 import TaskView from './pages/appraiser/TaskView';
 import ValuationRecordAppraiserDetail from './pages/appraiser/TaskViewDetail';
@@ -54,6 +57,8 @@ import RequestView from './pages/consultant/RequestView';
 
 import ManagerCommitRequests from './pages/manager/CommitRequests';
 import ManagerCommitRequestDetail from './pages/manager/CommitRequestDetail';
+import ManagerSealingRequests from './pages/manager/SealRequest';
+import ManagerSealRequestDetail from './pages/manager/SealRequestDetail';
 
 
 axios.defaults.baseURL = 'http://localhost:3000';
@@ -94,6 +99,8 @@ function App() {
             <Route path="valuation-records/:recordId" element={<RecordViewDetail />} />
             <Route path="commit-requests" element={<CommitmentRequests />} />
             <Route path="commit-requests/:commitId" element={<CommitmentRequestDetail />} />
+            <Route path="record-sealing/:recordId" element={<RecordSealing />} />
+            <Route path="seal-status" element={<ConsulatantSealStatus />} />
           </Route>
 
           {/* Nested routes under AppraiserDashboard */}
@@ -108,6 +115,9 @@ function App() {
           <Route path="/manager" element={<ManagerDashboard />} />
           <Route path="/manager/commit-requests" element={<ManagerCommitRequests />} />
           <Route path="/manager/commit-requests/:commitId" element={<ManagerCommitRequestDetail />} />
+          <Route path="/manager/seal-requests" element={<ManagerSealingRequests />} />
+          <Route path="/manager/seal-requests/:sealId" element={<ManagerSealRequestDetail />} />
+
 
 
           <Route path="/about-us-guest" element={<AboutUsGuest />} />
