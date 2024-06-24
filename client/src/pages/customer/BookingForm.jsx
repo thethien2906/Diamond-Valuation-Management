@@ -6,11 +6,11 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import MenuItem from "@mui/material/MenuItem";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { IconButton } from "@mui/material";
-import { UserContext } from "../../context/userContext"; // Import the user context
-
+import { UserContext } from "../../context/userContext";
 const BookingForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -21,13 +21,17 @@ const BookingForm = () => {
     date: "",
     time: "",
   });
-
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [serviceId, setServiceId] = useState("");
   const [consultantId, setConsultantId] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
-  const { user } = useContext(UserContext); // Use the user context to get the current user
-
+  const location = useLocation();
+  const {user} = useContext(UserContext);
   useEffect(() => {
+    // Get the serviceId from the query parameters
+    const queryParams = new URLSearchParams(location.search);
+    setServiceId(queryParams.get("serviceId"));
+
     // Fetch available consultant ID when the component mounts
     const fetchConsultantId = async () => {
       try {
@@ -44,7 +48,7 @@ const BookingForm = () => {
     };
 
     fetchConsultantId();
-  }, []);
+  }, [location.search]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +59,7 @@ const BookingForm = () => {
     e.preventDefault();
     const { name, email, phoneNumber, identityCard, address, date, time } = formData;
 
-    if (!name || !email || !phoneNumber || !identityCard || !address || !date || !time) {
+    if (!name || !email || !phoneNumber || !identityCard || !address || !date || !time || !serviceId) {
       toast.error("Please fill out all fields before booking.");
       return;
     }
@@ -65,25 +69,15 @@ const BookingForm = () => {
       return;
     }
 
-    if (!user) {
-      toast.error("User not logged in. Please log in to book an appointment.");
-      return;
-    }
-
     try {
-      const response = await fetch('http://localhost:3000/api/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          consultantId,
-          customerId: user._id, // Include userId in the booking data
-        }),
+      const response = await axios.post('/api/bookings', {
+        ...formData,
+        consultantId,
+        customerId: user._id,
+        serviceId,
       });
 
-      if (response.ok) {
+      if (response.status === 201) {
         toast.success("Booking created successfully!");
         setShowConfirmation(true);
         setTimeout(() => setShowConfirmation(false), 3000);
@@ -98,8 +92,7 @@ const BookingForm = () => {
           time: "",
         });
       } else {
-        const errorData = await response.json();
-        toast.error(errorData.msg || "An error occurred while booking your appointment. Please try again.");
+        toast.error("An error occurred while booking your appointment. Please try again.");
       }
     } catch (error) {
       console.error("Error booking appointment:", error);

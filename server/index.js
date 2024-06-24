@@ -11,6 +11,7 @@ const receiptRoutes = require('./routes/receiptRoutes');
 const valuationRecordRoutes = require('./routes/valuationRecordRoutes');
 const commitRoutes = require('./routes/commitRoutes');
 const sealRoutes = require('./routes/sealRoutes');
+const serviceRoutes = require('./routes/serviceRoutes');
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.log(err));
@@ -33,7 +34,7 @@ app.use('/api', receiptRoutes);
 app.use('/api', valuationRecordRoutes)
 app.use('/api', commitRoutes);
 app.use('/api', sealRoutes);
-
+app.use('/api', serviceRoutes); 
 
 const port = 3000;
 app.listen(port, () => {

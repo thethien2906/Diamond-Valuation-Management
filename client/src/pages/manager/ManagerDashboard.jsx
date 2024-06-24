@@ -100,6 +100,11 @@ const ManagerDashboard = ({ children }) => {
                     Sealing Request
                   </Typography>
                 </ListItemButton>
+                <ListItemButton component={Link} to="/manager/services">
+                  <Typography variant="body2" color="text.primary">
+                    Service Packages
+                  </Typography>
+                </ListItemButton>
               </List>
             </Box>
             <Box
@@ -169,6 +174,7 @@ const ManagerDashboard = ({ children }) => {
                   <MenuItem component={Link} to="/manager-sealing-requests">
                     Sealing Request
                   </MenuItem>
+                  
                   <Divider />
                 </Box>
               </Drawer>

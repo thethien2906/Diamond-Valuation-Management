@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import CustomerLayout from "../../components/CustomerLayout";
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../../context/userContext";
@@ -11,48 +11,44 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'; // Import the icon
-
-const tiers = [
-  {
-    title: 'Unstoppable!',
-    price: '6.9',
-    consultant: 'Male',
-    duration: 'Moderate',
-    accuracy: 'High',
-    buttonText: 'Book Appointment',
-    buttonVariant: 'outlined',
-  },
-  {
-    title: 'Godlike!',
-    price: '69.69',
-    consultant: 'Male/Female',
-    duration: 'Fast',
-    accuracy: 'Higher',
-    buttonText: 'Book Appointment',
-    buttonVariant: 'contained',
-  },
-  {
-    title: 'Legendary!',
-    price: '696.9',
-    consultant: 'Male/Female',
-    duration: 'Need for Speed',
-    accuracy: '$1,000 with "aimbot"',
-    buttonText: 'Book Appointment',
-    buttonVariant: 'outlined',
-  },
-];
-
+import axios from 'axios';
+import CircularProgress from '@mui/material/CircularProgress';
 const ConsultingServicesCustomer = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleBookAppointment = () => {
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const response = await axios.get('/api/services');
+        setServices(response.data);
+      } catch (error) {
+        console.error('Error fetching services:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, []);
+
+  const handleBookAppointment = (serviceId) => {
     if (user) {
-      navigate("/booking");
+      navigate(`/booking?serviceId=${serviceId}`);
     } else {
       navigate("/login");
     }
   };
+
+  if (loading) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <CustomerLayout>
@@ -81,17 +77,17 @@ const ConsultingServicesCustomer = () => {
           </Typography>
         </Box>
         <Grid container spacing={3} alignItems="center" justifyContent="center">
-          {tiers.map((tier) => (
-            <Grid item key={tier.title} xs={12} sm={6} md={4}>
+          {services.map((service) => (
+            <Grid item key={service._id} xs={12} sm={6} md={4}>
               <Card
                 sx={{
                   p: 2,
                   display: 'flex',
                   flexDirection: 'column',
                   gap: 4,
-                  border: tier.title === 'Godlike!' ? '1px solid' : undefined,
-                  borderColor: tier.title === 'Godlike!' ? 'primary.main' : undefined,
-                  background: tier.title === 'Godlike!' ? 'linear-gradient(#033363, #021F3B)' : undefined,
+                  border: service.name === 'Godlike!' ? '1px solid' : undefined,
+                  borderColor: service.name === 'Godlike!' ? 'primary.main' : undefined,
+                  background: service.name === 'Godlike!' ? 'linear-gradient(#033363, #021F3B)' : undefined,
                 }}
               >
                 <CardContent>
@@ -100,13 +96,13 @@ const ConsultingServicesCustomer = () => {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      color: tier.title === 'Godlike!' ? 'white' : 'inherit',
+                      color: service.name === 'Godlike!' ? 'white' : 'inherit',
                     }}
                   >
                     <Typography component="h3" variant="h6">
-                      {tier.title}
+                      {service.name}
                     </Typography>
-                    {tier.title === 'Godlike!' && (
+                    {service.name === 'Godlike!' && (
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
                         <AutoAwesomeIcon sx={{ mr: 1 }} /> {/* Render the icon */}
                         <Typography variant="body2" color="white">
@@ -119,30 +115,28 @@ const ConsultingServicesCustomer = () => {
                     sx={{
                       display: 'flex',
                       alignItems: 'baseline',
-                      color: tier.title === 'Godlike!' ? 'white' : undefined,
+                      color: service.name === 'Godlike!' ? 'white' : undefined,
                     }}
                   >
                     <Typography component="h3" variant="h2">
-                      ${tier.price}
+                      ${service.price}
                     </Typography>
                   </Box>
-                  <Typography component="p" variant="body1" sx={{ mt: 2, color: tier.title === 'Godlike!' ? 'white' : undefined, }}>
-                    Consultant: {tier.consultant}
+                  
+                  <Typography component="p" variant="body1" sx={{ mt: 2, color: service.name === 'Godlike!' ? 'white' : undefined }}>
+                    Duration: {service.duration}
                   </Typography>
-                  <Typography component="p" variant="body1" sx={{ mt: 2, color: tier.title === 'Godlike!' ? 'white' : undefined, }}>
-                    Duration: {tier.duration}
-                  </Typography>
-                  <Typography component="p" variant="body1" sx={{ mt: 2, color: tier.title === 'Godlike!' ? 'white' : undefined, }}>
-                    Accuracy: {tier.accuracy}
+                  <Typography component="p" variant="body1" sx={{ mt: 2, color: service.name === 'Godlike!' ? 'white' : undefined }}>
+                    Accuracy: {service.accuracy}
                   </Typography>
                 </CardContent>
                 <CardActions>
                   <Button
                     fullWidth
-                    variant={tier.buttonVariant}
-                    onClick={handleBookAppointment}
+                    variant={service.name === 'Godlike!' ? 'contained' : 'outlined'}
+                    onClick={() => handleBookAppointment(service._id)}
                   >
-                    {tier.buttonText}
+                    Book Appointment
                   </Button>
                 </CardActions>
               </Card>

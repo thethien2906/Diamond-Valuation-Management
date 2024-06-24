@@ -8,8 +8,6 @@ const valuationRecordSchema = new Schema({
   email: { type: String, required: true },
   appointmentDate: { type: Date, required: true },
   appointmentTime: { type: String, required: true },
-  services: { type: String, required: true },
-  paymentMethod: { type: String, required: true },
   consultantId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   appraiserId: { type: Schema.Types.ObjectId, ref: 'User' },

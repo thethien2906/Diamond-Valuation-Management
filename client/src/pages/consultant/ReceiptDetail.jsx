@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useReactToPrint } from 'react-to-print'; 
+import { useReactToPrint } from 'react-to-print';
 
 import {
   Box,
@@ -13,16 +13,23 @@ import {
 import { toast } from 'react-hot-toast';
 
 const ReceiptDetail = () => {
-    const { receiptId } = useParams();
-    const [receipt, setReceipt] = useState(null);
-    const [creatingRecord, setCreatingRecord] = useState(false);
-    const navigate = useNavigate();
+  const { receiptId } = useParams();
+  const [receipt, setReceipt] = useState(null);
+  const [service, setService] = useState(null);
+  const [creatingRecord, setCreatingRecord] = useState(false);
+  const navigate = useNavigate();
+  const componentRef = useRef();
 
   useEffect(() => {
     const fetchReceiptData = async () => {
       try {
         const response = await axios.get(`/api/receipts/${receiptId}`);
         setReceipt(response.data);
+
+        if (response.data.serviceId) {
+          const serviceResponse = await axios.get(`/api/services/${response.data.serviceId}`);
+          setService(serviceResponse.data);
+        }
       } catch (error) {
         console.error('Error fetching receipt data:', error);
         toast.error("Failed to fetch receipt data");
@@ -31,12 +38,13 @@ const ReceiptDetail = () => {
 
     fetchReceiptData();
   }, [receiptId]);
+
   const handleCreateRecord = async () => {
     setCreatingRecord(true);
     try {
       const response = await axios.post(`/api/valuation-records/${receiptId}`);
       toast.success('Valuation record created successfully');
-    //   navigate(`/valuation-records/${response.data._id}`);
+      navigate(`/consultant/valuation-records`);
     } catch (error) {
       console.error('Error creating valuation record:', error);
       toast.error('Failed to create valuation record');
@@ -44,21 +52,12 @@ const ReceiptDetail = () => {
       setCreatingRecord(false);
     }
   };
-  const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
   });
 
-  if (!receipt) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (!receipt) {
+  if (!receipt || !service) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
         <CircularProgress />
@@ -72,35 +71,32 @@ const ReceiptDetail = () => {
         Receipt Details
       </Typography>
       <div ref={componentRef}>
-      <Paper sx={{ p: 3, mt: 2 }}>
-        <Typography variant="body1">Receipt Number: {receipt.receiptNumber}</Typography>
-        <Typography variant="body1">Issue Date: {new Date(receipt.issueDate).toLocaleString()}</Typography>
-        <Typography variant="body1">Customer Name: {receipt.customerName}</Typography>
-        <Typography variant="body1">Phone: {receipt.phone}</Typography>
-        <Typography variant="body1">Email: {receipt.email}</Typography>
-        <Typography variant="body1">Appointment Date: {new Date(receipt.appointmentDate).toLocaleDateString()}</Typography>
-        <Typography variant="body1">Appointment Time: {receipt.appointmentTime}</Typography>
-        <Typography variant="body1">Services: {receipt.services}</Typography>
-        <Typography variant="body1">Payment Method: {receipt.paymentMethod}</Typography>
-        <Typography variant="body1">Amount Paid: ${receipt.amountPaid.toFixed(2)}</Typography>
-        
-      </Paper>
-      
+        <Paper sx={{ p: 3, mt: 2 }}>
+          <Typography variant="body1">Receipt Number: {receipt.receiptNumber}</Typography>
+          <Typography variant="body1">Issue Date: {new Date(receipt.issueDate).toLocaleString()}</Typography>
+          <Typography variant="body1">Customer Name: {receipt.customerName}</Typography>
+          <Typography variant="body1">Phone: {receipt.phone}</Typography>
+          <Typography variant="body1">Email: {receipt.email}</Typography>
+          <Typography variant="body1">Appointment Date: {new Date(receipt.appointmentDate).toLocaleDateString()}</Typography>
+          <Typography variant="body1">Appointment Time: {receipt.appointmentTime}</Typography>
+          <Typography variant="body1">Consultant ID: {receipt.consultantId}</Typography>
+          <Typography variant="body1">Service: {service.name}</Typography>
+        </Paper>
       </div>
       <Box sx={{ mt: 3 }}>
-          <Button variant="contained" color="primary" onClick={handlePrint}>
-            Print Receipt
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleCreateRecord}
-            sx={{ ml: 2 }}
-            disabled={creatingRecord}
-          >
-            {creatingRecord ? 'Creating Record...' : 'Create Record'}
-          </Button>
-        </Box>
+        <Button variant="contained" color="primary" onClick={handlePrint}>
+          Print Receipt
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleCreateRecord}
+          sx={{ ml: 2 }}
+          disabled={creatingRecord}
+        >
+          {creatingRecord ? 'Creating Record...' : 'Create Record'}
+        </Button>
+      </Box>
     </Box>
   );
 };
