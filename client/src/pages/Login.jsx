@@ -1,39 +1,47 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, Link as RouterLink } from 'react-router-dom';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import { UserContext } from "../context/userContext";
+import CloseIcon from '@mui/icons-material/Close';
+import DiamondIcon from '@mui/icons-material/Diamond';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import CssBaseline from '@mui/material/CssBaseline';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import DiamondIcon from '@mui/icons-material/Diamond';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-// Footer component
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        DiamondScope
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { UserContext } from "../context/userContext";
 
-// Default theme setup
-const defaultTheme = createTheme();
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#00BFFF', // Fluorescent blue
+    },
+    secondary: {
+      main: '#FFFFFF', // White
+    },
+    background: {
+      default: '#121212', // Dark background
+      paper: '#1E1E1E', // Paper background
+    },
+  },
+  typography: {
+    h5: {
+      color: '#FFFFFF', // White text for headings
+    },
+    body2: {
+      color: '#B0C4DE', // Light blue text for secondary content
+    },
+  },
+});
 
 export default function SignInSide() {
   const navigate = useNavigate();
@@ -46,7 +54,7 @@ export default function SignInSide() {
   const loginUser = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/auth/login", data); // Updated path to '/auth/login'
+      const response = await axios.post("/auth/login", data);
       if (response.data.error) {
         toast.error(response.data.error);
       } else {
@@ -88,11 +96,13 @@ export default function SignInSide() {
       navigateToDashboard(user.role);
     }
   }, [user]);
+
   const handleClose = () => {
     navigate('/');
   };
+
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -120,7 +130,7 @@ export default function SignInSide() {
               alignItems: 'center',
             }}
           >
-              <IconButton
+            <IconButton
               aria-label="close"
               onClick={handleClose}
               sx={{ position: 'absolute', top: 8, right: 8 }}
@@ -145,6 +155,9 @@ export default function SignInSide() {
                 autoFocus
                 value={data.email}
                 onChange={(e) => setData({ ...data, email: e.target.value })}
+                InputProps={{
+                  style: { color: '#FFFFFF' }, // White text
+                }}
               />
               <TextField
                 margin="normal"
@@ -157,6 +170,9 @@ export default function SignInSide() {
                 autoComplete="current-password"
                 value={data.password}
                 onChange={(e) => setData({ ...data, password: e.target.value })}
+                InputProps={{
+                  style: { color: '#FFFFFF' }, // White text
+                }}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
@@ -166,23 +182,32 @@ export default function SignInSide() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, bgcolor: '#00BFFF' }}
               >
                 Sign In
               </Button>
               <Grid container>
                 <Grid item xs>
-                <Link component={RouterLink} to="/forgot-password" variant="body2"> 
+                  <Link component={RouterLink} to="/forgot-password" variant="body2" sx={{ color: '#B0C4DE' }}>
                     Forgot password?
                   </Link>
                 </Grid>
                 <Grid item>
-                  <Link component={RouterLink} to="/register" variant="body2">
+                  <Link component={RouterLink} to="/register" variant="body2" sx={{ color: '#B0C4DE' }}>
                     {"Don't have an account? Register"}
                   </Link>
                 </Grid>
               </Grid>
-              <Copyright sx={{ mt: 5 }} />
+              <Box mt={5}>
+                <Typography variant="body2" color="text.secondary" align="center">
+                  {'Copyright © '}
+                  <Link color="inherit" href="https://mui.com/">
+                    DiamondScope
+                  </Link>{' '}
+                  {new Date().getFullYear()}
+                  {'.'}
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </Grid>
