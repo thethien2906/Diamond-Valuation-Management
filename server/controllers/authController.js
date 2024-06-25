@@ -125,7 +125,7 @@ const loginUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'No user found' });
     }
-    if (user.IsVerified=='false') {
+    if (user.IsVerified=='false' && user.role=='user') {
       return res.status(401).json({ error: 'Please Verify your email' });
     }
     const match = await comparePassword(password, user.password);
