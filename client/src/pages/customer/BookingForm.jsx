@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
+import { loadStripe } from '@stripe/stripe-js';
 import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import MenuItem from "@mui/material/MenuItem";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate, useLocation } from "react-router-dom";
 import { IconButton } from "@mui/material";
 import { UserContext } from "../../context/userContext";
+
+const stripePromise = loadStripe("pk_test_51PV2aGRx0XBTHEAYZABfhKcLlLs2bnM370uuzHyLBJzXvisiF7KHMxR8oEokE7cdPexsyw6SoV4PiB7ASJfgJo5u00gnrG8Oxe");
+
 const BookingForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -26,18 +29,17 @@ const BookingForm = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
+
   useEffect(() => {
-    // Get the serviceId from the query parameters
     const queryParams = new URLSearchParams(location.search);
     setServiceId(queryParams.get("serviceId"));
 
-    // Fetch available consultant ID when the component mounts
     const fetchConsultantId = async () => {
       try {
         const response = await axios.get('/api/consultants/available');
         if (response.data.length > 0) {
-          setConsultantId(response.data[0].userID); // Assuming first available consultant
+          setConsultantId(response.data[0].userID);
         } else {
           toast.error("No consultants available at the moment.");
         }
@@ -79,18 +81,20 @@ const BookingForm = () => {
 
       if (response.status === 201) {
         toast.success("Booking created successfully!");
-        setShowConfirmation(true);
-        setTimeout(() => setShowConfirmation(false), 3000);
 
-        setFormData({
-          name: "",
-          email: "",
-          phoneNumber: "",
-          identityCard: "",
-          address: "",
-          date: "",
-          time: "",
+        const stripe = await stripePromise;
+        const checkoutSession = await axios.post('/api/create-checkout-session', {
+          bookingId: response.data.booking._id,
         });
+
+        const result = await stripe.redirectToCheckout({
+          sessionId: checkoutSession.data.id,
+        });
+
+        if (result.error) {
+          console.error("Error redirecting to checkout:", result.error.message);
+          toast.error("An error occurred while redirecting to payment. Please try again.");
+        }
       } else {
         toast.error("An error occurred while booking your appointment. Please try again.");
       }
@@ -183,7 +187,7 @@ const BookingForm = () => {
         {showConfirmation && (
           <Box sx={{ mt: 4 }}>
             <Typography variant="body1" color="primary" sx={{ textAlign: "center" }}>
-              Thank you for booking! We will call you back to confirm your appointment.
+              Thank you for booking!
             </Typography>
           </Box>
         )}

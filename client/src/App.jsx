@@ -1,6 +1,8 @@
 // Client/src/App.js
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
+import Success from './pages/CheckoutSuccess';
+import Cancel from './pages/CheckoutCancel';
 
 import Home from './pages/guest/Home';
 import Register from './pages/Register';
@@ -32,10 +34,10 @@ import AboutUsCustomer from './pages/customer/AboutUsCustomer';
 import ConsultingServicesCustomer from './pages/customer/ConsultingServicesCustomer';
 import RecordTracking from './pages/customer/RecordTracking';
 import CommitRequest from './pages/customer/CommitRequest';
+
+
 import CommitmentRequests from './pages/consultant/CommitmentRequestView';
 import CommitmentRequestDetail from './pages/consultant/CommitmentRequestViewDetail';
-
-
 import PendingRequests from './pages/consultant/PendingRequests';
 import RequestViewDetail from './pages/consultant/RequestViewDetail';
 import AppointmentCalendar from './pages/consultant/AppointmentCalendar';
@@ -129,6 +131,9 @@ function App() {
           <Route path="/booking" element={<BookingForm />} />
           <Route path="/record-tracking" element={<RecordTracking />} />
           <Route path="/request-commit/:recordId" element={<CommitRequest />} />
+          <Route path="/payment/success" element={<Success />} />
+          <Route path="/payment/cancel" element={<Cancel />} />
+      
         </Routes>
       </ConsultantContextProvider>
     </UserContextProvider>
