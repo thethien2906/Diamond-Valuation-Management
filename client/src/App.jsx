@@ -17,7 +17,7 @@ import CustomerDashboard from './pages/customer/CustomerDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ConsultantDashboardLayout from './pages/consultant/ConsultantDashboardLayout';
 import AppraiserDashboard from './pages/appraiser/AppraiserDashboard';
-import ManagerDashboard from './pages/manager/ManagerDashboard';
+import ManagerLayout from './pages/manager/ManagerLayout';
 
 import ViewUsers from './pages/admin/ViewUsers';
 import ViewStaffs from './pages/admin/ViewStaffs';
@@ -112,13 +112,13 @@ function App() {
             <Route path="task-view/:recordId" element={<TaskDoneViewDetail />} />
           </Route>
 
-          <Route path="/manager" element={<ManagerDashboard />} />
-          <Route path="/manager/commit-requests" element={<ManagerCommitRequests />} />
-          <Route path="/manager/commit-requests/:commitId" element={<ManagerCommitRequestDetail />} />
-          <Route path="/manager/seal-requests" element={<ManagerSealingRequests />} />
-          <Route path="/manager/seal-requests/:sealId" element={<ManagerSealRequestDetail />} />
-          <Route path="/manager/services" element={<ManagerServices />} />
-
+          <Route path="/manager" element={<ManagerLayout />}>
+          <Route path="commit-requests" element={<ManagerCommitRequests />} />
+          <Route path="commit-requests/:commitId" element={<ManagerCommitRequestDetail />} />
+          <Route path="seal-requests" element={<ManagerSealingRequests />} />
+          <Route path="seal-requests/:sealId" element={<ManagerSealRequestDetail />} />
+          <Route path="services" element={<ManagerServices />} />
+          </Route>
 
           <Route path="/about-us-guest" element={<AboutUsGuest />} />
           <Route path="/consulting-services-guest" element={<ConsultingServicesGuest />} />

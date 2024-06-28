@@ -1,35 +1,33 @@
-import React, { useContext, useState } from "react";
-import { useNavigate, Link, Outlet } from "react-router-dom";
-import { UserContext } from "../../context/userContext";
+import React, { useContext, useState, useEffect } from 'react';
+import { Link, useNavigate, Outlet } from 'react-router-dom';
+import { UserContext } from '../../context/userContext';
 import {
-  Box,
-  Typography,
   AppBar,
+  Box,
   Toolbar,
+  IconButton,
   Drawer,
   List,
-  ListItemText,
-  IconButton,
-  useTheme,
-  Divider,
   ListItemButton,
   ListItemIcon,
   Menu,
-  MenuItem
-} from "@mui/material";
-import MenuIcon from '@mui/icons-material/Menu';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import PendingActionsIcon from '@mui/icons-material/PendingActions';
+  MenuItem,
+  Typography,
+  Divider,
+} from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
-import TrackChangesIcon from '@mui/icons-material/TrackChanges';
+import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import axios from "axios";
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import axios from 'axios';
 
-const ConsultantDashboardLayout = () => {
+const ManagerDashboard = ({ children }) => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
-  const theme = useTheme();
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -57,10 +55,16 @@ const ConsultantDashboardLayout = () => {
     }
   };
 
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
+
   return (
     <Box sx={{ display: 'flex' }}>
       {/* App Bar */}
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, bgcolor:'#212529' }}>
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, bgcolor: '#212529' }}>
         <Toolbar>
           {/* Menu Icon for Small Screens */}
           <IconButton
@@ -74,29 +78,18 @@ const ConsultantDashboardLayout = () => {
           </IconButton>
           {/* Title */}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Consultant Home
+            Manager Dashboard
           </Typography>
-          {/* User Menu for Small Screens */}
-          <IconButton
-            color="inherit"
-            aria-label="user menu"
-            onClick={handleMenuOpen}
-            edge="end"
-            sx={{ display: { md: 'none' } }}
-          >
-            <AccountCircleIcon />
-          </IconButton>
-          {/* User Menu for Medium and Above Screens */}
-          <IconButton
-            color="inherit"
-            aria-label="user menu"
-            onClick={handleMenuOpen}
-            edge="end"
-            sx={{ display: { xs: 'none', md: 'flex' } }}
-          >
-            <AccountCircleIcon />
-          </IconButton>
           {/* User Menu */}
+          <IconButton
+            color="inherit"
+            aria-label="user menu"
+            onClick={handleMenuOpen}
+            edge="end"
+            sx={{ display: { md: 'flex' } }}
+          >
+            <AccountCircleIcon />
+          </IconButton>
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
@@ -109,13 +102,13 @@ const ConsultantDashboardLayout = () => {
               vertical: 'top',
               horizontal: 'right',
             }}
-            sx={{marginTop: '40px'}}
+            sx={{ marginTop: '40px' }}
           >
             <MenuItem component={Link} to="/">
               <ListItemIcon>
                 <HomeIcon fontSize="small" sx={{ color: 'primary.main', mr: 1 }} />
               </ListItemIcon>
-              <Typography variant="inherit">Return to Home</Typography>
+              <Typography variant="inherit">Return Home</Typography>
             </MenuItem>
             <Divider />
             <MenuItem onClick={handleLogout}>
@@ -127,7 +120,7 @@ const ConsultantDashboardLayout = () => {
           </Menu>
         </Toolbar>
       </AppBar>
-      
+
       {/* Drawer for Small Screens (xs and sm) */}
       <Drawer
         anchor="left"
@@ -139,36 +132,30 @@ const ConsultantDashboardLayout = () => {
         }}
       >
         <Toolbar />
-        <List sx={{gap: 2}}>
-          <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant/appointments">
+        <List>
+          <ListItemButton onClick={toggleDrawer} component={Link} to="/manager-dashboard">
             <ListItemIcon>
-              <CalendarTodayIcon sx={{ color: '#fff' }} />
+              <DashboardIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
-            <ListItemText primary="View Appointment Calendar" />
+            <Typography variant="inherit" sx={{ color: '#fff' }}>Dashboard</Typography>
           </ListItemButton>
-          <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant">
+          <ListItemButton onClick={toggleDrawer} component={Link} to="/manager/commit-requests">
             <ListItemIcon>
-              <PendingActionsIcon sx={{ color: '#fff' }} />
+              <HourglassEmptyIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
-            <ListItemText primary="Pending Requests" />
+            <Typography variant="inherit" sx={{ color: '#fff' }}>Commitment Request</Typography>
           </ListItemButton>
-          <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant/valuation-records">
+          <ListItemButton onClick={toggleDrawer} component={Link} to="/manager/seal-requests">
             <ListItemIcon>
-              <TrackChangesIcon sx={{ color: '#fff' }} />
+              <AssignmentIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
-            <ListItemText primary="Record Tracking" />
+            <Typography variant="inherit" sx={{ color: '#fff' }}>Sealing Request</Typography>
           </ListItemButton>
-          <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant/commit-requests">
+          <ListItemButton onClick={toggleDrawer} component={Link} to="/manager/services">
             <ListItemIcon>
-              <TrackChangesIcon sx={{ color: '#fff' }} />
+              <ConfirmationNumberIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
-            <ListItemText primary="Commitment Requests" />
-          </ListItemButton>
-          <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant/seal-status">
-            <ListItemIcon>
-              <TrackChangesIcon sx={{ color: '#fff' }} />
-            </ListItemIcon>
-            <ListItemText primary="Seal Status" />
+            <Typography variant="inherit" sx={{ color: '#fff' }}>Service Packages</Typography>
           </ListItemButton>
         </List>
         <Divider sx={{ bgcolor: '#6c757d' }} />
@@ -178,7 +165,7 @@ const ConsultantDashboardLayout = () => {
           </Typography>
         </Box>
       </Drawer>
-      
+
       {/* Permanent Drawer for Medium Screens (md and above) */}
       <Drawer
         variant="permanent"
@@ -189,44 +176,36 @@ const ConsultantDashboardLayout = () => {
             width: 240,
             boxSizing: 'border-box',
             bgcolor: '#212529',
-            color: '#fff'
+            color: '#fff',
           },
-          [theme.breakpoints.down('md')]: {
-            display: 'none', // Hide drawer on small screens and below
-          },
+          display: { xs: 'none', md: 'block' }, // Hide drawer on small screens and below
         }}
       >
         <Toolbar />
         <List>
-          <ListItemButton component={Link} to="/consultant/appointments">
+          <ListItemButton component={Link} to="/manager-dashboard">
             <ListItemIcon>
-              <CalendarTodayIcon sx={{ color: '#fff' }} />
+              <DashboardIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
-            <ListItemText primary="View Appointment Calendar" />
+            <Typography variant="inherit" sx={{ color: '#fff' }}>Dashboard</Typography>
           </ListItemButton>
-          <ListItemButton component={Link} to="/consultant">
+          <ListItemButton component={Link} to="/manager/commit-requests">
             <ListItemIcon>
-              <PendingActionsIcon sx={{ color: '#fff' }} />
+              <HourglassEmptyIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
-            <ListItemText primary="Pending Requests" />
+            <Typography variant="inherit" sx={{ color: '#fff' }}>Commitment Request</Typography>
           </ListItemButton>
-          <ListItemButton component={Link} to="/consultant/valuation-records">
+          <ListItemButton component={Link} to="/manager/seal-requests">
             <ListItemIcon>
-              <TrackChangesIcon sx={{ color: '#fff' }} />
+              <AssignmentIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
-            <ListItemText primary="Record Tracking" />
+            <Typography variant="inherit" sx={{ color: '#fff' }}>Sealing Request</Typography>
           </ListItemButton>
-          <ListItemButton component={Link} to="/consultant/commit-requests">
+          <ListItemButton component={Link} to="/manager/services">
             <ListItemIcon>
-              <TrackChangesIcon sx={{ color: '#fff' }} />
+              <ConfirmationNumberIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
-            <ListItemText primary="Commitment Requests" />
-          </ListItemButton>
-          <ListItemButton component={Link} to="/consultant/seal-status">
-            <ListItemIcon>
-              <TrackChangesIcon sx={{ color: '#fff' }} />
-            </ListItemIcon>
-            <ListItemText primary="Seal Status" />
+            <Typography variant="inherit" sx={{ color: '#fff' }}>Service Packages</Typography>
           </ListItemButton>
         </List>
         <Box sx={{ p: 2, mt: 'auto', textAlign: 'center', bgcolor: '#343a40', color: '#717e87' }}>
@@ -235,7 +214,7 @@ const ConsultantDashboardLayout = () => {
           </Typography>
         </Box>
       </Drawer>
-      
+
       {/* Main Content */}
       <Box
         component="main"
@@ -247,11 +226,10 @@ const ConsultantDashboardLayout = () => {
         }}
       >
         <Toolbar />
-        <Outlet />
+        <Outlet /> {/* This will render the child routes/components */}
       </Box>
     </Box>
   );
-
 };
 
-export default ConsultantDashboardLayout;
+export default ManagerDashboard;
