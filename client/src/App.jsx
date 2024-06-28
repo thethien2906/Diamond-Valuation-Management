@@ -60,6 +60,7 @@ import ManagerCommitRequestDetail from './pages/manager/CommitRequestDetail';
 import ManagerSealingRequests from './pages/manager/SealRequest';
 import ManagerSealRequestDetail from './pages/manager/SealRequestDetail';
 import ManagerServices from './pages/manager/ServiceManage';
+import ManagerDashboard from './pages/manager/ManagerDashboard';
 
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.withCredentials = true;
@@ -113,6 +114,7 @@ function App() {
           </Route>
 
           <Route path="/manager" element={<ManagerLayout />}>
+          <Route path="manager-dashboard" element={<ManagerDashboard/>}/>
           <Route path="commit-requests" element={<ManagerCommitRequests />} />
           <Route path="commit-requests/:commitId" element={<ManagerCommitRequestDetail />} />
           <Route path="seal-requests" element={<ManagerSealingRequests />} />
