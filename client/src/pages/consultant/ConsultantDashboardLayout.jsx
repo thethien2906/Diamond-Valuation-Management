@@ -24,6 +24,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import EditOffIcon from '@mui/icons-material/EditOff';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import axios from "axios";
 
 const ConsultantDashboardLayout = () => {
@@ -160,13 +162,13 @@ const ConsultantDashboardLayout = () => {
           </ListItemButton>
           <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant/commit-requests">
             <ListItemIcon>
-              <TrackChangesIcon sx={{ color: '#fff' }} />
+              <EditOffIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Commitment Requests" />
           </ListItemButton>
           <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant/seal-status">
             <ListItemIcon>
-              <TrackChangesIcon sx={{ color: '#fff' }} />
+              <MoreHorizIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Seal Status" />
           </ListItemButton>
@@ -218,13 +220,13 @@ const ConsultantDashboardLayout = () => {
           </ListItemButton>
           <ListItemButton component={Link} to="/consultant/commit-requests">
             <ListItemIcon>
-              <TrackChangesIcon sx={{ color: '#fff' }} />
+              <EditOffIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Commitment Requests" />
           </ListItemButton>
           <ListItemButton component={Link} to="/consultant/seal-status">
             <ListItemIcon>
-              <TrackChangesIcon sx={{ color: '#fff' }} />
+              <MoreHorizIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Seal Status" />
           </ListItemButton>
