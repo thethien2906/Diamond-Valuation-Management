@@ -16,6 +16,7 @@ const createBooking = async (req, res) => {
       consultantId: consultant._id,
       customerId: bookingData.customerId, 
       serviceId: service._id,
+      
     });
     await newBooking.save();
     res.status(201).json({
@@ -68,7 +69,8 @@ const getPendingBookingsByConsultant = async (req, res) => {
 
     const pendingBookings = await Booking.find({
       consultantId: consultant._id, 
-      status: 'pending'
+      status: 'pending',
+      paymentStatus: 'Paid'
     });
 
     res.json(pendingBookings);

@@ -30,6 +30,11 @@ const bookingSchema = new Schema({
     ref: 'Service', // Reference to the Service model
     required: true, // Make this field required
   },
+  paymentStatus: {
+    type: String,
+    enum: ['Pending', 'Paid', 'Failed'], // Possible statuses
+    default: 'Pending' // Default status is 'pending'
+  }
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);
