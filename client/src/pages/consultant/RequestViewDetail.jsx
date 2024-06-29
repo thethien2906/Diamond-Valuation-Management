@@ -45,14 +45,15 @@ const ViewRequestDetail = () => {
 
   const handleDeny = async () => {
     try {
-      await axios.delete(`/api/bookings/${bookingId}`);
-      toast.success("Booking denied and deleted.");
+      await axios.post(`/api/reject-booking`, { bookingId });
+      toast.success("Booking denied and payment refunded.");
       navigate("/consultant/appointments");
-      setPendingBookings((prevBookings) =>
-        prevBookings.filter((booking) => booking._id !== bookingId)
-      );
+      // setPendingBookings((prevBookings) =>
+      //   prevBookings.filter((booking) => booking._id !== bookingId)
+      // );
     } catch (error) {
       console.error("Error denying booking:", error);
+      toast.error("Failed to deny booking.");
     }
   };
 

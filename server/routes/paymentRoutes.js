@@ -1,9 +1,9 @@
 const express = require('express');
-const { createCheckoutSession } = require('../controllers/paymentController');
+const { createCheckoutSession , rejectBooking} = require('../controllers/paymentController');
 
 const router = express.Router();
 
 router.post('/create-checkout-session', createCheckoutSession);
-
+router.post('/reject-booking', rejectBooking);
 
 module.exports = router;

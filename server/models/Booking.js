@@ -30,9 +30,13 @@ const bookingSchema = new Schema({
     ref: 'Service', // Reference to the Service model
     required: true, // Make this field required
   },
+  paymentIntentId: { // Store the Stripe payment intent ID
+    type: String,
+    required: false,
+  },
   paymentStatus: {
     type: String,
-    enum: ['Pending', 'Paid', 'Failed'], // Possible statuses
+    enum: ['Pending', 'Paid', 'Refunded'], // Possible statuses
     default: 'Pending' // Default status is 'pending'
   }
 });
