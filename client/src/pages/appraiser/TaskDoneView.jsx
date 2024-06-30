@@ -3,7 +3,6 @@ import axios from 'axios';
 import {
   Box,
   Typography,
-  Button,
   Paper,
   CircularProgress,
   Table,
@@ -11,8 +10,10 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  IconButton
 } from '@mui/material';
+import { Visibility } from '@mui/icons-material';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,7 +44,7 @@ const TaskView = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <CircularProgress />
       </Box>
     );
@@ -51,41 +52,39 @@ const TaskView = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
+      <Typography variant="h6" component="h2" gutterBottom>
         Valuation Records
       </Typography>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{ mt: 2 }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Record Number</TableCell>
-              <TableCell>Customer Name</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Record Number</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-          {Array.isArray(records) && records.map((record)  => (
-              <TableRow key={record._id}>
-                <TableCell>{record.recordNumber}</TableCell>
-                <TableCell>{record.customerName}</TableCell>
-                <TableCell>{record.status}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleViewRecord(record._id)}
-                  >
-                    View
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))
-            
-            }
-            {!Array.isArray(records) && (
+            {Array.isArray(records) && records.length > 0 ? (
+              records.map((record) => (
+                <TableRow key={record._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell>{record.recordNumber}</TableCell>
+                  <TableCell>{record.customerName}</TableCell>
+                  <TableCell>{record.status}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="black"
+                      onClick={() => handleViewRecord(record._id)}
+                    >
+                      <Visibility />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
               <TableRow>
-                <TableCell colSpan={4}>No records found</TableCell>
+                <TableCell colSpan={4} sx={{ textAlign: 'center' }}>No records found</TableCell>
               </TableRow>
             )}
           </TableBody>
