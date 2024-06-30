@@ -2,6 +2,7 @@ Diamond Valuation Management
 
 This project consists of a frontend built with React and Vite, a backend built with Node.js and Express, and a MongoDB database. It is designed to help manage diamond valuation records.
 
+To run without cloning : https://hub.docker.com/repository/docker/wusxo/diamondshine/general
 
 Project Structure
 
