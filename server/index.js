@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
 const cors = require('cors');
+const ort = require('onnxruntime-node');
 const { mongoose } = require('mongoose');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
@@ -114,8 +115,86 @@ app.use('/api', valuationRecordRoutes)
 app.use('/api', commitRoutes);
 app.use('/api', sealRoutes);
 app.use('/api', serviceRoutes); 
-
 app.use('/api', paymentRoutes);
+
+
+const modelPath = 'diamond_price_model.onnx'; // replace with the path to your ONNX model
+
+// Function to preprocess input data
+function preprocess(data) {
+    const { carat, cut, color, clarity, depth, table, x, y, z } = data;
+
+    // One-hot encoding for categorical variables
+    const cutEncoded = {
+        Fair: [1, 0, 0],
+        Good: [0, 1, 0],
+        'Very Good': [0, 0, 1]
+    }[cut] || [0, 0, 0];
+
+    const colorEncoded = {
+        D: [1, 0, 0, 0, 0, 0, 0],
+        E: [0, 1, 0, 0, 0, 0, 0],
+        F: [0, 0, 1, 0, 0, 0, 0],
+        G: [0, 0, 0, 1, 0, 0, 0],
+        H: [0, 0, 0, 0, 1, 0, 0],
+        I: [0, 0, 0, 0, 0, 1, 0],
+        J: [0, 0, 0, 0, 0, 0, 1]
+    }[color] || [0, 0, 0, 0, 0, 0, 0];
+
+    const clarityEncoded = {
+        I1: [1, 0, 0, 0, 0, 0, 0, 0],
+        IF: [0, 1, 0, 0, 0, 0, 0, 0],
+        SI1: [0, 0, 1, 0, 0, 0, 0, 0],
+        SI2: [0, 0, 0, 1, 0, 0, 0, 0],
+        VS1: [0, 0, 0, 0, 1, 0, 0, 0],
+        VS2: [0, 0, 0, 0, 0, 1, 0, 0],
+        VVS1: [0, 0, 0, 0, 0, 0, 1, 0],
+        VVS2: [0, 0, 0, 0, 0, 0, 0, 1]
+    }[clarity] || [0, 0, 0, 0, 0, 0, 0, 0];
+
+    // Additional features
+   
+    // Combine all features into a single array
+    const features = [
+        carat, depth, table,
+        ...cutEncoded,
+        ...colorEncoded,
+        ...clarityEncoded,
+        
+    ];
+
+    return features;
+}
+
+// Load the ONNX model
+async function loadModel() {
+    return await ort.InferenceSession.create(modelPath);
+}
+
+app.post('/predict', async (req, res) => {
+    const input = req.body;
+    const features = preprocess(input);
+
+    // Ensure the input tensor has the correct shape
+    const tensor = new ort.Tensor('float32', Float32Array.from(features), [1, features.length]);
+
+    try {
+        const session = await loadModel();
+        const feeds = { input: tensor };
+        const results = await session.run(feeds);
+        const prediction = results.output.data[0]; // Adjust based on your model's output
+
+        res.json({ price: prediction });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to make prediction' });
+    }
+});
+
+
+
+
+
 
 const port = 3000;
 app.listen(port, () => {
