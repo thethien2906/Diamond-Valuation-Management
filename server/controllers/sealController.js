@@ -92,5 +92,28 @@ const getSealingRequestsByConsultant = async (req, res) => {
     }
     }
 
-  
-module.exports = { createSealRequest, getSealRequests, updateSealRequestStatus,getSealRequestsById,getSealingRequestsByConsultant };
+const unsealRecord = async (req, res) => {
+  const { sealId } = req.params;
+
+  try {
+    // Find the seal
+    const seal = await Seal.findById(sealId);
+    if (!seal) {
+      return res.status(404).json({ message: 'Seal not found' });
+    }
+
+    // Update the record status
+    await ValuationRecord.findByIdAndUpdate(seal.recordId, { status: 'Completed' });
+
+    // Delete the seal
+    await Seal.findByIdAndDelete(sealId);
+
+    res.json({ message: 'Record unsealed and seal deleted' });
+  } catch (error) {
+    console.error('Error unsealing record:', error);
+    res.status(500).json({ message: 'Failed to unseal record' });
+  }
+};
+
+
+module.exports = { createSealRequest, getSealRequests, updateSealRequestStatus,getSealRequestsById,getSealingRequestsByConsultant,unsealRecord };
