@@ -57,12 +57,12 @@ const TaskView = () => {
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          <TableHead sx={{ backgroundColor: '#212529' }}>
             <TableRow>
-              <TableCell>Record Number</TableCell>
-              <TableCell>Customer Name</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Record Number</TableCell>
+              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Customer Name</TableCell>
+              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Status</TableCell>
+              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -73,7 +73,7 @@ const TaskView = () => {
                 <TableCell>{record.status}</TableCell>
                 <TableCell>
                   <IconButton
-                    color="primary"
+                    color="black"
                     onClick={() => handleViewRecord(record._id)}
                   >
                     <Visibility />

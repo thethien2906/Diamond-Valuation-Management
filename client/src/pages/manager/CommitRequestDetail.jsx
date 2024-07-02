@@ -54,18 +54,18 @@ const ManagerCommitRequestDetail = () => {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
-        Commitment Request Detail
-      </Typography>
-      <Paper sx={{ p: 3, mt: 2 }}>
-        <Typography variant="body1">Record Id: {commitRequest.recordId}</Typography>
-        <Typography variant="body1">Name: {commitRequest.customerName}</Typography>
-        <Typography variant="body1">Phone Number: {commitRequest.phoneNumber}</Typography>
-        <Typography variant="body1">Email: {commitRequest.email}</Typography>
-        <Typography variant="body1">Reason for Loss: {commitRequest.reasonForLoss}</Typography>
-        <Typography variant="body1">Date Issued: {new Date(commitRequest.dateIssued).toLocaleDateString()}</Typography>
-        <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <Paper sx={{ width: '100%', maxWidth: 600, p: 3 }}>
+        <Typography variant="h4" component="h2" gutterBottom align="center">
+          Commitment Request Detail
+        </Typography>
+        <Typography variant="body1" textAlign="center">Record Id: {commitRequest.recordId}</Typography>
+        <Typography variant="body1" textAlign="center">Customer Name: {commitRequest.customerName}</Typography>
+        <Typography variant="body1" textAlign="center">Phone Number: {commitRequest.phoneNumber}</Typography>
+        <Typography variant="body1" textAlign="center">Email: {commitRequest.email}</Typography>
+        <Typography variant="body1" textAlign="center">Reason for Loss: {commitRequest.reasonForLoss}</Typography>
+        <Typography variant="body1" textAlign="center">Date Issued: {new Date(commitRequest.dateIssued).toLocaleDateString()}</Typography>
+        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
           <Button 
             variant="contained" 
             color="primary" 
@@ -77,6 +77,7 @@ const ManagerCommitRequestDetail = () => {
             variant="contained" 
             color="secondary" 
             onClick={() => handleStatusChange('Rejected')}
+            sx={{ ml: 2 }}
           >
             Deny
           </Button>

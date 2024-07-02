@@ -1,82 +1,226 @@
-// Client/src/components/AdminDashboard.jsx
-import React, { useContext } from "react";
-import { useNavigate, Outlet, Link } from 'react-router-dom';
-import axios from "axios";
-import { UserContext } from "../../context/userContext";
-import { AppBar, Toolbar, Button, Box, Typography, Drawer, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import HomeIcon from '@mui/icons-material/Home';
+import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
+import PeopleIcon from '@mui/icons-material/People';
+import PersonIcon from '@mui/icons-material/Person';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import {
+  AppBar,
+  Box,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Toolbar,
+  Typography,
+  useTheme
+} from "@mui/material";
+import axios from "axios";
+import React, { useContext, useState } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/userContext";
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
-  const { user } = useContext(UserContext);
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const { user, setUser } = useContext(UserContext);
+  const theme = useTheme();
+
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   const handleLogout = async () => {
     try {
       await axios.post("/auth/logout");
       setUser(null);
       localStorage.removeItem("user");
-      navigate("/");
+      navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
     }
   };
 
-  const handleDrawerToggle = () => {
-    setDrawerOpen(!drawerOpen);
-  };
-
-  const handleReturnToWebsite = () => {
-    navigate("/");
-  };
-
   return (
     <Box sx={{ display: 'flex' }}>
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      {/* App Bar */}
+      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1, bgcolor:'#212529' }}>
         <Toolbar>
+          {/* Menu Icon for Small Screens */}
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            onClick={toggleDrawer}
+            sx={{ mr: 2, display: { md: 'none' }, fontSize: '1.5rem' }}
           >
-            <MenuIcon />
+            <MenuIcon sx={{ fontSize: '2rem' }} />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          {/* Title */}
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Admin Dashboard
           </Typography>
-          <Button color="inherit" onClick={handleLogout}>Logout</Button>
-          <Button color="inherit" onClick={handleReturnToWebsite}>Return to Website</Button>
+          {/* User Menu for Small Screens */}
+          <IconButton
+            color="inherit"
+            aria-label="user menu"
+            onClick={handleMenuOpen}
+            edge="end"
+            sx={{ display: { md: 'none' } }}
+          >
+            <AccountCircleIcon />
+          </IconButton>
+          {/* User Menu for Medium and Above Screens */}
+          <IconButton
+            color="inherit"
+            aria-label="user menu"
+            onClick={handleMenuOpen}
+            edge="end"
+            sx={{ display: { xs: 'none', md: 'flex' } }}
+          >
+            <AccountCircleIcon />
+          </IconButton>
+          {/* User Menu */}
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            sx={{marginTop: '40px'}}
+          >
+            <MenuItem component={Link} to="/">
+              <ListItemIcon>
+                <HomeIcon fontSize="small" sx={{ color: 'primary.main', mr: 1 }} />
+              </ListItemIcon>
+              <Typography variant="inherit">Return to Home</Typography>
+            </MenuItem>
+            <Divider />
+            <MenuItem onClick={handleLogout}>
+              <ListItemIcon>
+                <LogoutIcon fontSize="small" sx={{ color: 'error.main', mr: 1 }} />
+              </ListItemIcon>
+              <Typography variant="inherit">Logout</Typography>
+            </MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
+      
+      {/* Drawer for Small Screens (xs and sm) */}
+      <Drawer
+        anchor="left"
+        open={drawerOpen}
+        onClose={toggleDrawer}
+        sx={{
+          display: { xs: 'block', sm: 'block', md: 'none' },
+          '& .MuiDrawer-paper': { width: 240, boxSizing: 'border-box', bgcolor: '#212529', color: '#fff' },
+        }}
+      >
+        <Toolbar />
+        <List sx={{gap: 2}}>
+          <ListItemButton onClick={toggleDrawer} component={Link} to="users">
+            <ListItemIcon>
+              <PeopleIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <ListItemText primary="View Users" />
+          </ListItemButton>
+          <ListItemButton onClick={toggleDrawer} component={Link} to="staff">
+            <ListItemIcon>
+              <PersonIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <ListItemText primary="View Staff" />
+          </ListItemButton>
+          <ListItemButton onClick={toggleDrawer} component={Link} to="add-user">
+            <ListItemIcon>
+              <PersonAddIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <ListItemText primary="Add User" />
+          </ListItemButton>
+        </List>
+        <Divider sx={{ bgcolor: '#6c757d' }} />
+        <Box sx={{ p: 2, mt: 'auto', textAlign: 'center', bgcolor: '#343a40', color: '#717e87' }}>
+          <Typography variant="body2" sx={{ fontSize: '1.1rem' }}>
+            Logged in as: {user?.name || 'Guest'}
+          </Typography>
+        </Box>
+      </Drawer>
+      
+      {/* Permanent Drawer for Medium Screens (md and above) */}
       <Drawer
         variant="permanent"
         sx={{
           width: 240,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box' },
+          [`& .MuiDrawer-paper`]: {
+            width: 240,
+            boxSizing: 'border-box',
+            bgcolor: '#212529',
+            color: '#fff'
+          },
+          [theme.breakpoints.down('md')]: {
+            display: 'none', // Hide drawer on small screens and below
+          },
         }}
       >
         <Toolbar />
-        <Box sx={{ overflow: 'auto' }}>
-          <List>
-            <ListItem button component={Link} to="users">
-              <ListItemText primary="View Users" />
-            </ListItem>
-            <ListItem button component={Link} to="staff">
-              <ListItemText primary="View Staff" />
-            </ListItem>
-            <ListItem button component={Link} to="add-user">
-              <ListItemText primary="Add User" />
-            </ListItem>
-          </List>
+        <List>
+          <ListItemButton component={Link} to="users">
+            <ListItemIcon>
+              <PeopleIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <ListItemText primary="View Users" />
+          </ListItemButton>
+          <ListItemButton component={Link} to="staff">
+            <ListItemIcon>
+              <PersonIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <ListItemText primary="View Staff" />
+          </ListItemButton>
+          <ListItemButton component={Link} to="add-user">
+            <ListItemIcon>
+              <PersonAddIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <ListItemText primary="Add User" />
+          </ListItemButton>
+        </List>
+        <Box sx={{ p: 2, mt: 'auto', textAlign: 'center', bgcolor: '#343a40', color: '#717e87' }}>
+          <Typography variant="body2" sx={{ fontSize: '1rem' }}>
+            Logged in as: {user?.name}
+          </Typography>
         </Box>
       </Drawer>
+      
+      {/* Main Content */}
       <Box
         component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - 240px)` }, mt: 8 }}
+        sx={{
+          flexGrow: 1,
+          bgcolor: 'background.default',
+          p: 3,
+          marginLeft: { md: '100px' },
+        }}
       >
         <Toolbar />
         <Outlet />

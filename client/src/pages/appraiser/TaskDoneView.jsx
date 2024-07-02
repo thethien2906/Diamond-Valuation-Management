@@ -57,12 +57,12 @@ const TaskView = () => {
       </Typography>
       <TableContainer component={Paper} sx={{ mt: 2 }}>
         <Table>
-          <TableHead>
+          <TableHead sx={{ backgroundColor: '#212529' }}>
             <TableRow>
-              <TableCell sx={{ fontWeight: 'bold' }}>Record Number</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color:'white'}}>Record Number</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color:'white' }}>Customer Name</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color:'white' }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: 'bold', color:'white' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

@@ -1,8 +1,7 @@
-// Client/src/pages/AddingForm.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Box, Typography, MenuItem, Container, Grid } from '@mui/material';
+import { TextField, Button, Box, Typography, MenuItem, Container } from '@mui/material';
 import { toast } from 'react-hot-toast';
 
 const AddingForm = () => {
@@ -24,6 +23,7 @@ const AddingForm = () => {
     try {
       await axios.post("/api/users", formData);
       navigate("/admin/staff");
+      toast.success("User added successfully!");
     } catch (error) {
       console.error("Error adding user:", error);
       if (error.response && error.response.data && error.response.data.message) {
@@ -35,7 +35,7 @@ const AddingForm = () => {
   };
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="sm">
       <Box
         component="form"
         onSubmit={handleSubmit}
@@ -44,67 +44,83 @@ const AddingForm = () => {
           padding: 3,
           boxShadow: 3,
           borderRadius: 2,
-          backgroundColor: '#fff',
+          backgroundColor: '#212121',
+          color: 'white',
         }}
       >
-        <Typography variant="h4" component="h2" sx={{ mb: 4, textAlign: 'center' }}>
+        <Typography variant="h4" component="h2" sx={{ mb: 4, textAlign: 'center', color: 'white' }}>
           Add New User
         </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
-            <TextField
-              label="Name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <TextField
-              label="Email"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <TextField
-              label="Password"
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              fullWidth
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <TextField
-              label="Role"
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              select
-              fullWidth
-              variant="outlined"
-            >
-              <MenuItem value="consultant">Consultant</MenuItem>
-              <MenuItem value="appraiser">Appraiser</MenuItem>
-              <MenuItem value="manager">Manager</MenuItem>
-              {/* <MenuItem value="admin">Admin</MenuItem> */}
-            </TextField>
-          </Grid>
-        </Grid>
+        <TextField
+          label="Name"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          InputLabelProps={{ style: { color: 'white' } }}
+          InputProps={{
+            style: { color: 'white', borderColor: 'white' },
+          }}
+          sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'white' }, '&:hover fieldset': { borderColor: 'white' }, '&.Mui-focused fieldset': { borderColor: 'white' } } }}
+        />
+        <TextField
+          label="Email"
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          InputLabelProps={{ style: { color: 'white' } }}
+          InputProps={{
+            style: { color: 'white', borderColor: 'white' },
+          }}
+          sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'white' }, '&:hover fieldset': { borderColor: 'white' }, '&.Mui-focused fieldset': { borderColor: 'white' } } }}
+        />
+        <TextField
+          label="Password"
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          InputLabelProps={{ style: { color: 'white' } }}
+          InputProps={{
+            style: { color: 'white', borderColor: 'white' },
+          }}
+          sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'white' }, '&:hover fieldset': { borderColor: 'white' }, '&.Mui-focused fieldset': { borderColor: 'white' } } }}
+        />
+        <TextField
+          label="Role"
+          name="role"
+          value={formData.role}
+          onChange={handleChange}
+          select
+          fullWidth
+          variant="outlined"
+          margin="normal"
+          InputLabelProps={{ style: { color: 'white' } }}
+          InputProps={{
+            style: { color: 'white', borderColor: 'white' },
+          }}
+          sx={{ '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'white' }, '&:hover fieldset': { borderColor: 'white' }, '&.Mui-focused fieldset': { borderColor: 'white' } } }}
+        >
+          <MenuItem value="consultant">Consultant</MenuItem>
+          <MenuItem value="appraiser">Appraiser</MenuItem>
+          <MenuItem value="manager">Manager</MenuItem>
+          {/* <MenuItem value="admin">Admin</MenuItem> */}
+        </TextField>
         <Box sx={{ textAlign: 'center', mt: 3 }}>
           <Button
             type="submit"
             variant="contained"
             color="primary"
+            sx={{ bgcolor: '#212529', '&:hover': { bgcolor: '#333' } }}
           >
             Add
           </Button>
