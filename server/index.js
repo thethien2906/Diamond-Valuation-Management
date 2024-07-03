@@ -17,7 +17,7 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const stripe = require ('stripe')(process.env.STRIPE_SECRET_KEY);
 const Booking = require('./models/Booking');
 const Transaction = require('./models/Transaction');
-
+const blogRoutes = require('./routes/blogRoutes');
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 mongoose.connect(process.env.MONGO_URL)
@@ -116,7 +116,7 @@ app.use('/api', commitRoutes);
 app.use('/api', sealRoutes);
 app.use('/api', serviceRoutes); 
 app.use('/api', paymentRoutes);
-
+app.use('/api', blogRoutes); // Use the blog routes
 
 const modelPath = 'diamond_price_model.onnx'; // replace with the path to your ONNX model
 

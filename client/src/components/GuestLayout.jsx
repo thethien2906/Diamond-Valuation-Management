@@ -85,6 +85,11 @@ const GuestLayout = ({ children }) => {
                       VALUATION TOOL
                     </Typography>
                   </MenuItem>
+                  <MenuItem component={Link} to="/blogs" sx={{ py: '6px', px: '12px', borderRadius:'30px'}}>
+                    <Typography variant="body2" color="text.primary">
+                      Blogs
+                    </Typography>
+                  </MenuItem>
                 </Box>
               </Box>
               <Box
