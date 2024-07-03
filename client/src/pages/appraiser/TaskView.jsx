@@ -3,7 +3,6 @@ import axios from 'axios';
 import {
   Box,
   Typography,
-  Button,
   Paper,
   CircularProgress,
   Table,
@@ -11,8 +10,10 @@ import {
   TableCell,
   TableContainer,
   TableHead,
-  TableRow
+  TableRow,
+  IconButton
 } from '@mui/material';
+import { Visibility } from '@mui/icons-material';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -51,41 +52,38 @@ const TaskView = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
+      <Typography variant="h6" component="h2" gutterBottom>
         Valuation Records
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          <TableHead sx={{ backgroundColor: '#212529' }}>
             <TableRow>
-              <TableCell>Record Number</TableCell>
-              <TableCell>Customer Name</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Record Number</TableCell>
+              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Customer Name</TableCell>
+              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Status</TableCell>
+              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-          {Array.isArray(records) && records.map((record)  => (
+            {Array.isArray(records) && records.map((record) => (
               <TableRow key={record._id}>
                 <TableCell>{record.recordNumber}</TableCell>
                 <TableCell>{record.customerName}</TableCell>
                 <TableCell>{record.status}</TableCell>
                 <TableCell>
-                  <Button
-                    variant="contained"
-                    color="primary"
+                  <IconButton
+                    color="black"
                     onClick={() => handleViewRecord(record._id)}
                   >
-                    View
-                  </Button>
+                    <Visibility />
+                  </IconButton>
                 </TableCell>
               </TableRow>
-            ))
-            
-            }
+            ))}
             {!Array.isArray(records) && (
               <TableRow>
-                <TableCell colSpan={4}>No records found</TableCell>
+                <TableCell colSpan={4} sx={{ textAlign: 'center' }}>No records found</TableCell>
               </TableRow>
             )}
           </TableBody>

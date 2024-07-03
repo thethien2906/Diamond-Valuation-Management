@@ -28,6 +28,8 @@ import AddingForm from './pages/admin/AddingForm';
 import AboutUsGuest from './pages/guest/AboutUsGuest';
 import ConsultingServicesGuest from './pages/guest/ConsultingServicesGuest';
 import ValuationTool from './pages/guest/ValuationTool';
+import BlogListPage from './pages/guest/BlogListPage';
+import BlogDetailPage from './pages/guest/BlogDetailPage';
 
 import BookingForm from './pages/customer/BookingForm';
 import AboutUsCustomer from './pages/customer/AboutUsCustomer';
@@ -63,6 +65,8 @@ import ManagerSealingRequests from './pages/manager/SealRequest';
 import ManagerSealRequestDetail from './pages/manager/SealRequestDetail';
 import ManagerServices from './pages/manager/ServiceManage';
 import ManagerDashboard from './pages/manager/ManagerDashboard';
+import BlogCRUD from './pages/manager/BlogManage';
+
 
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.withCredentials = true;
@@ -73,7 +77,7 @@ function App() {
       <ConsultantContextProvider>
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<AboutUsGuest />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify/:token" element={<Verify />} />
@@ -122,11 +126,14 @@ function App() {
           <Route path="seal-requests" element={<ManagerSealingRequests />} />
           <Route path="seal-requests/:sealId" element={<ManagerSealRequestDetail />} />
           <Route path="services" element={<ManagerServices />} />
+          <Route path="blogs-manage" element={<BlogCRUD />} />
           </Route>
 
           <Route path="/about-us-guest" element={<AboutUsGuest />} />
           <Route path="/consulting-services-guest" element={<ConsultingServicesGuest />} />
           <Route path="/valuation-tool" element={<ValuationTool />} />
+          <Route path="/blogs" element={<BlogListPage />} />
+          <Route path="/blogs/:blogId" element={<BlogDetailPage />} />
 
           <Route path="/about-us-customer" element={<AboutUsCustomer />} />
           <Route path="/consulting-services-customer" element={<ConsultingServicesCustomer />} />

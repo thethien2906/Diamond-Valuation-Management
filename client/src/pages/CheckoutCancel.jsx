@@ -1,9 +1,28 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Button, Container, Typography } from '@mui/material';
+import axios from 'axios';
 
 const Cancel = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const cancelBooking = async () => {
+      const params = new URLSearchParams(location.search);
+      const bookingId = params.get('bookingId'); // Assuming the bookingId is passed as a query parameter
+
+      if (bookingId) {
+        try {
+          await axios.post('/api/cancel-booking', { bookingId });
+        } catch (error) {
+          console.error('Error cancelling booking:', error);
+        }
+      }
+    };
+
+    cancelBooking();
+  }, [location.search]);
 
   const handleGoBack = () => {
     navigate('/dashboard');

@@ -207,6 +207,12 @@ const ManagerDashboard = ({ children }) => {
             </ListItemIcon>
             <Typography variant="inherit" sx={{ color: '#fff' }}>Service Packages</Typography>
           </ListItemButton>
+          <ListItemButton component={Link} to="/manager/blogs-manage">
+            <ListItemIcon>
+              <ConfirmationNumberIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <Typography variant="inherit" sx={{ color: '#fff' }}>Blog</Typography>
+          </ListItemButton>
         </List>
         <Box sx={{ p: 2, mt: 'auto', textAlign: 'center', bgcolor: '#343a40', color: '#717e87' }}>
           <Typography variant="body2" sx={{ fontSize: '1rem' }}>

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Button } from '@mui/material';
+import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, IconButton } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const ManagerCommitRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -52,13 +53,13 @@ const ManagerCommitRequests = () => {
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          <TableHead sx={{ backgroundColor: '#212529' }}>
             <TableRow>
-              <TableCell>Record ID</TableCell>
-              <TableCell>Customer Name</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Date Issued</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell sx={{ color: 'white' }}>Record ID</TableCell>
+              <TableCell sx={{ color: 'white' }}>Customer Name</TableCell>
+              <TableCell sx={{ color: 'white' }}>Status</TableCell>
+              <TableCell sx={{ color: 'white' }}>Date Issued</TableCell>
+              <TableCell sx={{ color: 'white' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -69,13 +70,12 @@ const ManagerCommitRequests = () => {
                 <TableCell>{request.status}</TableCell>
                 <TableCell>{new Date(request.dateIssued).toLocaleDateString()}</TableCell>
                 <TableCell>
-                  <Button 
-                    variant="contained" 
-                    color="primary" 
+                  <IconButton 
+                    color="black" 
                     onClick={() => handleViewDetail(request._id)}
                   >
-                    View Detail
-                  </Button>
+                    <VisibilityIcon />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

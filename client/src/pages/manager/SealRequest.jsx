@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Button } from '@mui/material';
+import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, IconButton } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const ManagerSealingRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -47,19 +48,19 @@ const ManagerSealingRequests = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
+      <Typography variant="h6" component="h2" gutterBottom>
         Sealing Requests (Pending)
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          <TableHead sx={{ backgroundColor: '#212529' }}>
             <TableRow>
-              <TableCell>Record ID</TableCell>
-              <TableCell>Customer Name</TableCell>
-              <TableCell>Reason</TableCell>
-              <TableCell>Consultant</TableCell>
-              <TableCell>Date Issued</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell sx={{color:'white'}}>Record ID</TableCell>
+              <TableCell sx={{color:'white'}}>Customer Name</TableCell>
+              <TableCell sx={{color:'white'}}>Reason</TableCell>
+              <TableCell sx={{color:'white'}}>Consultant</TableCell>
+              <TableCell sx={{color:'white'}}>Date Issued</TableCell>
+              <TableCell sx={{color:'white'}}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -71,13 +72,12 @@ const ManagerSealingRequests = () => {
                 <TableCell>{request.consultantId.name}</TableCell>
                 <TableCell>{new Date(request.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell>
-                  <Button 
-                    variant="contained" 
-                    color="primary" 
+                  <IconButton 
+                    color="black" 
                     onClick={() => handleViewDetail(request._id)}
                   >
-                    View Detail
-                  </Button>
+                    <VisibilityIcon />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

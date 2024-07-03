@@ -30,23 +30,36 @@ const createCheckoutSession = async (req, res) => {
       ],
       mode: 'payment',
       success_url: `http://localhost:5173/payment/success`,
-      cancel_url: `http://localhost:5173/payment/cancel`,
+      cancel_url: `http://localhost:5173/payment/cancel?bookingId=${bookingId}`,
       metadata: {
         bookingId: bookingId, // Add bookingId to metadata
         // UserId: booking.customerId,
       },
     });
-    await sendEmail(
-      booking.email,
-      'Booking Created',
-      `Your booking for ${booking.serviceId.name} has been created.`
-    );
+    
     res.json({ id: session.id });
   } catch (error) {
     console.error('Error creating Stripe checkout session:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+const cancelBooking = async (req, res) => {
+  const { bookingId } = req.body;
+
+  try {
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    await Booking.findByIdAndDelete(bookingId);
+    res.status(200).json({ message: 'Booking cancelled' });
+  } catch (error) {
+    console.error('Error cancelling booking:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 const rejectBooking = async (req, res) => {
   const { bookingId } = req.body;
 
@@ -86,4 +99,4 @@ const rejectBooking = async (req, res) => {
 
 
 
-module.exports = { createCheckoutSession, rejectBooking };
+module.exports = { createCheckoutSession, rejectBooking, cancelBooking };
