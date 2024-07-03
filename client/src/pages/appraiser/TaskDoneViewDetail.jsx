@@ -8,7 +8,8 @@ import {
   Button,
   Paper,
   TextField,
-  CircularProgress
+  CircularProgress,
+  Grid
 } from '@mui/material';
 import { toast } from 'react-hot-toast';
 
@@ -49,7 +50,7 @@ const TaskDoneViewDetail = () => {
     e.preventDefault();
     setUpdating(true);
     try {
-      const response = await axios.put(`/api/valuation-records/${recordId}`, {
+      await axios.put(`/api/valuation-records/${recordId}`, {
         ...record,
         status: 'Completed',
       });
@@ -80,126 +81,172 @@ const TaskDoneViewDetail = () => {
   }
 
   return (
-    
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
-        Valuation Record Details (Appraiser)
-      </Typography>
       <div ref={componentRef}>
-      <Paper sx={{ p: 3, mt: 2 }}>
-        <Typography variant="body1">Record Number: {record.recordNumber}</Typography>
-        <Typography variant="body1">Customer Name: {record.customerName}</Typography>
-        <Typography variant="body1">Phone Number: {record.phoneNumber}</Typography>
-        <Typography variant="body1">Email: {record.email}</Typography>
-        <Typography variant="body1">Appointment Date: {new Date(record.appointmentDate).toLocaleDateString()}</Typography>
-        <Typography variant="body1">Appointment Time: {record.appointmentTime}</Typography>
-        <Typography variant="body1">Services: {record.services}</Typography>
-        <Typography variant="body1">Payment Method: {record.paymentMethod}</Typography>
-        <Typography variant="body1">Consultant ID: {record.consultantId}</Typography>
-        <Typography variant="body1">Appraiser ID: {record.appraiserId || 'Not assigned yet'}</Typography>
-        
-        <form onSubmit={handleSubmit}>
-          <TextField
-            label="Shape and Cut"
-            name="shapeAndCut"
-            value={record.shapeAndCut || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Carat Weight"
-            name="caratWeight"
-            type="number"
-            value={record.caratWeight || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Clarity"
-            name="clarity"
-            value={record.clarity || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Cut Grade"
-            name="cutGrade"
-            value={record.cutGrade || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Measurements"
-            name="measurements"
-            value={record.measurements || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Polish"
-            name="polish"
-            value={record.polish || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Symmetry"
-            name="symmetry"
-            value={record.symmetry || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Fluorescence"
-            name="fluorescence"
-            value={record.fluorescence || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Estimated Value"
-            name="estimatedValue"
-            type="number"
-            value={record.estimatedValue || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Valuation Method"
-            name="valuationMethod"
-            value={record.valuationMethod || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Certificate Number"
-            name="certificateNumber"
-            value={record.certificateNumber || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          
-      
-        </form>
-      </Paper>
-      </div>
-      <Box sx={{ mt: 3 }}>
-          <Button variant="contained" color="primary" onClick={handlePrint}>
-            Print Receipt
-          </Button>
-          
+        <Paper sx={{ p: 3, mt: 2, mb: 3 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+            <img src="/Diamond.jpg" alt="Logo" style={{ height: 150, marginRight: '16px' }} />
+            <Typography variant="h4" component="h2" sx={{ flexGrow: 1, textAlign: 'left', marginLeft:'100px' }}>
+              Diamond Scope
+              <Typography variant="body1">Record Number: {record.recordNumber}</Typography>
+              <Typography variant="body1">Appointment Date: {new Date(record.appointmentDate).toLocaleDateString()}</Typography>
+            </Typography>
           </Box>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Typography gutterBottom><b>Customer Information:</b></Typography>
+              <Typography variant="body1">• Customer Name: {record.customerName}</Typography>
+              <Typography variant="body1">• Phone Number: {record.phoneNumber}</Typography>
+              <Typography variant="body1">• Email: {record.email}</Typography>
+              <Typography gutterBottom><b>Staff Details:</b></Typography>
+              <Typography variant="body1">• Consultant Name: {record.consultantId}</Typography>
+              <Typography variant="body1">• Appraiser Name: {record.appraiserId || 'Not assigned yet'}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography gutterBottom><b>Appointment Details:</b></Typography>
+              <Typography variant="body1">• Appointment Time: {record.appointmentTime}</Typography>
+              <Typography gutterBottom><b>Service Details:</b></Typography>
+              <Typography variant="body1">• Services: {record.services}</Typography>
+              <Typography variant="body1">• Payment Method: {record.paymentMethod}</Typography>
+            </Grid>
+          </Grid>
+          <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Shape and Cut:</Typography>
+                  <TextField
+                    name="shapeAndCut"
+                    value={record.shapeAndCut || ''}
+                    onChange={handleChange}
+                    variant="standard"
+                    fullWidth // Ensures the TextField takes full width
+                  />
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Carat Weight:</Typography>
+                  <TextField
+                    name="caratWeight"
+                    type="number"
+                    value={record.caratWeight || ''}
+                    onChange={handleChange}
+                    variant="standard"
+                    fullWidth // Ensures the TextField takes full width
+                  />
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Clarity:</Typography>
+                  <TextField
+                    name="clarity"
+                    value={record.clarity || ''}
+                    onChange={handleChange}
+                    variant="standard"
+                    fullWidth // Ensures the TextField takes full width
+                  />
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Cut Grade:</Typography>
+                  <TextField
+                    name="cutGrade"
+                    value={record.cutGrade || ''}
+                    onChange={handleChange}
+                    variant="standard"
+                    fullWidth // Ensures the TextField takes full width
+                  />
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Measurements:</Typography>
+                  <TextField
+                    name="measurements"
+                    value={record.measurements || ''}
+                    onChange={handleChange}
+                    variant="standard"
+                    fullWidth // Ensures the TextField takes full width
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Polish:</Typography>
+                  <TextField
+                    name="polish"
+                    value={record.polish || ''}
+                    onChange={handleChange}
+                    variant="standard"
+                    fullWidth // Ensures the TextField takes full width
+                  />
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Symmetry:</Typography>
+                  <TextField
+                    name="symmetry"
+                    value={record.symmetry || ''}
+                    onChange={handleChange}
+                    variant="standard"
+                    fullWidth // Ensures the TextField takes full width
+                  />
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Fluorescence:</Typography>
+                  <TextField
+                    name="fluorescence"
+                    value={record.fluorescence || ''}
+                    onChange={handleChange}
+                    variant="standard"
+                    fullWidth // Ensures the TextField takes full width
+                  />
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Estimated Value:</Typography>
+                  <TextField
+                    name="estimatedValue"
+                    type="number"
+                    value={record.estimatedValue || ''}
+                    onChange={handleChange}
+                    variant="standard"
+                    fullWidth // Ensures the TextField takes full width
+                  />
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Valuation Method:</Typography>
+                  <TextField
+                    name="valuationMethod"
+                    value={record.valuationMethod || ''}
+                    onChange={handleChange}
+                    variant="standard"
+                    fullWidth // Ensures the TextField takes full width
+                  />
+                </Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
+                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Certificate Number:</Typography>
+                  <TextField
+                    name="certificateNumber"
+                    value={record.certificateNumber || ''}
+                    onChange={handleChange}
+                    variant="standard"
+                    fullWidth // Ensures the TextField takes full width
+                  />
+                </Box>
+                <Typography variant='h6'  marginTop={'100px'} marginBottom={'200px'} marginLeft={'100px'}>Consultant Signature</Typography>
+              </Grid>
+            </Grid>
+            
+          </form>
+        </Paper>
+      </div>
+      <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
+        <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mr: 2 }}>
+          Print Receipt
+        </Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={handleSubmit}
+          disabled={updating}
+        >
+          {updating ? 'Updating...' : 'Save Changes'}
+        </Button>
+      </Box>
     </Box>
   );
 };

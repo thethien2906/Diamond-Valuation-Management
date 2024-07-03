@@ -8,7 +8,8 @@ import {
   Typography,
   Button,
   Paper,
-  CircularProgress
+  CircularProgress,
+  Grid,
 } from '@mui/material';
 import { toast } from 'react-hot-toast';
 
@@ -67,23 +68,41 @@ const ReceiptDetail = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
+      <Typography variant="h4" component="h2" gutterBottom textAlign="center">
         Receipt Details
       </Typography>
       <div ref={componentRef}>
-        <Paper sx={{ p: 3, mt: 2 }}>
-          <Typography variant="body1">Receipt Number: {receipt.receiptNumber}</Typography>
-          <Typography variant="body1">Issue Date: {new Date(receipt.issueDate).toLocaleString()}</Typography>
-          <Typography variant="body1">Customer Name: {receipt.customerName}</Typography>
-          <Typography variant="body1">Phone: {receipt.phone}</Typography>
-          <Typography variant="body1">Email: {receipt.email}</Typography>
-          <Typography variant="body1">Appointment Date: {new Date(receipt.appointmentDate).toLocaleDateString()}</Typography>
-          <Typography variant="body1">Appointment Time: {receipt.appointmentTime}</Typography>
-          <Typography variant="body1">Consultant ID: {receipt.consultantId}</Typography>
-          <Typography variant="body1">Service: {service.name}</Typography>
-        </Paper>
-      </div>
-      <Box sx={{ mt: 3 }}>
+        <Paper sx={{ p: 3, mt: 2, boxShadow: 3, borderRadius: 2, maxWidth: 600, mx: 'auto' }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="body1">Receipt Number: {receipt.receiptNumber}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1">Issue Date: {new Date(receipt.issueDate).toLocaleString()}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1">Customer Name: {receipt.customerName}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1">Phone: {receipt.phone}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1">Email: {receipt.email}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1">Appointment Date: {new Date(receipt.appointmentDate).toLocaleDateString()}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1">Appointment Time: {receipt.appointmentTime}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1">Consultant ID: {receipt.consultantId}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1">Service: {service.name}</Typography>
+            </Grid>
+          </Grid>
+          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
         <Button variant="contained" color="primary" onClick={handlePrint}>
           Print Receipt
         </Button>
@@ -97,6 +116,9 @@ const ReceiptDetail = () => {
           {creatingRecord ? 'Creating Record...' : 'Create Record'}
         </Button>
       </Box>
+        </Paper>
+      </div>
+
     </Box>
   );
 };

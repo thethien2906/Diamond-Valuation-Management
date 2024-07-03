@@ -141,7 +141,7 @@ const ConsultantDashboardLayout = () => {
         }}
       >
         <Toolbar />
-        <List sx={{gap: 2}}>
+        <List sx={{gap: 5}}>
           <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant/appointments">
             <ListItemIcon>
               <CalendarTodayIcon sx={{ color: '#fff' }} />
@@ -245,7 +245,8 @@ const ConsultantDashboardLayout = () => {
           flexGrow: 1,
           bgcolor: 'background.default',
           p: 3,
-          marginLeft: { md: '240px' }, // Ensures content margin aligns with drawer width
+          maxWidth: 1000,
+          marginLeft:20,
         }}
       >
         <Toolbar />
