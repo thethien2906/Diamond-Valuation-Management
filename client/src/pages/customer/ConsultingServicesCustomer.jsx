@@ -1,18 +1,19 @@
-import React, { useContext, useState, useEffect } from "react";
-import CustomerLayout from "../../components/CustomerLayout";
-import { useNavigate } from 'react-router-dom';
-import { UserContext } from "../../context/userContext";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome'; // Import the icon
+import { keyframes } from '@mui/system';
 import axios from 'axios';
-import CircularProgress from '@mui/material/CircularProgress';
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import CustomerLayout from "../../components/CustomerLayout";
+import { UserContext } from "../../context/userContext";
+
 const ConsultingServicesCustomer = () => {
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
@@ -42,6 +43,17 @@ const ConsultingServicesCustomer = () => {
     }
   };
 
+  const fluorescentGlow = keyframes`
+    0%, 100% {
+      box-shadow: 0 0 3px #00f, 0 0 6px #00f, 0 0 12px #00f, 0 0 24px #00f, 0 0 36px #00f;
+    }
+    50% {
+      box-shadow: 0 0 6px #00f, 0 0 12px #00f, 0 0 24px #00f, 0 0 48px #00f, 0 0 72px #00f;
+    }
+  `;
+
+  const isSpecialService = (serviceName) => ['Godlike!', 'Legendary!', 'Unstoppable!'].includes(serviceName);
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
@@ -69,74 +81,85 @@ const ConsultingServicesCustomer = () => {
             textAlign: { sm: 'left', md: 'center' },
           }}
         >
-          <Typography component="h2" variant="h4" color="text.primary">
+          <Typography component="h2" variant="h3" fontWeight="bold" color="white">
             Consulting Services
           </Typography>
-          <Typography variant="body1" color="text.secondary">
+          <Typography variant="body1" color="white">
             Unlock the true value of your diamonds with our personalized guidance.
           </Typography>
         </Box>
-        <Grid container spacing={3} alignItems="center" justifyContent="center">
+        <Grid container spacing={2} alignItems="stretch" justifyContent="center">
           {services.map((service) => (
-            <Grid item key={service._id} xs={12} sm={6} md={4}>
+            <Grid item key={service._id} xs={12} sm={6} md={3}>
               <Card
                 sx={{
-                  p: 2,
+                  p: 1,
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: 4,
-                  border: service.name === 'Godlike!' ? '1px solid' : undefined,
-                  borderColor: service.name === 'Godlike!' ? 'primary.main' : undefined,
-                  background: service.name === 'Godlike!' ? 'linear-gradient(#033363, #021F3B)' : undefined,
+                  justifyContent: 'space-between',
+                  height: '100%',
+                  border: isSpecialService(service.name) ? '1px solid' : undefined,
+                  borderColor: isSpecialService(service.name) ? 'primary.main' : undefined,
+                  transition: 'transform 0.3s, box-shadow 0.3s, background-color 0.3s',
+                  borderRadius: '20px',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: 3,
+                    backgroundColor: '#FFFFFF',
+                  },
+                  color: isSpecialService(service.name) ? 'grey.900' : 'text.primary',
+                  backgroundColor: '#FFFFFF',
                 }}
               >
                 <CardContent>
-                  <Box
+                  <Typography
+                    component="h3"
+                    variant="h6"
+                    fontSize="1.25rem"
                     sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      color: service.name === 'Godlike!' ? 'white' : 'inherit',
+                      fontWeight: isSpecialService(service.name) ? 'bold' : 'normal',
+                      color: isSpecialService(service.name) ? 'blue' : 'text.primary'
                     }}
                   >
-                    <Typography component="h3" variant="h6">
-                      {service.name}
-                    </Typography>
-                    {service.name === 'Godlike!' && (
-                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <AutoAwesomeIcon sx={{ mr: 1 }} /> {/* Render the icon */}
-                        <Typography variant="body2" color="white">
-                          Recommended
-                        </Typography>
-                      </Box>
-                    )}
-                  </Box>
+                    {service.name}
+                  </Typography>
+
                   <Box
                     sx={{
                       display: 'flex',
                       alignItems: 'baseline',
-                      color: service.name === 'Godlike!' ? 'white' : undefined,
+                      color: isSpecialService(service.name) ? 'black' : 'text.primary',
                     }}
                   >
-                    <Typography component="h3" variant="h2">
-                      ${service.price}
+                    <Typography component="h3" variant="h2" fontSize="2.5rem" fontWeight="bold">
+                      ${service.price.toFixed(2)}
                     </Typography>
                   </Box>
                   
-                  <Typography component="p" variant="body1" sx={{ mt: 2, color: service.name === 'Godlike!' ? 'white' : undefined }}>
+                  <Typography component="p" variant="body1" sx={{ mt: 1, fontSize: '0.9rem', color: isSpecialService(service.name) ? 'black' : 'text.primary' }}>
                     Duration: {service.duration}
                   </Typography>
-                  <Typography component="p" variant="body1" sx={{ mt: 2, color: service.name === 'Godlike!' ? 'white' : undefined }}>
+                  
+                  <Typography component="p" variant="body1" sx={{ mt: 1, fontSize: '0.9rem', color: isSpecialService(service.name) ? 'black' : 'text.primary' }}>
                     Accuracy: {service.accuracy}
                   </Typography>
                 </CardContent>
                 <CardActions>
                   <Button
-                    fullWidth
-                    variant={service.name === 'Godlike!' ? 'contained' : 'outlined'}
+                    variant={isSpecialService(service.name) ? 'contained' : 'outlined'}
                     onClick={() => handleBookAppointment(service._id)}
+                    sx={{
+                      width: '70%',
+                      margin: '0 auto',
+                      borderRadius: '10px',
+                      '&:hover': {
+                        animation: `${fluorescentGlow} 1.5s infinite alternate`,
+                      }
+                    }}
                   >
-                    Book Appointment
+                    <Typography variant="body1" fontWeight="bold">
+                      Book
+                    </Typography>
                   </Button>
                 </CardActions>
               </Card>
