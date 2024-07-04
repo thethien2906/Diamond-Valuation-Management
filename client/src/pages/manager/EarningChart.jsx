@@ -7,17 +7,17 @@ import axios from 'axios';
 export default function EarningChart() {
   const theme = useTheme();
 
-  // Initialize the data state with the original time values and initial amounts
+  // Initialize the data state with the time values from 9AM to 5PM and initial amounts
   const initialData = [
-    { time: '00:00', amount: 0 },
-    { time: '03:00', amount: 0 },
-    { time: '06:00', amount: 0 },
     { time: '09:00', amount: 0 },
+    { time: '10:00', amount: 0 },
+    { time: '11:00', amount: 0 },
     { time: '12:00', amount: 0 },
+    { time: '13:00', amount: 0 },
+    { time: '14:00', amount: 0 },
     { time: '15:00', amount: 0 },
-    { time: '18:00', amount: 0 },
-    { time: '21:00', amount: 0 },
-    { time: '24:00', amount: 0 },
+    { time: '16:00', amount: 0 },
+    { time: '17:00', amount: 0 },
   ];
 
   const [data, setData] = React.useState(initialData);
@@ -29,12 +29,22 @@ export default function EarningChart() {
       const response = await axios.get('http://localhost:3000/api/transactions');
       const transactions = response.data;
 
-      const updatedData = initialData.map((slot) => ({
-        ...slot,
-        amount: transactions
-          .filter(transaction => transaction.time === slot.time)
-          .reduce((acc, transaction) => acc + transaction.amount, 0),
-      }));
+      const updatedData = initialData.map(slot => {
+        // Extract hour from slot.time and filter transactions accordingly
+        const hour = slot.time.substring(0, 2); // Extract 'HH' from 'HH:00'
+
+        const transactionsInHour = transactions.filter(t => {
+          const transactionHour = new Date(t.time).getUTCHours().toString().padStart(2, '0');
+          return transactionHour === hour;
+        });
+
+        const totalAmount = transactionsInHour.reduce((acc, transaction) => acc + transaction.amount, 0);
+
+        return {
+          ...slot,
+          amount: totalAmount,
+        };
+      });
 
       setData(updatedData);
       setTransactions(transactions);
@@ -43,30 +53,18 @@ export default function EarningChart() {
     }
   };
 
-  const handleFetchData = () => {
-    fetchTransactions();
-  };
-
   // Effect to fetch transactions initially and set interval to update data every 5 seconds
   React.useEffect(() => {
-    // Fetch transactions initially
-    fetchTransactions();
-
-    // Set up an interval to fetch transactions every 5 seconds
     const interval = setInterval(() => {
-      const now = new Date();
-      // Check if day has changed
-      if (now.getDate() !== currentDate.getDate()) {
-        // Reset data for a new day
-        setData(initialData);
-        setCurrentDate(now);
-      }
       fetchTransactions();
     }, 5000);
 
+    // Fetch transactions initially on component mount
+    fetchTransactions();
+
     // Clean up the interval on component unmount
     return () => clearInterval(interval);
-  }, [currentDate]); // Only re-run effect if currentDate changes
+  }, []); // Empty dependency array to run effect only once
 
   // Get current date and format day/month
   const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}`;
@@ -89,7 +87,7 @@ export default function EarningChart() {
             {
               scaleType: 'point',
               dataKey: 'time',
-              tickNumber: 2,
+              tickNumber: 9, // Adjust tickNumber based on the number of time slots
               tickLabelStyle: theme.typography.body2,
             },
           ]}
