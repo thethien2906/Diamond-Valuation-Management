@@ -14,6 +14,7 @@ const commitRoutes = require('./routes/commitRoutes');
 const sealRoutes = require('./routes/sealRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
+const transactionRoutes = require('./routes/transactionRoutes');
 const stripe = require ('stripe')(process.env.STRIPE_SECRET_KEY);
 const Booking = require('./models/Booking');
 const Transaction = require('./models/Transaction');
@@ -116,6 +117,7 @@ app.use('/api', commitRoutes);
 app.use('/api', sealRoutes);
 app.use('/api', serviceRoutes); 
 app.use('/api', paymentRoutes);
+app.use('/api', transactionRoutes);
 app.use('/api', blogRoutes); // Use the blog routes
 
 const modelPath = 'diamond_price_model.onnx'; // replace with the path to your ONNX model
