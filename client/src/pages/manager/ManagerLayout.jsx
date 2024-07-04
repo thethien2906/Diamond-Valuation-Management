@@ -228,7 +228,7 @@ const ManagerDashboard = ({ children }) => {
           flexGrow: 1,
           bgcolor: 'background.default',
           p: 3,
-          marginLeft: { md: '150px' }, // Ensures content margin aligns with drawer width
+
         }}
       >
         <Toolbar />

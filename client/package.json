@@ -19,6 +19,7 @@
     "@square/web-sdk": "^2.0.1",
     "@stripe/react-stripe-js": "^2.7.1",
     "@stripe/stripe-js": "^3.5.0",
+    "aos": "^2.3.4",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "framer-motion": "^6.5.1",
@@ -27,6 +28,7 @@
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.4.1",
+    "react-intersection-observer": "^9.10.3",
     "react-router-dom": "^6.23.1",
     "react-square-web-payments-sdk": "^3.2.1",
     "react-to-print": "^2.15.1"
