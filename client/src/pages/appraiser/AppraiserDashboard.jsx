@@ -192,6 +192,12 @@ const AppraiserDashboard = () => {
             </ListItemIcon>
             <ListItemText primary="Completed Records" />
           </ListItemButton>
+          <ListItemButton component={Link} to="/appraiser/diamond-classify">
+            <ListItemIcon>
+              <CalendarTodayIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <ListItemText primary="diamond-classify" />
+          </ListItemButton>
         </List>
         <Box sx={{ p: 2, mt: 'auto', textAlign: 'center', bgcolor: '#343a40', color: '#717e87' }}>
           <Typography variant="body2" sx={{ fontSize: '1rem' }}>

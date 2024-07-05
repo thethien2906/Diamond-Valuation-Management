@@ -57,6 +57,11 @@ const GuestLayout = ({ children }) => {
                 Valuation Tool
               </Typography>
             </MenuItem>
+            <MenuItem component={Link} to="/blogs" style={{ padding: '12px 12px', borderRadius: '10px' }}>
+              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
+                Blogs
+              </Typography>
+            </MenuItem>
           </div>
           <Button
             component={Link}

@@ -58,6 +58,8 @@ import ValuationRecordAppraiserDetail from './pages/appraiser/TaskViewDetail';
 import TaskDoneView from './pages/appraiser/TaskDoneView';
 import TaskDoneViewDetail from './pages/appraiser/TaskDoneViewDetail';
 import RequestView from './pages/consultant/RequestView';
+import DiamondClassify from './pages/appraiser/DiamondClassify';
+
 
 import ManagerCommitRequests from './pages/manager/CommitRequests';
 import ManagerCommitRequestDetail from './pages/manager/CommitRequestDetail';
@@ -117,6 +119,7 @@ function App() {
             <Route path="valuation-records/:recordId" element={<ValuationRecordAppraiserDetail />} />
             <Route path="task-done-view" element={<TaskDoneView />} />
             <Route path="task-view/:recordId" element={<TaskDoneViewDetail />} />
+            <Route path="diamond-classify" element={<DiamondClassify />} />
           </Route>
 
           <Route path="/manager" element={<ManagerLayout />}>
