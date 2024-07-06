@@ -113,7 +113,21 @@ const updateBooking = async (req, res) => {
         from: process.env.SMTP_USER,
         to: updatedBooking.email,
         subject: 'Booking Approved - Meeting Details',
-        text: `Dear ${updatedBooking.name},\n\nYour booking has been approved. Here are the meeting details:\n\nDate: ${meetingDetails.date}\nTime: ${meetingDetails.time}\nMeeting Address: ${meetingDetails.address}\n\nBest regards,\n${consultant.name}`
+        html: `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
+          <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
+            <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+          </div>
+          <h2 style="color: #fff;">Booking Approved - Meeting Details</h2>
+          <p style="color: #fff; font-size: 18px;">Dear ${updatedBooking.name},</p>
+          <p style="color: #fff; font-size: 18px;">Your booking has been approved. Here are the meeting details:</p>
+          <p style="color: #fff; font-size: 18px;"><strong>Date:</strong> ${meetingDetails.date}</p>
+          <p style="color: #fff; font-size: 18px;"><strong>Time:</strong> ${meetingDetails.time}</p>
+          <p style="color: #fff; font-size: 18px;"><strong>Meeting Address:</strong> ${meetingDetails.address}</p>
+          <p style="color: #fff; font-size: 18px;">Best regards,</p>
+          <p style="color: #fff; font-size: 18px;">${consultant.name}</p>
+        </div>
+      `
       };
 
       await transporter.sendMail(mailOptions, (error, info) => { 

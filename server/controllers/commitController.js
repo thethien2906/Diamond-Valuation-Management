@@ -13,7 +13,7 @@ const createCommitRequest = async (req, res) => {
     }
     //set commimentRequested to true
     record.commitmentRequested = true;
-    
+    await record.save();
     // Create a new commit request
     const newCommit = new Commit({
       recordId,
@@ -174,13 +174,16 @@ const updateCommitStatus = async (req, res) => {
           to: customer.email,
           subject: 'Commitment Request Denied',
           text: `
-        Dear ${customer.name},
-
-        Your commitment request has been denied by our consultant.
-
-        We apologize for any inconvenience this may cause. Please contact us for further assistance or to discuss alternative options.
-
-        Thank you for your understanding.
+          <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
+          <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
+            <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+          </div>
+          <h2 style="color: #fff;">Commitment Request Denied</h2>
+          <p style="color: #fff; font-size: 18px;">Dear ${customer.name},</p>
+          <p style="color: #fff; font-size: 18px;">Your commitment request has been denied by our consultant.</p>
+          <p style="color: #fff; font-size: 18px;">We apologize for any inconvenience this may cause. Please contact us for further assistance or to discuss alternative options.</p>
+          <p style="color: #fff; font-size: 18px;">Thank you for your understanding.</p>
+          </div>
     `
       };
   
