@@ -154,4 +154,32 @@ const requestCommitment = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-module.exports = { createRecord, getRecordsByStatus, getRecordById, updateRecordById, getRecordsInProgress, getRecordsCompleted, getRecordsByUserId, requestCommitment };
+
+const getNamesByIds = async (req, res) => {
+  try {
+    const { recordId } = req.params;
+    const record = await ValuationRecord.findById(recordId)
+      .populate('serviceId', 'name')
+      .populate('consultantId', 'name')
+      .populate('customerId', 'name')
+      .populate('appraiserId', 'name')
+      .exec();
+
+    if (!record) {
+      return res.status(404).json({ error: 'Record not found' });
+    }
+
+    const { serviceId, consultantId, customerId, appraiserId } = record;
+    res.json({
+      ...record.toObject(),
+      serviceName: serviceId ? serviceId.name : 'Not assigned',
+      consultantName: consultantId ? consultantId.name : 'Not assigned',
+      customerName: customerId ? customerId.name : 'Not assigned',
+      appraiserName: appraiserId ? appraiserId.name : 'Not assigned',
+    });
+  } catch (error) {
+    console.error('Error fetching valuation record details:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+module.exports = { createRecord, getRecordsByStatus, getRecordById, updateRecordById, getRecordsInProgress, getRecordsCompleted, getRecordsByUserId, requestCommitment, getNamesByIds }; 

@@ -23,7 +23,8 @@ const TaskDoneViewDetail = () => {
   useEffect(() => {
     const fetchRecordData = async () => {
       try {
-        const response = await axios.get(`/api/valuation-records/${recordId}`);
+        const response = await axios.get(`/api/valuation-records/details/${recordId}`);
+        
         setRecord(response.data);
       } catch (error) {
         console.error('Error fetching valuation record data:', error);
@@ -93,22 +94,21 @@ const TaskDoneViewDetail = () => {
             </Typography>
           </Box>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <Typography gutterBottom><b>Customer Information:</b></Typography>
-              <Typography variant="body1">• Customer Name: {record.customerName}</Typography>
-              <Typography variant="body1">• Phone Number: {record.phoneNumber}</Typography>
-              <Typography variant="body1">• Email: {record.email}</Typography>
-              <Typography gutterBottom><b>Staff Details:</b></Typography>
-              <Typography variant="body1">• Consultant Name: {record.consultantId}</Typography>
-              <Typography variant="body1">• Appraiser Name: {record.appraiserId || 'Not assigned yet'}</Typography>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography gutterBottom><b>Appointment Details:</b></Typography>
-              <Typography variant="body1">• Appointment Time: {record.appointmentTime}</Typography>
-              <Typography gutterBottom><b>Service Details:</b></Typography>
-              <Typography variant="body1">• Services: {record.services}</Typography>
-              <Typography variant="body1">• Payment Method: {record.paymentMethod}</Typography>
-            </Grid>
+          <Grid item xs={12} sm={6}>
+  <Typography gutterBottom><b>Customer Information:</b></Typography>
+  <Typography variant="body1">• Customer Name: {record.customerName}</Typography>
+  <Typography variant="body1">• Phone Number: {record.phoneNumber}</Typography>
+  <Typography variant="body1">• Email: {record.email}</Typography>
+  <Typography gutterBottom><b>Staff Details:</b></Typography>
+  <Typography variant="body1">• Consultant Name: {record.consultantName}</Typography>
+  <Typography variant="body1">• Appraiser Name: {record.appraiserName || 'Not assigned yet'}</Typography>
+</Grid>
+<Grid item xs={12} sm={6}>
+  <Typography gutterBottom><b>Appointment Details:</b></Typography>
+  <Typography variant="body1">• Appointment Time: {record.appointmentTime}</Typography>
+  <Typography gutterBottom><b>Service Details:</b></Typography>
+  <Typography variant="body1">• Services: {record.serviceName}</Typography>
+</Grid>
           </Grid>
           <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
             <Grid container spacing={2}>
@@ -227,7 +227,6 @@ const TaskDoneViewDetail = () => {
                     fullWidth // Ensures the TextField takes full width
                   />
                 </Box>
-                <Typography variant='h6'  marginTop={'100px'} marginBottom={'200px'} marginLeft={'100px'}>Consultant Signature</Typography>
               </Grid>
             </Grid>
             
