@@ -1,3 +1,4 @@
+// routes/blogRoutes.js
 const express = require('express');
 const {
   createBlog,

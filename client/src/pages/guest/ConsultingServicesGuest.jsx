@@ -68,6 +68,7 @@ const ConsultingServicesGuest = () => {
           sx={{
             width: { sm: '100%', md: '60%' },
             textAlign: { sm: 'left', md: 'center' },
+            height:''
           }}
         >
           <Typography component="h2" variant="h3" fontWeight="bold" color="white">

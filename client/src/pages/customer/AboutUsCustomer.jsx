@@ -104,7 +104,7 @@ const AboutUsCustomer = () => {
           </Box>
           <Box sx={{ flex: 1, height: '400px', overflow: 'hidden', zIndex: 0 }}> {/* Adjust height as needed */}
             <img
-              src="/img/360_F_647491277_CEc0EIRHVlnWkFIgFyoJTtZGCYOjSaNV.jpg"
+              src="https://t3.ftcdn.net/jpg/06/47/49/12/360_F_647491277_CEc0EIRHVlnWkFIgFyoJTtZGCYOjSaNV.jpg"
               alt="Trusted"
               style={{
                 width: '100%',
@@ -134,20 +134,6 @@ const AboutUsCustomer = () => {
               WHY CHOOSE DIAMONDSHINE
             </Typography>
           </Box>
-          <Box sx={{ flex: 0 }}>
-            <img
-              src="/img/jewelry-appraiser.jpg"
-              alt="Why Choose Us"
-              style={{
-                width: '100%',
-                height: 'auto',
-                marginTop: '50px',
-                marginBottom: '40px',
-                borderRadius: '10px'
-              }}
-              data-aos="flip-left"
-            />
-          </Box>
         </Box>
         <Box
           width="80%"
@@ -168,7 +154,7 @@ const AboutUsCustomer = () => {
           </Box>
           <Box sx={{ flex: 1 }}>
             <img
-              src="/img/jewelry-appraiser.jpg"
+              src="https://www.jewelrycult.com/wp-content/uploads/2016/02/jewelry-appraiser.jpg"
               alt="Why Choose Us"
               style={{
                 width: '100%',
@@ -194,7 +180,7 @@ const AboutUsCustomer = () => {
         >
           <Box sx={{ flex: 1 }}>
             <img
-              src="/img/5957_ballerina_1280x720.jpg"
+              src="https://us.123rf.com/450wm/kwangmoo/kwangmoo1803/kwangmoo180300994/98582086-luxury-jewelry-diamond-rings-with-reflection-on-black-background.jpg?ver=6"
               alt="Why Choose Us"
               style={{
                 width: '100%',
@@ -231,7 +217,7 @@ const AboutUsCustomer = () => {
           </Box>
           <Box sx={{ flex: 1 }}>
             <img
-              src="/img/images.jpg"
+              src="https://abrn.asia/ojs/public/journals/3/article_66_cover_en_US.jpg"
               alt="Why Choose Us"
               style={{
                 width: '100%',
