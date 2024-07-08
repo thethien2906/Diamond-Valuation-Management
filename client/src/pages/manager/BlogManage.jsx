@@ -1,17 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import {
   Box,
-  Typography,
-  TextField,
   Button,
+  Card,
+  CardActions,
+  CardContent,
   CircularProgress,
   Grid,
-  Card,
-  CardContent,
-  CardActions,
+  TextField,
+  Typography,
 } from '@mui/material';
+import axios from 'axios';
+import React, { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // Import Quill styles
 import { UserContext } from '../../context/userContext';
 
 const BlogCRUD = () => {
@@ -21,7 +23,8 @@ const BlogCRUD = () => {
   const [form, setForm] = useState({
     title: '',
     content: '',
-    author: user ? user._id : '', // Using user context for author
+    author: user ? user._id : '',
+    imageUrl: '', // Added imageUrl field
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editBlogId, setEditBlogId] = useState(null);
@@ -42,7 +45,13 @@ const BlogCRUD = () => {
   }, []);
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };  
+
+
+  const handleContentChange = (value) => {
+    setForm({ ...form, content: value });
   };
 
   const handleSubmit = async (e) => {
@@ -51,9 +60,9 @@ const BlogCRUD = () => {
       handleUpdate(editBlogId);
     } else {
       try {
-        const response = await axios.post('/api/blogs', { ...form, author: user._id});
+        const response = await axios.post('/api/blogs', { ...form, author: user._id });
         setBlogs([response.data, ...blogs]);
-        setForm({ title: '', content: '', author: user.name });
+        setForm({ title: '', content: '', author: user.name, imageUrl: '' });
         toast.success('Blog created successfully');
       } catch (error) {
         console.error('Error creating blog:', error);
@@ -65,8 +74,14 @@ const BlogCRUD = () => {
   const handleEdit = (blog) => {
     setIsEditing(true);
     setEditBlogId(blog._id);
-    setForm({ title: blog.title, content: blog.content, author: blog.author });
+    setForm({
+      title: blog.title,
+      content: blog.content,
+      imageUrl: blog.imageUrl,
+      author: blog.author,
+    });
   };
+
 
   const handleUpdate = async (blogId) => {
     try {
@@ -74,7 +89,7 @@ const BlogCRUD = () => {
       setBlogs(blogs.map((blog) => (blog._id === blogId ? response.data : blog)));
       setIsEditing(false);
       setEditBlogId(null);
-      setForm({ title: '', content: '', author: user.name });
+      setForm({ title: '', content: '', author: user.name, imageUrl: '' });
       toast.success('Blog updated successfully');
     } catch (error) {
       console.error('Error updating blog:', error);
@@ -117,17 +132,38 @@ const BlogCRUD = () => {
           required
         />
         <TextField
-          label="Content"
-          name="content"
-          value={form.content}
+          label="Image URL"
+          name="imageUrl"
+          value={form.imageUrl}
           onChange={handleChange}
           fullWidth
-          multiline
-          rows={4}
           margin="normal"
-          required
         />
-        <Button type="submit" variant="contained" color="primary">
+
+        <ReactQuill
+          value={form.content}
+          onChange={handleContentChange}
+          theme="snow"
+          modules={{
+            toolbar: [
+              [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+              [{ size: [] }],
+              ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+              [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+              ['link', 'image', 'video'],
+              [{ 'align': [] }],
+              ['clean']
+            ],
+          }}
+          formats={[
+            'header', 'font', 'size',
+            'bold', 'italic', 'underline', 'strike', 'blockquote',
+            'list', 'bullet', 'indent',
+            'link', 'image', 'video',
+            'align'
+          ]}
+        />
+        <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }}>
           {isEditing ? 'Update Blog' : 'Create Blog'}
         </Button>
       </Box>
@@ -141,9 +177,6 @@ const BlogCRUD = () => {
                 </Typography>
                 <Typography variant="body2" color="textSecondary">
                   {new Date(blog.createdAt).toLocaleDateString()}
-                </Typography>
-                <Typography variant="body2">
-                  {blog.content.substring(0, 100)}...
                 </Typography>
               </CardContent>
               <CardActions>

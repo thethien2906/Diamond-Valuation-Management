@@ -1,30 +1,23 @@
-import Button from '@mui/material/Button';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const GuestLayout = ({ children }) => {
   const [showContainer, setShowContainer] = useState(true);
-  const [lastScrollTop, setLastScrollTop] = useState(0);
+  const [anchorEl, setAnchorEl] = useState(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      if (currentScrollTop > lastScrollTop) {
-        setShowContainer(false); // Scrolling down
-      } else {
-        setShowContainer(true); // Scrolling up
-      }
-      setLastScrollTop(currentScrollTop <= 0 ? 0 : currentScrollTop);
-    };
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [lastScrollTop]);
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div className="home-container" style={{ backgroundColor: '#033F63', position: '', zIndex: 1 }}>
@@ -32,17 +25,16 @@ const GuestLayout = ({ children }) => {
         style={{
           position: 'fixed',
           top: showContainer ? '0px' : '-80px',
-          width: '100%',
+          width: '101%',
           zIndex: 1100,
           boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
           transition: 'top 0.3s',
           backgroundColor: '#FAFAFA', // Light gray similar to Netlify
-          
         }}
       >
         <Container maxWidth="lg" disableGutters style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '11px' }}>
           <div style={{ display: 'flex', gap: '50px' }}>
-            <MenuItem component={Link} to="/about-us-guest" style={{ padding: '12px 12px', borderRadius: '10px' }}>
+            <MenuItem component={Link} to="/about-us-guest" style={{ padding: '12px 12px', borderRadius: '10px', marginLeft:'200px' }}>
               <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
                 About Us
               </Typography>
@@ -63,27 +55,43 @@ const GuestLayout = ({ children }) => {
               </Typography>
             </MenuItem>
           </div>
-          <Button
-            component={Link}
-            to="/login"
-            variant="contained"
-            style={{
-              padding: '8px 24px',
-              borderRadius: '4px',
-              backgroundColor: '#033F63',
-              color: 'white',
-              fontWeight: 'bold',
-              fontSize: '14px',
-              textTransform: 'none',
-            }}
+          <IconButton
+            color="inherit"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleMenu}
+            sx={{ ml: 'auto' }}
           >
-            <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-              Sign In
-            </Typography>
-          </Button>
+            <AccountCircleIcon sx={{ color: 'black' }} />
+          </IconButton>
+          <Menu
+            id="menu-appbar"
+            anchorEl={anchorEl}
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            sx={{ marginTop: '40px' }}
+          >
+            <MenuItem component={Link} to="/login" onClick={handleClose}>
+              <Typography variant="body2" color="text.primary" sx={{ ml: 1, textAlign: 'center' }}>
+                Sign In
+              </Typography>
+            </MenuItem>
+          </Menu>
         </Container>
       </div>
-      <Container maxWidth="lg" style={{ marginTop: '70px', marginBottom: '50px' }}>{children}</Container>
+      <Container maxWidth="lg" style={{ marginTop: '68px', marginBottom: '50px', padding: '20px', marginLeft:'69px' }}>
+        {children}
+      </Container>
     </div>
   );
 };
