@@ -4,11 +4,13 @@ import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, Ta
 import { toast } from 'react-hot-toast';
 import { UserContext } from '../../context/userContext';
 import { useNavigate } from 'react-router-dom';
+
 const RecordTracking = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
+
   useEffect(() => {
     const fetchRecords = async () => {
       if (!user) {
@@ -63,8 +65,7 @@ const RecordTracking = () => {
               <TableCell>Status</TableCell>
               <TableCell>Appointment Date</TableCell>
               <TableCell>Appointment Time</TableCell>
-              <TableCell>Services</TableCell>
-              <TableCell>Estimated Value</TableCell>
+              <TableCell>Service Name</TableCell>
               <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
@@ -76,8 +77,7 @@ const RecordTracking = () => {
                 <TableCell>{record.status}</TableCell>
                 <TableCell>{new Date(record.appointmentDate).toLocaleDateString()}</TableCell>
                 <TableCell>{record.appointmentTime}</TableCell>
-                <TableCell>{record.services}</TableCell>
-                <TableCell>{record.estimatedValue || 'Not yet estimated'}</TableCell>
+                <TableCell>{record.serviceName}</TableCell>
                 <TableCell>
                   <Button 
                     variant="contained" 

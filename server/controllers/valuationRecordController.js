@@ -126,9 +126,15 @@ const updateRecordById = async (req, res) => {
 const getRecordsByUserId = async (req, res) => {
   try {
     const { customerId } = req.params;
-    const records = await ValuationRecord.find({ customerId });
+    const records = await ValuationRecord.find({ customerId })
+    .populate('serviceId', 'name')
+      .exec();
+      const detailedRecords = records.map(record => ({
+        ...record.toObject(),
+        serviceName: record.serviceId ? record.serviceId.name : 'Not assigned',
+      }));
     
-    res.status(200).json(records);
+    res.status(200).json(detailedRecords);
   } catch (error) {
     console.error('Error fetching records by user ID:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -182,4 +188,6 @@ const getNamesByIds = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
 module.exports = { createRecord, getRecordsByStatus, getRecordById, updateRecordById, getRecordsInProgress, getRecordsCompleted, getRecordsByUserId, requestCommitment, getNamesByIds }; 

@@ -111,6 +111,11 @@ const CustomerLayout = ({ children }) => {
                     VALUATION TOOL
                   </Typography>
                 </MenuItem>
+                <MenuItem component={Link} to="/blog" sx={{ py: '6px', px: '12px', borderRadius: '30px' }}>
+                  <Typography variant="body2" color="text.primary">
+                    BLOGS
+                  </Typography>
+                </MenuItem>
                 <MenuItem component={Link} to="/record-tracking" sx={{ py: '6px', px: '12px', borderRadius: '30px' }}>
                   <Typography variant="body2" color="text.primary">
                     RECORD TRACKING
@@ -184,6 +189,9 @@ const CustomerLayout = ({ children }) => {
                   </MenuItem>
                   <MenuItem component={Link} to="/valuation-tool">
                     VALUATION TOOL
+                  </MenuItem>
+                  <MenuItem component={Link} to="/blog">
+                    BLOGS
                   </MenuItem>
                   <MenuItem component={Link} to="/record-tracking">
                     RECORD TRACKING

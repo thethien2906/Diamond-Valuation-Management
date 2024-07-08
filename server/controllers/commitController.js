@@ -13,7 +13,7 @@ const createCommitRequest = async (req, res) => {
     }
     //set commimentRequested to true
     record.commitmentRequested = true;
-    
+    await record.save();
     // Create a new commit request
     const newCommit = new Commit({
       recordId,

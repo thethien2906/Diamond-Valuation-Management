@@ -12,8 +12,8 @@ import {
   Button
 } from '@mui/material';
 import { toast } from 'react-hot-toast';
-import GuestLayout from '../../components/GuestLayout';
-const BlogListPageGuest = () => {
+import CustomerLayout from '../../components/CustomerLayout';
+const BlogListPageCustomer = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -43,7 +43,7 @@ const BlogListPageGuest = () => {
   }
 
   return (
-    <GuestLayout>
+    <CustomerLayout>
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" component="h2" gutterBottom>
         Blogs
@@ -73,8 +73,8 @@ const BlogListPageGuest = () => {
         ))}
       </Grid>
     </Box>
-    </GuestLayout>
+    </CustomerLayout>
   );
 };
 
-export default BlogListPageGuest;
+export default BlogListPageCustomer;

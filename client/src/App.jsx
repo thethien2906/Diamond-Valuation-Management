@@ -36,7 +36,8 @@ import AboutUsCustomer from './pages/customer/AboutUsCustomer';
 import ConsultingServicesCustomer from './pages/customer/ConsultingServicesCustomer';
 import RecordTracking from './pages/customer/RecordTracking';
 import CommitRequest from './pages/customer/CommitRequest';
-
+import BlogListPageCustomer from './pages/customer/BlogListPage';
+import BlogDetailPageCustomer from './pages/customer/BlogDetailPage';
 
 import CommitmentRequests from './pages/consultant/CommitmentRequestView';
 import CommitmentRequestDetail from './pages/consultant/CommitmentRequestViewDetail';
@@ -68,7 +69,8 @@ import ManagerSealRequestDetail from './pages/manager/SealRequestDetail';
 import ManagerServices from './pages/manager/ServiceManage';
 import ManagerDashboard from './pages/manager/ManagerDashboard';
 import BlogCRUD from './pages/manager/BlogManage';
-
+import BlogListPageGuest from './pages/guest/BlogListPage';
+import BlogDetailPageGuest from './pages/guest/BlogDetailPage';
 
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.withCredentials = true;
@@ -135,8 +137,10 @@ function App() {
           <Route path="/about-us-guest" element={<AboutUsGuest />} />
           <Route path="/consulting-services-guest" element={<ConsultingServicesGuest />} />
           <Route path="/valuation-tool" element={<ValuationTool />} />
-          <Route path="/blogs" element={<BlogListPage />} />
-          <Route path="/blogs/:blogId" element={<BlogDetailPage />} />
+          <Route path="/blogs" element={<BlogListPageGuest />} />
+          <Route path="/blogs/:blogId" element={<BlogDetailPageGuest />} />
+
+
 
           <Route path="/about-us-customer" element={<AboutUsCustomer />} />
           <Route path="/consulting-services-customer" element={<ConsultingServicesCustomer />} />
@@ -145,6 +149,8 @@ function App() {
           <Route path="/request-commit/:recordId" element={<CommitRequest />} />
           <Route path="/payment/success" element={<Success />} />
           <Route path="/payment/cancel" element={<Cancel />} />
+          <Route path="/blog" element={<BlogListPageCustomer />} />
+          <Route path="/blog/:blogId" element={<BlogDetailPageCustomer />} />
       
         </Routes>
       </ConsultantContextProvider>

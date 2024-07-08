@@ -7,7 +7,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import GuestLayout from '../../components/GuestLayout';
-const BlogDetailPageGuest = () => {
+const BlogDetailPageCustomer = () => {
   const { blogId } = useParams();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,7 +44,7 @@ const BlogDetailPageGuest = () => {
   }
 
   return (
-    <GuestLayout>
+    <CustomerLayout>
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" component="h2" gutterBottom>
         {blog.title}
@@ -56,8 +56,8 @@ const BlogDetailPageGuest = () => {
         {blog.content}
       </Typography>
     </Box>
-    </GuestLayout>
+    </CustomerLayout>
   );
 };
 
-export default BlogDetailPageGuest;
+export default BlogDetailPageCustomer;

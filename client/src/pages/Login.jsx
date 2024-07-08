@@ -87,7 +87,7 @@ export default function SignInSide() {
         navigate("/manager");
         break;
       default:
-        navigate("/dashboard");
+        navigate("/about-us-customer");
     }
   };
 
