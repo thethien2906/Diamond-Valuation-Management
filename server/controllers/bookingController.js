@@ -1,6 +1,7 @@
 const Booking = require('../models/Booking');
 const User = require('../models/User');
 const transporter = require('../config/nodemailer');
+const Service = require('../models/Service');
 const createBooking = async (req, res) => {
   try {
     const bookingData = req.body;
@@ -8,11 +9,14 @@ const createBooking = async (req, res) => {
     if (!consultant) {
       return res.status(404).json({ error: "Consultant not found." });
     }
+    const service = await Service.findById(bookingData.serviceId);
     const newBooking = new Booking({
       ...bookingData,
       status: "pending",
       consultantId: consultant._id,
-      customerId: bookingData.customerId, // Make sure userId is included
+      customerId: bookingData.customerId, 
+      serviceId: service._id,
+      
     });
     await newBooking.save();
     res.status(201).json({
@@ -65,7 +69,8 @@ const getPendingBookingsByConsultant = async (req, res) => {
 
     const pendingBookings = await Booking.find({
       consultantId: consultant._id, 
-      status: 'pending'
+      status: 'pending',
+      paymentStatus: 'Paid'
     });
 
     res.json(pendingBookings);

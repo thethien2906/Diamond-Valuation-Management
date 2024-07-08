@@ -84,6 +84,7 @@ const registerUser = async (req, res) => {
           </a>
           <p style="color: #fff; font-size: 18px;">This link will expire in 5 days. If you did not make this request, please disregard this email.</p>
           <p style="color: #fff; font-size: 18px;">For help, contact us through our Help center.</p>
+          <p style="color: #fff; font-size: 18px;">Thank you.</p>
         </div>
       `
   };
@@ -133,7 +134,7 @@ const loginUser = async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'No user found' });
     }
-    if (user.isEmailVerified=='false') {
+    if (user.IsVerified=='false' && user.role=='user') {
       return res.status(401).json({ error: 'Please Verify your email' });
     }
     const match = await comparePassword(password, user.password);
@@ -191,7 +192,6 @@ const logoutUser = (req, res) => {
     try {
       const user = await User.findOne({ email });
       if (!user) {
-        console.error('User not found');
         return res.status(404).json({ error: 'User not found' });
       }
       const resetPasswordCode = crypto.randomBytes(3).toString('hex'); 
