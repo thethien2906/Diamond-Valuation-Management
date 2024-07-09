@@ -80,7 +80,7 @@ const registerUser = async (req, res) => {
           <h2 style="color: #fff; font-size: 24px;">Verify Your Email Address</h2>
           <p style="color: #fff; font-size: 18px;">To continue setting up your account, please verify your email address by clicking the button below:</p>
           <a href="http://localhost:5173/verify/${verificationToken}" style="text-decoration: none;">
-            <button style="font-size: 18px; padding: 10px 20px; color: #fff; background-color: #007BFF; border: none; cursor: pointer;">Verify Email Address</button>
+            <button style="font-size: 18px; padding: 10px 20px; color: #3399ff; background-color: #007BFF; border: none; cursor: pointer;">Verify Email Address</button>
           </a>
           <p style="color: #fff; font-size: 18px;">This link will expire in 5 days. If you did not make this request, please disregard this email.</p>
           <p style="color: #fff; font-size: 18px;">For help, contact us through our Help center.</p>
@@ -211,7 +211,7 @@ const logoutUser = (req, res) => {
           <p style="color: #fff; font-size: 20px;">Dear ${user.name},</p>
           <p style="color: #fff; font-size: 20px;">We received a request to reset your password. Please use the code below to reset your password:</p>
           <div style="text-align: center; margin: 20px 0;">
-            <span style="font-size: 36px; font-weight: bold; color: #fff; background-color: rgb(0, 27, 56); padding: 5px 10px;">${resetPasswordCode}</span>
+            <span style="font-size: 36px; font-weight: bold; color: #3399ff; background-color: rgb(0, 27, 56); padding: 5px 10px;">${resetPasswordCode}</span>
           </div>
           <p style="color: #fff; font-size: 20px;">If you did not request a password reset, please ignore this email or contact support.</p>
           <p style="color: #fff; font-size: 20px;">Thank you,</p>

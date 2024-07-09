@@ -1,20 +1,45 @@
+// controllers/blogController.js
 const Blog = require('../models/Blog');
 
 // Create a new blog post
 const createBlog = async (req, res) => {
   try {
-    const { title, content, author } = req.body;
+    const { title, content, author, imageUrl } = req.body;
 
     const newBlog = new Blog({
       title,
       content,
       author,
+      imageUrl, // Include imageUrl in the new blog creation
     });
 
     const savedBlog = await newBlog.save();
     res.status(201).json(savedBlog);
   } catch (error) {
     console.error('Error creating blog post:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+// Update a blog post by ID
+const updateBlog = async (req, res) => {
+  try {
+    const { blogId } = req.params;
+    const { title, content, imageUrl } = req.body;
+
+    const updatedBlog = await Blog.findByIdAndUpdate(
+      blogId,
+      { title, content, imageUrl, updatedAt: Date.now() }, // Include imageUrl in update
+      { new: true }
+    );
+
+    if (!updatedBlog) {
+      return res.status(404).json({ error: 'Blog post not found' });
+    }
+
+    res.status(200).json(updatedBlog);
+  } catch (error) {
+    console.error('Error updating blog post:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -45,29 +70,6 @@ const getBlogById = async (req, res) => {
   }
 };
 
-// Update a blog post by ID
-const updateBlog = async (req, res) => {
-  try {
-    const { blogId } = req.params;
-    const { title, content } = req.body;
-
-    const updatedBlog = await Blog.findByIdAndUpdate(
-      blogId,
-      { title, content, updatedAt: Date.now() },
-      { new: true }
-    );
-
-    if (!updatedBlog) {
-      return res.status(404).json({ error: 'Blog post not found' });
-    }
-
-    res.status(200).json(updatedBlog);
-  } catch (error) {
-    console.error('Error updating blog post:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-};
-
 // Delete a blog post by ID
 const deleteBlog = async (req, res) => {
   try {
@@ -88,8 +90,8 @@ const deleteBlog = async (req, res) => {
 
 module.exports = {
   createBlog,
+  updateBlog,
   getAllBlogs,
   getBlogById,
-  updateBlog,
   deleteBlog,
 };

@@ -54,18 +54,18 @@ const ManagerSealRequestDetail = () => {
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" component="h2" gutterBottom>
-        Seal Request Detail
-      </Typography>
-      <Paper sx={{ p: 3, mt: 2 }}>
-        <Typography variant="body1">Record Id: {sealRequest.recordId.recordNumber}</Typography>
-        <Typography variant="body1">Customer Name: {sealRequest.customerName}</Typography>
-        <Typography variant="body1">Reason: {sealRequest.reason}</Typography>
-        <Typography variant="body1">Notes: {sealRequest.notes}</Typography>
-        <Typography variant="body1">Consultant: {sealRequest.consultantId.name}</Typography>
-        <Typography variant="body1">Date Issued: {new Date(sealRequest.createdAt).toLocaleDateString()}</Typography>
-        <Box sx={{ mt: 3, display: 'flex', gap: 2 }}>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <Paper sx={{ width: '100%', maxWidth: 600, p: 3 }}>
+        <Typography variant="h4" component="h2" gutterBottom align="center">
+          Seal Request Detail
+        </Typography>
+        <Typography variant="body1" textAlign={'center'}>Record Id: {sealRequest.recordId.recordNumber}</Typography>
+        <Typography variant="body1" textAlign={'center'}>Customer Name: {sealRequest.customerName}</Typography>
+        <Typography variant="body1" textAlign={'center'}> Reason: {sealRequest.reason}</Typography>
+        <Typography variant="body1" textAlign={'center'}>Notes: {sealRequest.notes}</Typography>
+        <Typography variant="body1" textAlign={'center'}>Consultant: {sealRequest.consultantId.name}</Typography>
+        <Typography variant="body1" textAlign={'center'}>Date Issued: {new Date(sealRequest.createdAt).toLocaleDateString()}</Typography>
+        <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
           <Button 
             variant="contained" 
             color="primary" 
@@ -77,6 +77,7 @@ const ManagerSealRequestDetail = () => {
             variant="contained" 
             color="secondary" 
             onClick={() => handleStatusChange('Rejected')}
+            sx={{ ml: 2 }}
           >
             Deny
           </Button>

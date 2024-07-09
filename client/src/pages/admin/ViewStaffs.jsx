@@ -1,8 +1,21 @@
-// Client/src/pages/ViewStaff.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from 'react-router-dom';
-import { Button, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper } from '@mui/material';
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Paper,
+  IconButton,
+  Fab
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AddIcon from '@mui/icons-material/Add';
 
 const ViewStaff = () => {
   const [staff, setStaff] = useState([]);
@@ -36,21 +49,26 @@ const ViewStaff = () => {
   };
 
   return (
-    <Container>
-      <Typography variant="h4" component="h2" sx={{ my: 4 }}>
+    <Container sx={{ mt: 4 }}>
+      <Typography variant="h4" component="h2" sx={{ mb: 4 }}>
         Staff List
       </Typography>
-      <Button variant="contained" color="primary" onClick={handleAddUser} sx={{ mb: 2 }}>
-        Add User
-      </Button>
+      <Fab
+        color="primary"
+        aria-label="add"
+        onClick={handleAddUser}
+        sx={{ mb: 2 }}
+      >
+        <AddIcon />
+      </Fab>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead>
+          <TableHead sx={{ bgcolor:"#212529" }}>
             <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Role</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell sx={{ color: 'white' }}>Name</TableCell>
+              <TableCell sx={{ color: 'white' }}>Email</TableCell>
+              <TableCell sx={{ color: 'white' }}>Role</TableCell>
+              <TableCell sx={{ color: 'white' }}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -60,13 +78,12 @@ const ViewStaff = () => {
                 <TableCell>{staffMember.email}</TableCell>
                 <TableCell>{staffMember.role}</TableCell>
                 <TableCell>
-                  <Button
-                    variant="contained"
+                  <IconButton
                     color="secondary"
                     onClick={() => handleDeleteStaff(staffMember._id)}
                   >
-                    Delete
-                  </Button>
+                    <DeleteIcon />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

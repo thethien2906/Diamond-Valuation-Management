@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress } from '@mui/material';
+import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Button } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { UserContext } from '../../context/userContext';
 
@@ -11,27 +11,38 @@ const ConsulatantSealStatus = () => {
 
   useEffect(() => {
     const fetchRequests = async () => {
-        if (!user) {
-          toast.error('User not logged in');
-          return;
-        }
-  
-        try {
-          // Fetch requests for the consultant's ID
-          const response = await axios.get(`/api/seal-requests/${user._id}/status`); 
-          setRequests(response.data);
-        } catch (error) {
-          console.error('Error fetching sealing:', error);
-          toast.error('Failed to fetch sealing');
-        } finally {
-          setLoading(false);
-        }
-      };
-      // Only fetch if user exists
-      if (user && user._id) {
-        fetchRequests();
+      if (!user) {
+        toast.error('User not logged in');
+        return;
       }
-    }, [user]); 
+
+      try {
+        // Fetch requests for the consultant's ID
+        const response = await axios.get(`/api/seal-requests/${user._id}/status`);
+        setRequests(response.data);
+      } catch (error) {
+        console.error('Error fetching sealing:', error);
+        toast.error('Failed to fetch sealing');
+      } finally {
+        setLoading(false);
+      }
+    };
+    // Only fetch if user exists
+    if (user && user._id) {
+      fetchRequests();
+    }
+  }, [user]);
+
+  const handleUnseal = async (sealId) => {
+    try {
+      await axios.post(`/api/seal-requests/${sealId}/unseal`);
+      toast.success('Record unsealed and seal deleted');
+      setRequests((prevRequests) => prevRequests.filter(request => request._id !== sealId));
+    } catch (error) {
+      console.error('Error unsealing record:', error);
+      toast.error('Failed to unseal record');
+    }
+  };
 
   if (loading) {
     return (
@@ -63,6 +74,7 @@ const ConsulatantSealStatus = () => {
               <TableCell>Reason</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Date Issued</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -73,6 +85,15 @@ const ConsulatantSealStatus = () => {
                 <TableCell>{request.reason}</TableCell>
                 <TableCell>{request.status}</TableCell>
                 <TableCell>{new Date(request.createdAt).toLocaleDateString()}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleUnseal(request._id)}
+                  >
+                    Unseal
+                  </Button>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

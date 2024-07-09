@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
+import CloseIcon from '@mui/icons-material/Close';
+import DiamondIcon from '@mui/icons-material/Diamond';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import DiamondIcon from '@mui/icons-material/Diamond';
-import Typography from '@mui/material/Typography';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 // Footer component
 function Copyright(props) {
@@ -31,8 +31,30 @@ function Copyright(props) {
   );
 }
 
-// Default theme setup
-const defaultTheme = createTheme();
+// Create a theme that matches the login page
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#00BFFF', // Fluorescent blue
+    },
+    secondary: {
+      main: '#FFFFFF', // White
+    },
+    background: {
+      default: '#121212', // Dark background
+      paper: '#1E1E1E', // Paper background
+    },
+  },
+  typography: {
+    h5: {
+      color: '#FFFFFF', // White text for headings
+    },
+    body2: {
+      color: '#B0C4DE', // Light blue text for secondary content
+    },
+  },
+});
 
 export default function Register() {
   const navigate = useNavigate();
@@ -59,11 +81,13 @@ export default function Register() {
       toast.error("An error occurred during registration.");
     }
   };
+
   const handleClose = () => {
     navigate('/');
   };
+
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={theme}>
       <Grid container component="main" sx={{ height: '100vh' }}>
         <CssBaseline />
         <Grid
@@ -115,6 +139,33 @@ export default function Register() {
                 autoFocus
                 value={data.name}
                 onChange={(e) => setData({ ...data, name: e.target.value })}
+                InputProps={{
+                  style: { color: '#FFFFFF', backgroundColor: 'transparent' }, // White text, transparent background
+                  disableUnderline: true, // Disable the underline to make it look cleaner
+                }}
+                InputLabelProps={{
+                  style: { color: '#B0C4DE' }, // Light blue text for the label
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#B0C4DE', // Light blue border color
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                    },
+                    '&.Mui-disabled fieldset': {
+                      borderColor: '#B0C4DE', // Light blue border color when disabled
+                    },
+                  },
+                  '&:-webkit-autofill': {
+                    WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+                    WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
+                  },
+                }}
               />
               <TextField
                 margin="normal"
@@ -126,6 +177,33 @@ export default function Register() {
                 autoComplete="email"
                 value={data.email}
                 onChange={(e) => setData({ ...data, email: e.target.value })}
+                InputProps={{
+                  style: { color: '#FFFFFF', backgroundColor: 'transparent' }, // White text, transparent background
+                  disableUnderline: true, // Disable the underline to make it look cleaner
+                }}
+                InputLabelProps={{
+                  style: { color: '#B0C4DE' }, // Light blue text for the label
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#B0C4DE', // Light blue border color
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                    },
+                    '&.Mui-disabled fieldset': {
+                      borderColor: '#B0C4DE', // Light blue border color when disabled
+                    },
+                  },
+                  '&:-webkit-autofill': {
+                    WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+                    WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
+                  },
+                }}
               />
               <TextField
                 margin="normal"
@@ -138,18 +216,45 @@ export default function Register() {
                 autoComplete="current-password"
                 value={data.password}
                 onChange={(e) => setData({ ...data, password: e.target.value })}
+                InputProps={{
+                  style: { color: '#FFFFFF', backgroundColor: 'transparent' }, // White text, transparent background
+                  disableUnderline: true, // Disable the underline to make it look cleaner
+                }}
+                InputLabelProps={{
+                  style: { color: '#B0C4DE' }, // Light blue text for the label
+                }}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#B0C4DE', // Light blue border color
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                    },
+                    '&.Mui-disabled fieldset': {
+                      borderColor: '#B0C4DE', // Light blue border color when disabled
+                    },
+                  },
+                  '&:-webkit-autofill': {
+                    WebkitBoxShadow: '0 0 0 30px black inset !important', // Maintain dark background on autofill
+                    WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
+                  },
+                }}
               />
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                sx={{ mt: 3, mb: 2, bgcolor: '#00BFFF' }}
               >
                 Register
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link href="/login" variant="body2">
+                  <Link href="/login" variant="body2" sx={{ color: '#B0C4DE' }}>
                     {"Already have an account? Sign in"}
                   </Link>
                 </Grid>

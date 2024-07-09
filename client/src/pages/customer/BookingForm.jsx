@@ -1,15 +1,21 @@
-import React, { useState, useEffect, useContext } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useNavigate } from "react-router-dom";
 import { IconButton } from "@mui/material";
-import { UserContext } from "../../context/userContext"; // Import the user context
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import TextField from "@mui/material/TextField";
+import Typography from "@mui/material/Typography";
+import { loadStripe } from '@stripe/stripe-js';
+import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
+import { UserContext } from "../../context/userContext";
+
+// Assuming `handleChange` and `formData` are defined elsewhere
+
+const today = new Date().toISOString().split('T')[0]; // Get today's date in "yyyy-mm-dd" format
+const stripePromise = loadStripe("pk_test_51PV2aGRx0XBTHEAYZABfhKcLlLs2bnM370uuzHyLBJzXvisiF7KHMxR8oEokE7cdPexsyw6SoV4PiB7ASJfgJo5u00gnrG8Oxe");
 
 const BookingForm = () => {
   const [formData, setFormData] = useState({
@@ -21,19 +27,22 @@ const BookingForm = () => {
     date: "",
     time: "",
   });
-
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [serviceId, setServiceId] = useState("");
   const [consultantId, setConsultantId] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
-  const { user } = useContext(UserContext); // Use the user context to get the current user
+  const location = useLocation();
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
-    // Fetch available consultant ID when the component mounts
+    const queryParams = new URLSearchParams(location.search);
+    setServiceId(queryParams.get("serviceId"));
+
     const fetchConsultantId = async () => {
       try {
         const response = await axios.get('/api/consultants/available');
         if (response.data.length > 0) {
-          setConsultantId(response.data[0].userID); // Assuming first available consultant
+          setConsultantId(response.data[0].userID);
         } else {
           toast.error("No consultants available at the moment.");
         }
@@ -44,7 +53,7 @@ const BookingForm = () => {
     };
 
     fetchConsultantId();
-  }, []);
+  }, [location.search]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +64,7 @@ const BookingForm = () => {
     e.preventDefault();
     const { name, email, phoneNumber, identityCard, address, date, time } = formData;
 
-    if (!name || !email || !phoneNumber || !identityCard || !address || !date || !time) {
+    if (!name || !email || !phoneNumber || !identityCard || !address || !date || !time || !serviceId) {
       toast.error("Please fill out all fields before booking.");
       return;
     }
@@ -65,41 +74,32 @@ const BookingForm = () => {
       return;
     }
 
-    if (!user) {
-      toast.error("User not logged in. Please log in to book an appointment.");
-      return;
-    }
-
     try {
-      const response = await fetch('http://localhost:3000/api/bookings', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          consultantId,
-          customerId: user._id, // Include userId in the booking data
-        }),
+      const response = await axios.post('/api/bookings', {
+        ...formData,
+        consultantId,
+        customerId: user._id,
+        serviceId,
       });
 
-      if (response.ok) {
+      if (response.status === 201) {
         toast.success("Booking created successfully!");
-        setShowConfirmation(true);
-        setTimeout(() => setShowConfirmation(false), 3000);
 
-        setFormData({
-          name: "",
-          email: "",
-          phoneNumber: "",
-          identityCard: "",
-          address: "",
-          date: "",
-          time: "",
+        const stripe = await stripePromise;
+        const checkoutSession = await axios.post('/api/create-checkout-session', {
+          bookingId: response.data.booking._id,
         });
+
+        const result = await stripe.redirectToCheckout({
+          sessionId: checkoutSession.data.id,
+        });
+
+        if (result.error) {
+          console.error("Error redirecting to checkout:", result.error.message);
+          toast.error("An error occurred while redirecting to payment. Please try again.");
+        }
       } else {
-        const errorData = await response.json();
-        toast.error(errorData.msg || "An error occurred while booking your appointment. Please try again.");
+        toast.error("An error occurred while booking your appointment. Please try again.");
       }
     } catch (error) {
       console.error("Error booking appointment:", error);
@@ -114,88 +114,271 @@ const BookingForm = () => {
   };
 
   return (
-    <Container maxWidth="sm">
+    <Box sx={{ backgroundColor: '#121212', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
       <Toaster />
-      <Box sx={{ mt: 8, mb: 4 }}>
-        <IconButton onClick={handleNavigateBack} sx={{ position: 'absolute', left: 50, top: 50 }}>
-          <ArrowBackIcon />
-        </IconButton>
-        <Typography variant="h4" component="h2" gutterBottom sx={{ textAlign: "center" }}>
-          Please fill out this form to book an appointment.
-        </Typography>
-        <Typography variant="body1" paragraph sx={{ textAlign: "center" }}>
-          We need your contact information to confirm your booking.
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <TextField
-            label="Name"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Email"
-            name="email"
-            type="email"
-            value={formData.email}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Phone Number"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Address"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Identity Card"
-            name="identityCard"
-            value={formData.identityCard}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="Date"
-            name="date"
-            type="date"
-            value={formData.date}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-            inputProps={{ min: today }}
-            fullWidth
-          />
-          <TextField
-            label="Time"
-            name="time"
-            type="time"
-            value={formData.time}
-            onChange={handleChange}
-            InputLabelProps={{ shrink: true }}
-            inputProps={{ min: "09:00", max: "17:00" }}
-            fullWidth
-          />
-          <Button type="submit" variant="contained" color="primary" fullWidth>
-            BOOK
-          </Button>
-        </Box>
-        {showConfirmation && (
-          <Box sx={{ mt: 4 }}>
-            <Typography variant="body1" color="primary" sx={{ textAlign: "center" }}>
-              Thank you for booking! We will call you back to confirm your appointment.
-            </Typography>
+      <Container maxWidth="sm" sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box sx={{ mt: 8, mb: 4, width: '100%', position: 'relative' }}>
+          <IconButton onClick={handleNavigateBack} sx={{ position: 'absolute', left: 50, top: 50 }}>
+            <ArrowBackIcon />
+          </IconButton>
+          <Typography variant="h4" component="h2" gutterBottom sx={{ textAlign: "center", color: '#FFFFFF' }}>
+            Please fill out this form to book an appointment.
+          </Typography>
+          <Typography variant="body1" paragraph sx={{ textAlign: "center", color: '#B0C4DE' }}>
+            We need your contact information to confirm your booking.
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', display: "flex", flexDirection: "column", gap: 2 }}>
+            <TextField
+              label="Name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              fullWidth
+              InputLabelProps={{
+                style: { color: '#B0C4DE' }, // Light blue text for the label
+              }}
+              InputProps={{
+                style: { color: '#FFFFFF' }, // White text
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                  },
+                  '&.Mui-disabled fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color when disabled
+                  },
+                },
+                '&:-webkit-autofill': {
+                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
+                },
+              }}
+            />
+            <TextField
+              label="Email"
+              name="email"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              fullWidth
+              InputLabelProps={{
+                style: { color: '#B0C4DE' }, // Light blue text for the label
+              }}
+              InputProps={{
+                style: { color: '#FFFFFF' }, // White text
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                  },
+                  '&.Mui-disabled fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color when disabled
+                  },
+                },
+                '&:-webkit-autofill': {
+                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
+                },
+              }}
+            />
+            <TextField
+              label="Phone Number"
+              name="phoneNumber"
+              value={formData.phoneNumber}
+              onChange={handleChange}
+              fullWidth
+              InputLabelProps={{
+                style: { color: '#B0C4DE' }, // Light blue text for the label
+              }}
+              InputProps={{
+                style: { color: '#FFFFFF' }, // White text
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                  },
+                  '&.Mui-disabled fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color when disabled
+                  },
+                },
+                '&:-webkit-autofill': {
+                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
+                },
+              }}
+            />
+            <TextField
+              label="Address"
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+              fullWidth
+              InputLabelProps={{
+                style: { color: '#B0C4DE' }, // Light blue text for the label
+              }}
+              InputProps={{
+                style: { color: '#FFFFFF' }, // White text
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                  },
+                  '&.Mui-disabled fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color when disabled
+                  },
+                },
+                '&:-webkit-autofill': {
+                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
+                },
+              }}
+            />
+            <TextField
+              label="Identity Card"
+              name="identityCard"
+              value={formData.identityCard}
+              onChange={handleChange}
+              fullWidth
+              InputLabelProps={{
+                style: { color: '#B0C4DE' }, // Light blue text for the label
+              }}
+              InputProps={{
+                style: { color: '#FFFFFF' }, // White text
+              }}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                  },
+                  '&.Mui-disabled fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color when disabled
+                  },
+                },
+                '&:-webkit-autofill': {
+                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
+                },
+              }}
+            />
+            <TextField
+              label="Date"
+              name="date"
+              type="date"
+              value={formData.date}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }} // White label text color
+              inputProps={{
+                min: today,
+                style: { color: '#B0C4DE' } // White input text color
+              }}
+              fullWidth
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                  },
+                  '&.Mui-disabled fieldset': {
+                    borderColor: '#00BFFF', // White border color when disabled
+                  },
+                  '& .MuiInputBase-input': {
+                    color: '#FFFFFF', // White text color
+                  },
+                },
+                '&:-webkit-autofill': {
+                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
+                },
+              }}
+            />
+
+            <TextField
+              label="Time"
+              name="time"
+              type="time"
+              value={formData.time}
+              onChange={handleChange}
+              InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }} // White label text color
+              inputProps={{
+                min: "09:00",
+                max: "17:00",
+                style: { color: '#B0C4DE' } // White input text color
+              }}
+              fullWidth
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color
+                  },
+                  '&:hover fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                  },
+                  '&.Mui-disabled fieldset': {
+                    borderColor: '#B0C4DE', // Light blue border color when disabled
+                  },
+                },
+                '&:-webkit-autofill': {
+                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
+                },
+              }}
+            />
+            <Button type="submit" variant="contained" sx={{ bgcolor: '#00BFFF' }} fullWidth>
+              BOOK
+            </Button>
           </Box>
-        )}
-      </Box>
-    </Container>
+          {showConfirmation && (
+            <Box sx={{ mt: 4 }}>
+              <Typography variant="body1" color="primary" sx={{ textAlign: "center" }}>
+                Thank you for booking!
+              </Typography>
+            </Box>
+          )}
+        </Box>
+      </Container>
+    </Box>
   );
 };
 
