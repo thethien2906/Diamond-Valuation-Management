@@ -12,13 +12,21 @@ import {
   Typography,
   Paper,
   IconButton,
-  Fab
+  Fab,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 
 const ViewStaff = () => {
   const [staff, setStaff] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedStaffId, setSelectedStaffId] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -41,7 +49,19 @@ const ViewStaff = () => {
       setStaff(staff.filter(staff => staff._id !== staffId));
     } catch (error) {
       console.error("Error deleting staff:", error);
+    } finally {
+      handleClose();
     }
+  };
+
+  const handleOpen = (staffId) => {
+    setSelectedStaffId(staffId);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedStaffId(null);
   };
 
   const handleAddUser = () => {
@@ -80,7 +100,7 @@ const ViewStaff = () => {
                 <TableCell>
                   <IconButton
                     color="secondary"
-                    onClick={() => handleDeleteStaff(staffMember._id)}
+                    onClick={() => handleOpen(staffMember._id)}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -90,6 +110,34 @@ const ViewStaff = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm Delete"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this staff member?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button 
+            onClick={() => handleDeleteStaff(selectedStaffId)} 
+            color="primary" 
+            autoFocus
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };

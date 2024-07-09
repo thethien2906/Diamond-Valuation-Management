@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Button, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, IconButton } from '@mui/material';
+import { Button, Container, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Paper, IconButton, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const ViewUsers = () => {
   const [users, setUsers] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -26,7 +28,19 @@ const ViewUsers = () => {
       setUsers(users.filter(user => user._id !== userId));
     } catch (error) {
       console.error("Error deleting user:", error);
+    } finally {
+      handleClose();
     }
+  };
+
+  const handleOpen = (userId) => {
+    setSelectedUserId(userId);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedUserId(null);
   };
 
   return (
@@ -36,7 +50,7 @@ const ViewUsers = () => {
       </Typography>
       <TableContainer component={Paper}>
         <Table>
-          <TableHead sx={{ bgcolor:"#212529"}}>
+          <TableHead sx={{ bgcolor:"#212529" }}>
             <TableRow>
               <TableCell sx={{ color: 'white' }}>Name</TableCell>
               <TableCell sx={{ color: 'white' }}>Email</TableCell>
@@ -51,7 +65,7 @@ const ViewUsers = () => {
                 <TableCell>
                   <IconButton
                     color="secondary"
-                    onClick={() => handleDeleteUser(user._id)}
+                    onClick={() => handleOpen(user._id)}
                   >
                     <DeleteIcon />
                   </IconButton>
@@ -61,6 +75,34 @@ const ViewUsers = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Confirm Delete"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this user?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancel
+          </Button>
+          <Button 
+            onClick={() => handleDeleteUser(selectedUserId)} 
+            color="primary" 
+            autoFocus
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
