@@ -132,7 +132,7 @@ const updateBooking = async (req, res) => {
           <p style="color: #fff; font-size: 18px;">Best regards,</p>
           <p style="color: #fff; font-size: 18px;">${consultant.name}</p>
         </div>
-      `
+      `,
       };
 
       await transporter.sendMail(mailOptions, (error, info) => { 

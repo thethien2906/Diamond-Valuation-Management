@@ -86,7 +86,7 @@ const registerUser = async (req, res) => {
           <p style="color: #fff; font-size: 18px;">For help, contact us through our Help center.</p>
           <p style="color: #fff; font-size: 18px;">Thank you.</p>
         </div>
-      `
+      `,
   };
       await transporter.sendMail(mailOptions);
       return res.status(201).json(user);
