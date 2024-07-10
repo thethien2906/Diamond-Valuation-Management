@@ -70,6 +70,13 @@ import ManagerSealingRequests from './pages/manager/SealRequest';
 import ManagerSealRequestDetail from './pages/manager/SealRequestDetail';
 import ManagerServices from './pages/manager/ServiceManage';
 
+import BlogCRUD from './pages/manager/BlogManage';
+import BlogListPageGuest from './pages/guest/BlogListPage';
+import BlogDetailPageGuest from './pages/guest/BlogDetailPage';
+import Protected from './ProtectedRoute';
+import EarningChart from './pages/manager/EarningChart';
+
+
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.withCredentials = true;
 
@@ -88,14 +95,14 @@ function App() {
           <Route path="/reset-password" element={<PasswordMailVerify />} />
           <Route path="/reset-password/:userId" element={<ResetPassword />} />
           {/* Nested routes under AdminDashboard */}
-          <Route path="/admin" element={<AdminDashboard />}>
+          <Route path="/admin" element={<Protected allowedRoles={['admin']}><AdminDashboard /></Protected>}>
             <Route path="users" element={<ViewUsers />} />
             <Route path="staff" element={<ViewStaffs />} />
             <Route path="add-user" element={<AddingForm />} />
           </Route>
 
           {/* Nested routes under ConsultantDashboard */}
-          <Route path="/consultant" element={<ConsultantDashboardLayout />}>
+          <Route path="/consultant" element={<Protected allowedRoles={['consultant']}><ConsultantDashboardLayout /></Protected>}>
             <Route index element={<PendingRequests />} />
             <Route path="requestView/:bookingId" element={<RequestView/>}/>
             <Route path="receipt" element={<Receipt/>}/>
@@ -113,7 +120,7 @@ function App() {
           </Route>
 
           {/* Nested routes under AppraiserDashboard */}
-          <Route path="/appraiser" element={<AppraiserDashboard />}>
+          <Route path="/appraiser" element={<Protected allowedRoles={['appraiser']}><AppraiserDashboard /></Protected>}>
             <Route index element={<AppraiserDashboard />} />
             <Route path="task-view" element={<TaskView />} />
             <Route path="valuation-records/:recordId" element={<ValuationRecordAppraiserDetail />} />
@@ -122,8 +129,8 @@ function App() {
             <Route path="diamond-classify" element={<DiamondClassify />} />
           </Route>
 
-          <Route path="/manager" element={<ManagerLayout />}>
-          <Route path="manager-dashboard" element={<ManagerDashboard/>}/>
+          <Route path="/manager" element={<Protected allowedRoles={['manager']}><ManagerLayout /></Protected>}>
+          <Route path="dashboard" element={<EarningChart/>}/>
           <Route path="commit-requests" element={<ManagerCommitRequests />} />
           <Route path="commit-requests/:commitId" element={<ManagerCommitRequestDetail />} />
           <Route path="seal-requests" element={<ManagerSealingRequests />} />
@@ -139,7 +146,10 @@ function App() {
           <Route path="/blogs/:blogId" element={<BlogDetailPageGuest />} />
 
 
+
           <Route path="/home" element={<Home />} />
+
+
           <Route path="/about-us-customer" element={<AboutUsCustomer />} />
           <Route path="/consulting-services-customer" element={<ConsultingServicesCustomer />} />
           <Route path="/booking" element={<BookingForm />} />
