@@ -21,28 +21,8 @@ const AboutUsCustomer = () => {
 
   return (
     <CustomerLayout>
-      <Box
-        data-aos="fade-up"
-        sx={{
-          backgroundColor: '#033F63',
-          padding: '20vh 50px', // Adjusted padding to use viewport height for better screen filling
-          textAlign: 'center',
-          color: '#fff', // Changed text color to white
-          marginBottom: '40px',
-          height: '50vh', // Set height to fill the entire viewport
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography
-          variant="h1"
-          sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 'bold', fontSize: '8rem' }}
-          data-aos="fade-up"
-        >
-          DiamondScope
-        </Typography>
-      </Box>
+      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '523%', backgroundColor: '#E5E4E2' }} />
+
       <Box
         display="flex"
         flexDirection="column"
@@ -64,22 +44,26 @@ const AboutUsCustomer = () => {
             width: '100%',
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' }, // Column for small screens, row for medium and larger screens
-            alignItems: 'center'
+            alignItems: 'center',
+            backgroundColor:'#E5E4E2'
           }}
         >
-          <Box sx={{ flex: 1, paddingRight: { md: '20px' }, paddingBottom: { xs: '20px', md: '0' } }}>
-            <Typography variant="h2" gutterBottom sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 'bold', color: '#033F63' }}>
-              ABOUT DIAMONDSHINE
+          <Box sx={{ flex: 1, paddingRight: { md: '20px' }, paddingBottom: { xs: '20px', md: '0' }, height: '600px', marginTop: '0px' }}>
+            <Typography variant="h3" gutterBottom sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 'bold', color: 'black', marginBottom: '60px' }}>
+            The top company for prioritizing diamond enthusiasts' needs worldwide
             </Typography>
-            <Typography variant="h5" paragraph sx={{ color: '#666', marginBottom: '40px' }}>
-              DiamondShine is a leading authority in diamond valuation, committed to providing
-              accurate and reliable assessments of diamond quality and worth. Our team of experts,
-              who possess extensive knowledge and experience in the field, leverages decades of expertise
-              and state-of-the-art technology to deliver precise evaluations for our clients. Whether you are
-              a private collector or a major industry player, our thorough and meticulous approach ensures
-              that you receive the most accurate and trustworthy valuations available in the market.
+            <Typography variant="h5" paragraph sx={{ color: '#666', marginLeft: '160px', textAlign: 'left', lineHeight: '1.8' }}>
+              DiamondScope is a leading authority in diamond valuation, committed to providing<br></br>
+              <u><i><b>accurate</b></i></u> and <u><i><b>reliable</b></i></u> assessments of diamond <u><i><b>quality</b></i></u> and <u><i><b>worth</b></i></u>. Our team of experts,<br></br>
+              who possess extensive knowledge and experience in the field, leverages decades of<br></br>
+              expertise and state-of-the-art technology to deliver precise evaluations for our clients.<br></br>
+              Whether you are a <u><i><b>private</b></i></u> <u><i><b>collector</b></i></u> or a <u><i><b>major</b></i></u> <u><i><b>industry</b></i></u> <u><i><b>player</b></i></u>, our <u><i><b>thorough</b></i></u> and<br></br>
+              <u><i><b>meticulous</b></i></u> approach ensures that you receive the most <u><i><b>accurate</b></i></u> and <u><i><b>trustworthy</b></i></u><br></br>
+              valuations available in the market.
             </Typography>
+
           </Box>
+
         </Box>
         <Box
           width="80%"
@@ -94,7 +78,7 @@ const AboutUsCustomer = () => {
             textAlign: 'right', // Align text to the right
           }}
         >
-          <Box sx={{ flex: 1, paddingLeft: { md: '20px' }, paddingBottom: { xs: '20px', md: '0' }, position: 'absolute', top: '40%', left: '20%', right: '-45%', marginLeft: '400px', transform: 'translate(-50%, -50%)', color: '#fff', backgroundColor: 'rgba(0, 0, 0, 0)', padding: '20px', borderRadius: '10px', zIndex: 1 }}>
+          <Box sx={{ flex: 1, paddingLeft: { md: '20px' }, paddingBottom: { xs: '20px', md: '0' }, position: 'absolute', top: '50%', left: '20%', right: '-45%', marginLeft: '400px', transform: 'translate(-50%, -50%)', color: '#fff', backgroundColor: 'rgba(0, 0, 0, 0)', padding: '20px', borderRadius: '10px', zIndex: 1 }}>
             <Typography variant="h3" gutterBottom sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 'bold', color: '#fff' }}>
               OUR MISSION
             </Typography>
@@ -104,7 +88,7 @@ const AboutUsCustomer = () => {
           </Box>
           <Box sx={{ flex: 1, height: '400px', overflow: 'hidden', zIndex: 0 }}> {/* Adjust height as needed */}
             <img
-              src="https://t3.ftcdn.net/jpg/06/47/49/12/360_F_647491277_CEc0EIRHVlnWkFIgFyoJTtZGCYOjSaNV.jpg"
+              src="https://static.vecteezy.com/system/resources/thumbnails/023/035/741/small_2x/diamond-is-a-rare-precious-natural-geological-stone-on-a-black-background-ai-generated-header-banner-mockup-with-space-photo.jpg"
               alt="Trusted"
               style={{
                 width: '100%',
@@ -113,27 +97,12 @@ const AboutUsCustomer = () => {
                 borderRadius: '0px',
                 position: 'relative',
                 zIndex: 0,
+                transform: 'scaleX(-1)', // Flip the image horizontally
               }}
               data-aos="flip-right"
             />
           </Box>
-        </Box>
-        <Box
-          width="80%"
-          data-aos="fade-up"
-          ref={whyChooseRef}
-          sx={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' }, // Column for small screens, row for medium and larger screens
-            alignItems: 'center'
-          }}
-        >
-          <Box sx={{ flex: 1, paddingRight: { md: '20px' }, paddingBottom: { xs: '20px', md: '0' } }}>
-            <Typography variant="h2" gutterBottom sx={{ fontFamily: "'Poppins', sans-serif", fontWeight: 'bold', color: '#033F63', marginTop: '50px' }}>
-              WHY CHOOSE DIAMONDSHINE
-            </Typography>
-          </Box>
+
         </Box>
         <Box
           width="80%"
@@ -148,8 +117,26 @@ const AboutUsCustomer = () => {
         >
           <Box sx={{ flex: 1, paddingRight: { md: '20px' }, paddingBottom: { xs: '20px', md: '0' } }}>
 
-            <Typography variant="h5" paragraph sx={{ color: '#666', marginBottom: '40px' }}>
-              With over 69 years of combined experience in the diamond industry, our team offers unparalleled expertise and insights. We utilize state-of-the-art technology and methodologies to ensure precise and accurate valuations. Our services are trusted by both industry leaders and private clients alike, underscoring our commitment to excellence and reliability.
+          </Box>
+        </Box>
+        <Box
+          width="80%"
+          data-aos="fade-up"
+          ref={whyChooseRef}
+          sx={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' }, // Column for small screens, row for medium and larger screens
+            alignItems: 'center',
+            backgroundColor:'#E5E4E2'
+          }}
+        >
+          <Box sx={{ flex: 1, paddingRight: { md: '20px' }, paddingBottom: { xs: '20px', md: '0' } }}>
+            <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', textAlign: 'left' }}>Expert Diamond Valuation</h1>
+
+            <Typography variant="h5" paragraph sx={{ color: '#666', marginBottom: '40px', textAlign: 'left', fontSize: '20px', lineHeight: '1.8' }}>
+              With over 69 years of combined experience in the diamond industry, our team offers unparalleled expertise and insights. We utilize state-of-the-art technology and methodologies to ensure precise and accurate valuations.<br></br>
+              <br></br> Our services are trusted by both industry leaders and private clients alike, underscoring our commitment to excellence and reliability.
             </Typography>
           </Box>
           <Box sx={{ flex: 1 }}>
@@ -158,7 +145,7 @@ const AboutUsCustomer = () => {
               alt="Why Choose Us"
               style={{
                 width: '100%',
-                height: 'auto',
+                height: '600px',
                 marginTop: '50px',
                 marginBottom: '40px',
                 borderRadius: '10px'
@@ -184,20 +171,36 @@ const AboutUsCustomer = () => {
               alt="Why Choose Us"
               style={{
                 width: '100%',
-                height: 'auto',
-                marginTop: '50px',
-                marginBottom: '40px',
+                height: '600px',
+                marginTop: '80px',  // Increase the marginTop for higher height
+                marginBottom: '80px',  // Increase the marginBottom for higher height
                 borderRadius: '10px'
               }}
               data-aos="flip-left"
             />
           </Box>
-          <Box sx={{ flex: 1, paddingLeft: { md: '20px' }, paddingBottom: { xs: '20px', md: '0' } }}>
-            <Typography variant="h5" paragraph sx={{ color: '#666', marginBottom: '40px' }}>
-              Whether you are buying, selling, or insuring diamonds, DiamondShine provides the assurance you need through our rigorous and detailed valuation process. Our commitment to accuracy and reliability means you can trust us with your most valuable assets. We strive to deliver the highest standards of service and transparency, ensuring every client receives the best possible experience.
+          <Box sx={{ flex: 1, paddingLeft: { md: '20px' }, paddingBottom: { xs: '20px', md: '0' }, backgroundColor:'#E5E4E2' }}>
+            <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', textAlign: 'left', marginLeft: '40px' }}>Trusted Diamond Valuation</h1>
+            <Typography
+              // Adjust the variant to a smaller size, such as "body1" or "body2"
+              paragraph
+              sx={{
+                color: '#666',
+                marginBottom: '40px',
+                marginLeft: '40px',
+                textAlign: 'left',
+                fontSize: '20px', // Custom font size adjustment
+                lineHeight: '1.8'
+              }}
+            >
+              Whether you are buying, selling, or insuring diamonds, DiamondShine provides the assurance you need through our rigorous and detailed valuation process.<br></br>
+              <br></br>
+              Our commitment to accuracy and reliability means you can trust us with your most valuable assets. We strive to deliver the highest standards of service and transparency, ensuring every client receives the best possible experience.
             </Typography>
+
           </Box>
         </Box>
+
         <Box
           width="80%"
           data-aos="fade-up"
@@ -206,13 +209,15 @@ const AboutUsCustomer = () => {
             width: '100%',
             display: 'flex',
             flexDirection: { xs: 'column', md: 'row' }, // Column for small screens, row for medium and larger screens
-            alignItems: 'center'
+            alignItems: 'center',
+            backgroundColor:'#E5E4E2'
           }}
         >
-          <Box sx={{ flex: 1, paddingRight: { md: '20px' }, paddingBottom: { xs: '20px', md: '0' } }}>
-
-            <Typography variant="h5" paragraph sx={{ color: '#666', marginBottom: '40px' }}>
-              At DiamondShine, we are dedicated to maintaining the trust and satisfaction of our clients. Our team's vast experience and use of advanced technology set us apart in the industry. By choosing DiamondShine, you are choosing a partner committed to excellence, reliability, and meticulous attention to detail in every valuation we perform.
+          <Box sx={{ flex: 1, paddingRight: { md: '20px' }, paddingBottom: { xs: '20px', md: '0' }, textAlign: 'left' }}>
+            <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', textAlign: 'left' }}>Discover DiamondScope</h1>
+            <Typography variant="h5" paragraph sx={{ color: '#666', marginBottom: '40px', fontSize: '20px', lineHeight: '1.8' }}>
+              At DiamondScope, we are dedicated to maintaining the trust and satisfaction of our clients. Our team's vast experience and use of advanced technology set us apart in the industry.<br></br>
+              <br></br> By choosing DiamondShine, you are choosing a partner committed to excellence, reliability, and meticulous attention to detail in every valuation we perform.
             </Typography>
           </Box>
           <Box sx={{ flex: 1 }}>
@@ -221,7 +226,7 @@ const AboutUsCustomer = () => {
               alt="Why Choose Us"
               style={{
                 width: '100%',
-                height: 'auto',
+                height: '600px',
                 marginTop: '50px',
                 marginBottom: '40px',
                 borderRadius: '10px'

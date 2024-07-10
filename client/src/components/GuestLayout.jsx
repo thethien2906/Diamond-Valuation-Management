@@ -34,24 +34,29 @@ const GuestLayout = ({ children }) => {
       >
         <Container maxWidth="lg" disableGutters style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '11px' }}>
           <div style={{ display: 'flex', gap: '50px' }}>
-            <MenuItem component={Link} to="/about-us-guest" style={{ padding: '12px 12px', borderRadius: '10px', marginLeft:'200px' }}>
+          <MenuItem component={Link} to="/home" style={{ padding: '12px 12px', borderRadius: '10px' }}>
+              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', marginLeft:'200px' }}>
+                HOME
+              </Typography>
+            </MenuItem>
+            <MenuItem component={Link} to="/about-us-guest" style={{ padding: '12px 12px', borderRadius: '10px' }}>
               <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                About Us
+                ABOUT US
               </Typography>
             </MenuItem>
             <MenuItem component={Link} to="/consulting-services-guest" style={{ padding: '12px 12px', borderRadius: '10px' }}>
               <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                Consulting Service
+                CONSULTING SERVICE
               </Typography>
             </MenuItem>
             <MenuItem component={Link} to="/valuation-tool" style={{ padding: '12px 12px', borderRadius: '10px' }}>
               <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                Valuation Tool
+                VALUATION TOOL
               </Typography>
             </MenuItem>
             <MenuItem component={Link} to="/blogs" style={{ padding: '12px 12px', borderRadius: '10px' }}>
               <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                Blogs
+                BLOGS
               </Typography>
             </MenuItem>
           </div>
@@ -89,7 +94,7 @@ const GuestLayout = ({ children }) => {
           </Menu>
         </Container>
       </div>
-      <Container maxWidth="lg" style={{ marginTop: '68px', marginBottom: '50px', padding: '20px', marginLeft:'69px' }}>
+      <Container maxWidth="lg" style={{ marginTop: '68px', marginBottom: '0px', padding: '20px', marginLeft:'69px' }}>
         {children}
       </Container>
     </div>
