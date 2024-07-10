@@ -133,7 +133,7 @@ const ManagerDashboard = ({ children }) => {
       >
         <Toolbar />
         <List>
-          <ListItemButton onClick={toggleDrawer} component={Link} to="/manager/manager-dashboard">
+          <ListItemButton onClick={toggleDrawer} component={Link} to="/manager/dashboard">
             <ListItemIcon>
               <DashboardIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
@@ -183,7 +183,7 @@ const ManagerDashboard = ({ children }) => {
       >
         <Toolbar />
         <List>
-          <ListItemButton component={Link} to="/manager/manager-dashboard">
+          <ListItemButton component={Link} to="/manager/dashboard">
             <ListItemIcon>
               <DashboardIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
