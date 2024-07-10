@@ -73,11 +73,20 @@ const registerUser = async (req, res) => {
       to: email,
       subject: 'Verify your email address',
       html: `
-          <p>To continue setting up your account, please verify your email address by clicking the button below:</p>
-          <a href="http://localhost:5173/verify/${verificationToken}"><button>Verify Email Address</button></a>
-          <p>This link will expire in 5 days. If you did not make this request, please disregard this email.</p>
-          <p>For help, contact us through our Help center.</p>
-      `
+          <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56); font-size: 18px;">
+          <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
+            <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" style="width: 150px;"/>
+          </div>
+          <h2 style="color: #fff; font-size: 24px;">Verify Your Email Address</h2>
+          <p style="color: #fff; font-size: 18px;">To continue setting up your account, please verify your email address by clicking the button below:</p>
+          <a href="http://localhost:5173/verify/${verificationToken}" style="text-decoration: none;">
+            <button style="font-size: 18px; padding: 10px 20px; color: #3399ff; background-color: #007BFF; border: none; cursor: pointer;">Verify Email Address</button>
+          </a>
+          <p style="color: #fff; font-size: 18px;">This link will expire in 5 days. If you did not make this request, please disregard this email.</p>
+          <p style="color: #fff; font-size: 18px;">For help, contact us through our Help center.</p>
+          <p style="color: #fff; font-size: 18px;">Thank you.</p>
+        </div>
+      `,
   };
       await transporter.sendMail(mailOptions);
       return res.status(201).json(user);
@@ -193,7 +202,22 @@ const logoutUser = (req, res) => {
         from: process.env.SMTP_USER,
         to: email,
         subject: 'Password Reset Code',
-        text: `Your password reset code is: ${resetPasswordCode}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56); font-size: 18px;">
+          <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56);">
+            <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" style="width: 150px;"/>
+          </div>
+          <h2 style="color: #fff; font-size: 36px;">Password Reset Request</h2>
+          <p style="color: #fff; font-size: 20px;">Dear ${user.name},</p>
+          <p style="color: #fff; font-size: 20px;">We received a request to reset your password. Please use the code below to reset your password:</p>
+          <div style="text-align: center; margin: 20px 0;">
+            <span style="font-size: 36px; font-weight: bold; color: #3399ff; background-color: rgb(0, 27, 56); padding: 5px 10px;">${resetPasswordCode}</span>
+          </div>
+          <p style="color: #fff; font-size: 20px;">If you did not request a password reset, please ignore this email or contact support.</p>
+          <p style="color: #fff; font-size: 20px;">Thank you,</p>
+          <p style="color: #fff; font-size: 20px;">Your Company Team</p>
+        </div>
+      `,
       };
   
       transporter.sendMail(mailOptions, (error, info) => {
