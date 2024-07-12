@@ -9,7 +9,7 @@ import {
   TextField, 
   Typography 
 } from '@mui/material';
-
+import CustomerLayout from '../../components/CustomerLayout';
 const ValuationTool = () => {
   const [formData, setFormData] = useState({
     carat: 0.5,
@@ -95,6 +95,7 @@ const ValuationTool = () => {
   };
 
   return (
+    <CustomerLayout>
     <Box sx={{ p: 3, backgroundColor: '#f0f4f8', minHeight: '100vh', color: '#1c3c5d' }}>
       <Typography variant="h4" gutterBottom>
         Diamond Price Predictor
@@ -256,6 +257,7 @@ const ValuationTool = () => {
         </Grid>
       </Grid>
     </Box>
+    </CustomerLayout>
   );
 };
 

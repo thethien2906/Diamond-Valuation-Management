@@ -4,7 +4,7 @@ import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, Ta
 import { toast } from 'react-hot-toast';
 import { UserContext } from '../../context/userContext';
 import { useNavigate } from 'react-router-dom';
-
+import CustomerLayout from '../../components/CustomerLayout';
 const RecordTracking = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -52,6 +52,7 @@ const RecordTracking = () => {
   }
 
   return (
+    <CustomerLayout>
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" component="h2" gutterBottom>
         Record Tracking
@@ -94,6 +95,7 @@ const RecordTracking = () => {
         </Table>
       </TableContainer>
     </Box>
+    </CustomerLayout>
   );
 };
 

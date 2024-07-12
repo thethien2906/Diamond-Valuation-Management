@@ -34,7 +34,7 @@ const GuestLayout = ({ children }) => {
       >
         <Container maxWidth="lg" disableGutters style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '11px' }}>
           <div style={{ display: 'flex', gap: '50px' }}>
-          <MenuItem component={Link} to="/home" style={{ padding: '12px 12px', borderRadius: '10px' }}>
+          <MenuItem component={Link} to="/" style={{ padding: '12px 12px', borderRadius: '10px' }}>
               <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', marginLeft:'200px' }}>
                 HOME
               </Typography>
@@ -56,9 +56,11 @@ const GuestLayout = ({ children }) => {
             </MenuItem>
             <MenuItem component={Link} to="/blogs" style={{ padding: '12px 12px', borderRadius: '10px' }}>
               <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                BLOGS
+                BLOGS 
               </Typography>
             </MenuItem>
+            
+            
           </div>
           <IconButton
             color="inherit"

@@ -1,80 +1,82 @@
 // Client/src/App.js
-import { Route, Routes } from 'react-router-dom';
 import './App.css';
-import Cancel from './pages/CheckoutCancel';
+import { Routes, Route } from 'react-router-dom';
 import Success from './pages/CheckoutSuccess';
+import Cancel from './pages/CheckoutCancel';
 
-import axios from 'axios';
-import { Toaster } from 'react-hot-toast';
-import { ConsultantContextProvider } from './context/ConsultantContext';
-import { UserContextProvider } from './context/userContext';
-import AdminDashboard from './pages/admin/AdminDashboard';
-import AppraiserDashboard from './pages/appraiser/AppraiserDashboard';
-import ConsultantDashboardLayout from './pages/consultant/ConsultantDashboardLayout';
-import CustomerDashboard from './pages/customer/CustomerDashboard';
 import Home from './pages/guest/Home';
+import Register from './pages/Register';
 import Login from './pages/Login';
 import Verify from './pages/MailVerify';
-import ManagerLayout from './pages/manager/ManagerLayout';
 import ForgotPassword from './pages/PasswordForgot';
-import PasswordMailVerify from './pages/PasswordMailVerify';
 import ResetPassword from './pages/PasswordReset';
-import Register from './pages/Register';
+import PasswordMailVerify from './pages/PasswordMailVerify';
+import axios from 'axios';
+import { Toaster } from 'react-hot-toast';
+import { UserContextProvider } from './context/userContext';
+import { ConsultantContextProvider } from './context/ConsultantContext';
+import CustomerDashboard from './pages/customer/CustomerDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import ConsultantDashboardLayout from './pages/consultant/ConsultantDashboardLayout';
+import AppraiserDashboard from './pages/appraiser/AppraiserDashboard';
+import ManagerLayout from './pages/manager/ManagerLayout';
 
-import AddingForm from './pages/admin/AddingForm';
-import ViewStaffs from './pages/admin/ViewStaffs';
 import ViewUsers from './pages/admin/ViewUsers';
+import ViewStaffs from './pages/admin/ViewStaffs';
+import AddingForm from './pages/admin/AddingForm';
 
 import AboutUsGuest from './pages/guest/AboutUsGuest';
 import ConsultingServicesGuest from './pages/guest/ConsultingServicesGuest';
 import ValuationTool from './pages/guest/ValuationTool';
+import BlogListPage from './pages/guest/BlogListPage';
+import BlogDetailPage from './pages/guest/BlogDetailPage';
 
-import AboutUsCustomer from './pages/customer/AboutUsCustomer';
-import BlogDetailPageCustomer from './pages/customer/BlogDetailPage';
-import BlogListPageCustomer from './pages/customer/BlogListPage';
 import BookingForm from './pages/customer/BookingForm';
-import CommitRequest from './pages/customer/CommitRequest';
+import AboutUsCustomer from './pages/customer/AboutUsCustomer';
 import ConsultingServicesCustomer from './pages/customer/ConsultingServicesCustomer';
 import RecordTracking from './pages/customer/RecordTracking';
+import CommitRequest from './pages/customer/CommitRequest';
+import BlogListPageCustomer from './pages/customer/BlogListPage';
+import BlogDetailPageCustomer from './pages/customer/BlogDetailPage';
 
-import AppointmentCalendar from './pages/consultant/AppointmentCalendar';
-import AppointmentViewDetail from './pages/consultant/AppointmentViewDetail';
 import CommitmentRequests from './pages/consultant/CommitmentRequestView';
 import CommitmentRequestDetail from './pages/consultant/CommitmentRequestViewDetail';
 import PendingRequests from './pages/consultant/PendingRequests';
+import RequestViewDetail from './pages/consultant/RequestViewDetail';
+import AppointmentCalendar from './pages/consultant/AppointmentCalendar';
+import AppointmentViewDetail from './pages/consultant/AppointmentViewDetail';
 import Receipt from './pages/consultant/Receipt';
-import ReceiptDetail from './pages/consultant/ReceiptDetail';
 import GenerateReceiptForm from './pages/consultant/ReceiptForm';
-import RecordSealing from './pages/consultant/RecordSeal';
+import ReceiptDetail from './pages/consultant/ReceiptDetail';
 import RecordView from './pages/consultant/RecordView';
 import RecordViewDetail from './pages/consultant/RecordViewDetail';
-import RequestViewDetail from './pages/consultant/RequestViewDetail';
+import RecordSealing from './pages/consultant/RecordSeal';
 import ConsulatantSealStatus from './pages/consultant/SealStatus';
 
 
-import DiamondClassify from './pages/appraiser/DiamondClassify';
-import TaskDoneView from './pages/appraiser/TaskDoneView';
-import TaskDoneViewDetail from './pages/appraiser/TaskDoneViewDetail';
 import TaskView from './pages/appraiser/TaskView';
 import ValuationRecordAppraiserDetail from './pages/appraiser/TaskViewDetail';
+import TaskDoneView from './pages/appraiser/TaskDoneView';
+import TaskDoneViewDetail from './pages/appraiser/TaskDoneViewDetail';
 import RequestView from './pages/consultant/RequestView';
+import DiamondClassify from './pages/appraiser/DiamondClassify';
 
 
-import BlogDetailPageGuest from './pages/guest/BlogDetailPage';
-import BlogListPageGuest from './pages/guest/BlogListPage';
-import BlogCRUD from './pages/manager/BlogManage';
-import ManagerCommitRequestDetail from './pages/manager/CommitRequestDetail';
 import ManagerCommitRequests from './pages/manager/CommitRequests';
-import ManagerDashboard from './pages/manager/ManagerDashboard';
+import ManagerCommitRequestDetail from './pages/manager/CommitRequestDetail';
 import ManagerSealingRequests from './pages/manager/SealRequest';
 import ManagerSealRequestDetail from './pages/manager/SealRequestDetail';
 import ManagerServices from './pages/manager/ServiceManage';
-
 import BlogCRUD from './pages/manager/BlogManage';
 import BlogListPageGuest from './pages/guest/BlogListPage';
 import BlogDetailPageGuest from './pages/guest/BlogDetailPage';
 import Protected from './ProtectedRoute';
 import EarningChart from './pages/manager/EarningChart';
+
+
+
+
+
 
 
 axios.defaults.baseURL = 'http://localhost:3000';
@@ -144,11 +146,7 @@ function App() {
           <Route path="/valuation-tool" element={<ValuationTool />} />
           <Route path="/blogs" element={<BlogListPageGuest />} />
           <Route path="/blogs/:blogId" element={<BlogDetailPageGuest />} />
-
-
-
-          <Route path="/home" element={<Home />} />
-
+          
 
           <Route path="/about-us-customer" element={<AboutUsCustomer />} />
           <Route path="/consulting-services-customer" element={<ConsultingServicesCustomer />} />
