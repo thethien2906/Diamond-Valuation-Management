@@ -17,15 +17,18 @@ import {
   TableHead,
   TableRow,
   Paper,
-  styled, // Import styled from MUI for custom styling
-  TablePagination, // Import TablePagination for pagination
+  styled,
+  TablePagination,
+  TextField,
+  InputAdornment,
+  IconButton,
 } from '@mui/material';
 import { axisClasses } from '@mui/x-charts/ChartsAxis';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'; // Import icon
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import SearchIcon from '@mui/icons-material/Search';
 
 const valueFormatter = (value) => `$${value?.toLocaleString()}`;
 
-// Custom styling for moving yAxis to the right
 const RightAlignedBox = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
@@ -33,17 +36,19 @@ const RightAlignedBox = styled(Box)(({ theme }) => ({
   alignItems: 'center',
   height: '100%',
   '& .MuiBox-root .recharts-wrapper .recharts-yAxis': {
-    right: '10px', // Adjust margin to move yAxis labels to the right
+    right: '10px',
   },
 }));
 
 export default function EarningChart() {
   const [transactions, setTransactions] = useState([]);
   const [monthlyEarnings, setMonthlyEarnings] = useState(new Array(12).fill(0));
-  const [totalPayments, setTotalPayments] = useState(0); // State to hold total payments
-  const [selectedMonth, setSelectedMonth] = useState(1); // Initialize selectedMonth to 1 for January
-  const [page, setPage] = useState(0); // State for current page
-  const rowsPerPage = 5; // Number of rows per page
+  const [totalPayments, setTotalPayments] = useState(0);
+  const [selectedMonth, setSelectedMonth] = useState(1);
+  const [page, setPage] = useState(0);
+  const rowsPerPage = 5;
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -51,21 +56,21 @@ export default function EarningChart() {
         const response = await axios.get('/api/transactions');
         let transactions = response.data;
 
-        // Sort transactions by created date in descending order
         transactions.sort((a, b) => new Date(b.created) - new Date(a.created));
 
         const earnings = new Array(12).fill(0);
         let total = 0;
 
         transactions.forEach(transaction => {
-          const month = new Date(transaction.created).getUTCMonth(); // Get UTC month
+          const month = new Date(transaction.created).getUTCMonth();
           earnings[month] += transaction.amount;
           total += transaction.amount;
         });
 
         setMonthlyEarnings(earnings);
-        setTotalPayments(total); // Set total payments
-        setTransactions(transactions); // Set transactions
+        setTotalPayments(total);
+        setTransactions(transactions);
+        setFilteredTransactions(transactions);
       } catch (error) {
         console.error('Error fetching transactions:', error);
       }
@@ -82,6 +87,24 @@ export default function EarningChart() {
     setPage(newPage);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearch = () => {
+    setFilteredTransactions(
+      transactions.filter(transaction =>
+        transaction.customerName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
   const monthNames = [
     'January', 'February', 'March', 'April', 'May', 'June', 
     'July', 'August', 'September', 'October', 'November', 'December'
@@ -95,8 +118,8 @@ export default function EarningChart() {
   const chartSetting = {
     yAxis: [
       {
-        position: 'right', // Position yAxis labels on the right
-        valueFormatter: (value) => `$${value.toLocaleString()}`, // Value formatter for Y-axis labels
+        position: 'right',
+        valueFormatter: (value) => `$${value.toLocaleString()}`,
       },
     ],
     series: [{ dataKey: 'earnings', label: 'Monthly Earnings', valueFormatter }],
@@ -104,10 +127,10 @@ export default function EarningChart() {
     width: 1000,
     sx: {
       [`& .${axisClasses.directionX} .${axisClasses.label}`]: {
-        fontSize: '12px', // Adjust font size for xAxis labels
-        whiteSpace: 'nowrap', // Prevent wrapping of labels
-        overflow: 'hidden', // Hide overflow if any
-        textOverflow: 'ellipsis', // Show ellipsis for long labels
+        fontSize: '12px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
       },
     },
   };
@@ -161,6 +184,27 @@ export default function EarningChart() {
           <Typography variant="h6" component="div" gutterBottom>
             Transaction Details
           </Typography>
+          <Grid container direction="row" justifyContent="space-between" alignItems="center">
+            <Grid item>
+              <TextField
+                label="Search by Name"
+                variant="outlined"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onKeyDown={handleKeyDown}
+                sx={{ marginBottom: 2, width: 200 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSearch}>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+          </Grid>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="Transaction table">
               <TableHead>
@@ -176,8 +220,8 @@ export default function EarningChart() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {transactions
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Pagination logic
+                {filteredTransactions
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((transaction, index) => (
                     <TableRow key={index}>
                       <TableCell>{formatDate(transaction.created)}</TableCell>
@@ -196,7 +240,7 @@ export default function EarningChart() {
           <TablePagination
             rowsPerPageOptions={[rowsPerPage]}
             component="div"
-            count={transactions.length}
+            count={filteredTransactions.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handlePageChange}
