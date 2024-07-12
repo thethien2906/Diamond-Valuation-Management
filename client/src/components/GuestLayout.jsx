@@ -32,10 +32,10 @@ const GuestLayout = ({ children }) => {
           backgroundColor: '#FAFAFA', // Light gray similar to Netlify
         }}
       >
-        <Container maxWidth="lg" disableGutters style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '11px' }}>
+        <Container maxWidth="lg" disableGutters style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '11px', marginLeft:'100px'}}>
           <div style={{ display: 'flex', gap: '50px' }}>
-          <MenuItem component={Link} to="/" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif', marginLeft:'200px' }}>
+          <MenuItem component={Link} to="/Home" style={{ padding: '12px 12px', borderRadius: '10px' }}>
+              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
                 HOME
               </Typography>
             </MenuItem>
@@ -96,7 +96,7 @@ const GuestLayout = ({ children }) => {
           </Menu>
         </Container>
       </div>
-      <Container maxWidth="lg" style={{ marginTop: '68px', marginBottom: '0px', padding: '20px', marginLeft:'69px' }}>
+      <Container maxWidth="lg" style={{ marginTop: '68px', marginBottom: '0px', padding: '20px'}}>
         {children}
       </Container>
     </div>

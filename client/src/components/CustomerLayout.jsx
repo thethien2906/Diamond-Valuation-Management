@@ -76,7 +76,7 @@ const CustomerLayout = ({ children }) => {
                 CONSULTING SERVICES
               </Typography>
             </MenuItem>
-            <MenuItem component={Link} to="/valuation-tool" style={{ padding: '12px 12px', borderRadius: '10px' }}>
+            <MenuItem component={Link} to="/Valuation" style={{ padding: '12px 12px', borderRadius: '10px' }}>
               <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
                 VALUATION TOOL
               </Typography>
