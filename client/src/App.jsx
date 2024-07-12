@@ -73,6 +73,7 @@ import BlogListPageGuest from './pages/guest/BlogListPage';
 import BlogDetailPageGuest from './pages/guest/BlogDetailPage';
 import Protected from './ProtectedRoute';
 import EarningChart from './pages/manager/EarningChart';
+import HomeCus from './pages/customer/HomeCus';
 
 
 
@@ -89,7 +90,8 @@ function App() {
       <ConsultantContextProvider>
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
-          <Route path="/Home" element={<Home />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<HomeCus />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify/:token" element={<Verify />} />
