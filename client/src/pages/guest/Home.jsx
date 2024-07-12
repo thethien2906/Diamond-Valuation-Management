@@ -187,7 +187,6 @@ const Home = () => {
           </Grid>
         </Grid>
       </HowItWorksSection>
-
       <FooterSection style={{ marginLeft: '20px' }}>
         <Typography variant="h4" component="h2" gutterBottom>
           Contact Us

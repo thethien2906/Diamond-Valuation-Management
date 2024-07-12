@@ -10,7 +10,7 @@ import {
   Typography 
 } from '@mui/material';
 import CustomerLayout from '../../components/CustomerLayout';
-const ValuationTool = () => {
+const ValuationToolCus = () => {
   const [formData, setFormData] = useState({
     carat: 0.5,
     cut: '',
@@ -261,4 +261,4 @@ const ValuationTool = () => {
   );
 };
 
-export default ValuationTool;
+export default ValuationToolCus;

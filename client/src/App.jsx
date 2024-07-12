@@ -28,6 +28,7 @@ import AddingForm from './pages/admin/AddingForm';
 import AboutUsGuest from './pages/guest/AboutUsGuest';
 import ConsultingServicesGuest from './pages/guest/ConsultingServicesGuest';
 import ValuationTool from './pages/guest/ValuationTool';
+import ValuationToolCus from './pages/customer/ValuationToolCus';
 import BlogListPage from './pages/guest/BlogListPage';
 import BlogDetailPage from './pages/guest/BlogDetailPage';
 
@@ -88,7 +89,7 @@ function App() {
       <ConsultantContextProvider>
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/Home" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify/:token" element={<Verify />} />
@@ -147,7 +148,7 @@ function App() {
           <Route path="/blogs" element={<BlogListPageGuest />} />
           <Route path="/blogs/:blogId" element={<BlogDetailPageGuest />} />
           
-
+          <Route path="/Valuation" element={<ValuationToolCus/>}/>
           <Route path="/about-us-customer" element={<AboutUsCustomer />} />
           <Route path="/consulting-services-customer" element={<ConsultingServicesCustomer />} />
           <Route path="/booking" element={<BookingForm />} />
