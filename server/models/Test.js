@@ -17,8 +17,8 @@ async function insertTransaction() {
   try {
     // Create a new transaction instance
     const newTransaction = new Transaction({
-      time: '2024-07-02T11:42:08.000Z',
-      amount: 100,
+      created: '13:40',
+      amount: 9000,
       currency: 'USD',
       customerEmail: 'john.doe@example.com',
       customerName: 'John Doe',

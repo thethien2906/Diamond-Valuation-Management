@@ -49,7 +49,10 @@ export default function EarningChart() {
     const fetchTransactions = async () => {
       try {
         const response = await axios.get('/api/transactions');
-        const transactions = response.data;
+        let transactions = response.data;
+
+        // Sort transactions by created date in descending order
+        transactions.sort((a, b) => new Date(b.created) - new Date(a.created));
 
         const earnings = new Array(12).fill(0);
         let total = 0;
@@ -107,6 +110,11 @@ export default function EarningChart() {
         textOverflow: 'ellipsis', // Show ellipsis for long labels
       },
     },
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' };
+    return new Date(dateString).toLocaleString('sv-SE', options).replace(' ', 'T') + 'Z';
   };
 
   return (
@@ -172,7 +180,7 @@ export default function EarningChart() {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage) // Pagination logic
                   .map((transaction, index) => (
                     <TableRow key={index}>
-                      <TableCell>{new Date(transaction.created).toLocaleString()}</TableCell>
+                      <TableCell>{formatDate(transaction.created)}</TableCell>
                       <TableCell>{transaction.time}</TableCell>
                       <TableCell>${transaction.amount.toLocaleString()}</TableCell>
                       <TableCell>{transaction.currency}</TableCell>
