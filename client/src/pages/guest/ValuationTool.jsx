@@ -95,7 +95,7 @@ const ValuationTool = () => {
   };
 
   return (
-    <CustomerLayout>
+    
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" gutterBottom>
         Diamond Price Predictor
@@ -225,7 +225,7 @@ const ValuationTool = () => {
         </Grid>
       </Grid>
     </Box>
-    </CustomerLayout>
+    
   );
 };
 

@@ -11,6 +11,7 @@ import pandas as pd
 import pickle
 import io
 from sklearn.preprocessing import StandardScaler
+from fastapi.responses import JSONResponse
 app = FastAPI()
 origins = [
     "http://localhost:5173",  # React development server
@@ -25,31 +26,68 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Load the model
+# Load the model  #diamond_cnn.pth
+# class DiamondCNN(nn.Module):
+#     def __init__(self):
+#         super(DiamondCNN, self).__init__()
+#         self.conv1 = nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1)
+#         self.bn1 = nn.BatchNorm2d(16)
+#         self.conv2 = nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1)
+#         self.bn2 = nn.BatchNorm2d(32)
+#         self.conv3 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+#         self.bn3 = nn.BatchNorm2d(64)
+#         self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
+#         self.fc1 = nn.Linear(64 * 28 * 28, 512)
+#         self.dropout1 = nn.Dropout(0.5)
+#         self.fc2 = nn.Linear(512, 256)
+#         self.dropout2 = nn.Dropout(0.5)
+#         self.fc3 = nn.Linear(256, 8)  # 8 output features
+
+#     def forward(self, x):
+#         x = self.pool(F.relu(self.bn1(self.conv1(x))))
+#         x = self.pool(F.relu(self.bn2(self.conv2(x))))
+#         x = self.pool(F.relu(self.bn3(self.conv3(x))))
+#         x = x.view(-1, 64 * 28 * 28)
+#         x = F.relu(self.fc1(x))
+#         x = self.dropout1(x)
+#         x = F.relu(self.fc2(x))
+#         x = self.dropout2(x)
+#         x = self.fc3(x)
+#         return x
+
+
+# Load the model #diamond_cnn_01.pth
 class DiamondCNN(nn.Module):
     def __init__(self):
         super(DiamondCNN, self).__init__()
         self.conv1 = nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1)
+        self.bn1 = nn.BatchNorm2d(16)
         self.conv2 = nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1)
+        self.bn2 = nn.BatchNorm2d(32)
         self.conv3 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)
+        self.bn3 = nn.BatchNorm2d(64)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
         self.fc1 = nn.Linear(64 * 28 * 28, 512)
+        self.dropout1 = nn.Dropout(0.5)
         self.fc2 = nn.Linear(512, 256)
+        self.dropout2 = nn.Dropout(0.5)
         self.fc3 = nn.Linear(256, 8)  # 8 output features
 
     def forward(self, x):
-        x = self.pool(nn.functional.relu(self.conv1(x)))
-        x = self.pool(nn.functional.relu(self.conv2(x)))
-        x = self.pool(nn.functional.relu(self.conv3(x)))
+        x = self.pool(F.relu(self.bn1(self.conv1(x))))
+        x = self.pool(F.relu(self.bn2(self.conv2(x))))
+        x = self.pool(F.relu(self.bn3(self.conv3(x))))
         x = x.view(-1, 64 * 28 * 28)
-        x = nn.functional.relu(self.fc1(x))
-        x = nn.functional.relu(self.fc2(x))
+        x = F.relu(self.fc1(x))
+        x = self.dropout1(x)
+        x = F.relu(self.fc2(x))
+        x = self.dropout2(x)
         x = self.fc3(x)
         return x
-
+    
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 cnn_model = DiamondCNN().to(device)
-cnn_model.load_state_dict(torch.load('diamond_cnn.pth'))
+cnn_model.load_state_dict(torch.load('diamond_cnn_01.pth'))
 cnn_model.eval()
 
 # Load the label encoders
@@ -188,7 +226,22 @@ def predict(features: DiamondFeatures):
         prediction = mlp_model(input_tensor).cpu().numpy()
         predicted_price = float(prediction[0][0])  # Convert numpy float to Python float
     
-    return {"predicted_price": predicted_price}
+    return {"predicted_price": predicted_price * 2}
+
+
+
+
+
+
+
+
+
+df = pd.read_csv('realtime_diamonds.csv')
+
+@app.get("/prices/cushion")
+async def get_cushion_prices():
+    cushion_df = df[df['Shape'] == 'CUSHION']
+    return JSONResponse(content=cushion_df.to_dict(orient="records"))
 
 if __name__ == "__main__":
     import uvicorn

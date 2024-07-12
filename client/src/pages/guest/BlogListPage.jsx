@@ -68,7 +68,7 @@ const BlogListPage = () => {
             borderRadius: '0px',
             position: 'relative',
             zIndex: 0,
-            filter: 'brightness(50%)', // Blur effect
+            filter: 'brightness(50%)', 
           }}
         />
         <Box

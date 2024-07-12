@@ -132,8 +132,33 @@ const updateCommitStatus = async (req, res) => {
       
       // Send email based on status change
       const emailText = status === 'Approved' ? 
-        `Dear ${commit.customerName}, your commitment request has been approved.` :
-        `Dear ${commit.customerName}, your commitment request has been denied.`;
+      `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
+        <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
+          <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+        </div>
+        <h2 style="color: #fff;">Commitment Request Approved</h2>
+        <p style="color: #fff;">Dear ${commit.customerName},</p>
+        <p style="color: #fff;">Your commitment request has been approved.</p>
+        <p style="color: #fff;">Thank you for your patience and cooperation.</p>
+        <p style="color: #fff;">Best regards,</p>
+        <p style="color: #fff;">Your Company Team</p>
+      </div>
+      ` :
+      `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
+        <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
+          <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+        </div>
+        <h2 style="color: #fff;">Commitment Request Denied</h2>
+        <p style="color: #fff;">Dear ${commit.customerName},</p>
+        <p style="color: #fff;">Your commitment request has been denied.</p>
+        <p style="color: #fff;">We apologize for any inconvenience this may cause. Please contact us for further assistance or to discuss alternative options.</p>
+        <p style="color: #fff;">Thank you for your understanding.</p>
+        <p style="color: #fff;">Best regards,</p>
+        <p style="color: #fff;">Your Company Team</p>
+      </div>
+      `;
       sendEmail(commit.email, `Commitment Request ${status}`, emailText);
   
       res.status(200).json({ message: 'Commitment request status updated successfully', commit });
@@ -173,15 +198,18 @@ const updateCommitStatus = async (req, res) => {
         from: process.env.SMTP_USER,
           to: customer.email,
           subject: 'Commitment Request Denied',
-          text: `
-        Dear ${customer.name},
-
-        Your commitment request has been denied by our consultant.
-
-        We apologize for any inconvenience this may cause. Please contact us for further assistance or to discuss alternative options.
-
-        Thank you for your understanding.
-    `
+          html: `
+          <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
+          <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
+            <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+          </div>
+          <h2 style="color: #fff;">Commitment Request Denied</h2>
+          <p style="color: #fff; font-size: 18px;">Dear ${customer.name},</p>
+          <p style="color: #fff; font-size: 18px;">Your commitment request has been denied by our consultant.</p>
+          <p style="color: #fff; font-size: 18px;">We apologize for any inconvenience this may cause. Please contact us for further assistance or to discuss alternative options.</p>
+          <p style="color: #fff; font-size: 18px;">Thank you for your understanding.</p>
+          </div>
+      `
       };
   
       await transporter.sendMail(mailOptions); // Send the email

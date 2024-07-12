@@ -73,6 +73,12 @@ import BlogDetailPageGuest from './pages/guest/BlogDetailPage';
 import Protected from './ProtectedRoute';
 import EarningChart from './pages/manager/EarningChart';
 
+
+
+
+
+
+
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.withCredentials = true;
 
@@ -82,7 +88,7 @@ function App() {
       <ConsultantContextProvider>
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
-          <Route path="/" element={<AboutUsGuest />} />
+          <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify/:token" element={<Verify />} />
@@ -140,7 +146,7 @@ function App() {
           <Route path="/valuation-tool" element={<ValuationTool />} />
           <Route path="/blogs" element={<BlogListPageGuest />} />
           <Route path="/blogs/:blogId" element={<BlogDetailPageGuest />} />
-
+          
 
           <Route path="/about-us-customer" element={<AboutUsCustomer />} />
           <Route path="/consulting-services-customer" element={<ConsultingServicesCustomer />} />
