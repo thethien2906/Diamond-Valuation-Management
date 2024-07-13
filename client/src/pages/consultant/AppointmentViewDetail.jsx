@@ -89,7 +89,7 @@ const AppointmentViewDetail = () => {
           </Grid>
           <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
             <Button variant="contained" onClick={handleGenerateReceipt}>
-              Generate Receipt
+              Next
             </Button>
           </Box>
         </Paper>

@@ -48,9 +48,6 @@ const ViewRequestDetail = () => {
       await axios.post(`/api/reject-booking`, { bookingId });
       toast.success("Booking denied and payment refunded.");
       navigate("/consultant/appointments");
-      // setPendingBookings((prevBookings) =>
-      //   prevBookings.filter((booking) => booking._id !== bookingId)
-      // );
     } catch (error) {
       console.error("Error denying booking:", error);
       toast.error("Failed to deny booking.");
@@ -58,12 +55,12 @@ const ViewRequestDetail = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h6" component="h2" gutterBottom>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+      <Typography variant="h4" component="h2" gutterBottom>
         Booking Details
       </Typography>
       {bookingDetails ? (
-        <Paper sx={{ p: 3, mt: 2 }}>
+        <Paper sx={{ p: 3, mt: 2, minWidth: 500,textAlign:'center' }}>
           <Typography variant="h6">Name: {bookingDetails.name}</Typography>
           <Typography variant="body1">Email: {bookingDetails.email}</Typography>
           <Typography variant="body1">Phone Number: {bookingDetails.phoneNumber}</Typography>
@@ -71,7 +68,7 @@ const ViewRequestDetail = () => {
           <Typography variant="body1">Address: {bookingDetails.address}</Typography>
           <Typography variant="body1">Date: {bookingDetails.date}</Typography>
           <Typography variant="body1">Time: {bookingDetails.time}</Typography>
-          <Box sx={{ mt: 3 }}>
+          <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
             <Button
               variant="contained"
               color="primary"

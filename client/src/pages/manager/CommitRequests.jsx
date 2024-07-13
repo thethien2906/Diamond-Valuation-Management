@@ -41,7 +41,7 @@ const ManagerCommitRequests = () => {
   if (requests.length === 0) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-        <Typography variant="h6">No commitment requests found</Typography>
+        <Typography variant="h4">No commitment requests found</Typography>
       </Box>
     );
   }

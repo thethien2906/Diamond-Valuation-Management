@@ -74,6 +74,7 @@ import BlogDetailPageGuest from './pages/guest/BlogDetailPage';
 import Protected from './ProtectedRoute';
 import EarningChart from './pages/manager/EarningChart';
 import HomeCus from './pages/customer/HomeCus';
+import ViewStaffEdit from './pages/admin/ViewStaffEdit';
 
 
 
@@ -103,6 +104,7 @@ function App() {
           <Route path="/admin" element={<Protected allowedRoles={['admin']}><AdminDashboard /></Protected>}>
             <Route path="users" element={<ViewUsers />} />
             <Route path="staff" element={<ViewStaffs />} />
+            <Route path="edit/:staffId" element={<ViewStaffEdit />} />
             <Route path="add-user" element={<AddingForm />} />
           </Route>
 
