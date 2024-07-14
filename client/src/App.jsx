@@ -76,6 +76,10 @@ import EarningChart from './pages/manager/EarningChart';
 import HomeCus from './pages/customer/HomeCus';
 
 
+import HistoricalPricesGraph from './pages/_graph/HistoricalPricesGraph';
+import GraphLayout from './pages/_graph/GraphLayout';
+
+
 
 
 
@@ -90,6 +94,7 @@ function App() {
       <ConsultantContextProvider>
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
+          
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<HomeCus />} />
           <Route path="/register" element={<Register />} />
@@ -149,6 +154,14 @@ function App() {
           <Route path="/valuation-tool" element={<ValuationTool />} />
           <Route path="/blogs" element={<BlogListPageGuest />} />
           <Route path="/blogs/:blogId" element={<BlogDetailPageGuest />} />
+
+
+
+          <Route path="/historical-prices/:shape" element={<HistoricalPricesGraph />} />
+          <Route path="/historical-prices" element={<GraphLayout />} />
+
+
+
           
           <Route path="/Valuation" element={<ValuationToolCus/>}/>
           <Route path="/about-us-customer" element={<AboutUsCustomer />} />

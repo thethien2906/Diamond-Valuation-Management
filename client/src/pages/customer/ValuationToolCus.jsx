@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { 
   Box, 
@@ -27,7 +28,11 @@ const ValuationToolCus = () => {
 
   const [predictedPrice, setPredictedPrice] = useState(null);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
+  const handleHistoricalPrice = () => {
+    navigate('/historical-prices');
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -238,6 +243,15 @@ const ValuationToolCus = () => {
         </Grid>
       </Paper>
     </Box>
+    {/* button to go to historical-prices  */}
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={handleHistoricalPrice}
+      sx={{ mt: 2 }}
+    >
+      Live Market
+    </Button>
     </CustomerLayout>
   );
 };

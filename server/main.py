@@ -226,7 +226,7 @@ def predict(features: DiamondFeatures):
         prediction = mlp_model(input_tensor).cpu().numpy()
         predicted_price = float(prediction[0][0])  # Convert numpy float to Python float
     
-    return {"predicted_price": predicted_price * 2}
+    return {"predicted_price": predicted_price }
 
 
 

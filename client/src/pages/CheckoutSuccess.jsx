@@ -6,7 +6,7 @@ const Success = () => {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate('/dashboard');
+    navigate('/about-us-customer');
   };
 
   return (

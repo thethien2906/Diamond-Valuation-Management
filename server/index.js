@@ -20,6 +20,7 @@ const Booking = require('./models/Booking');
 const Transaction = require('./models/Transaction');
 const blogRoutes = require('./routes/blogRoutes');
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+const historicalPricesRouter = require('./routes/historicalPrices');
 
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log('Connected to MongoDB'))
@@ -119,6 +120,7 @@ app.use('/api', serviceRoutes);
 app.use('/api', paymentRoutes);
 app.use('/api', transactionRoutes);
 app.use('/api', blogRoutes);
+app.use('/api', historicalPricesRouter);
 
 // const modelPath = 'diamond_price_model.onnx'; // replace with the path to your ONNX model
 
