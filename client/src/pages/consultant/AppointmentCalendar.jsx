@@ -103,7 +103,6 @@ const AppointmentCalendar = () => {
             <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
               <TableRow>
                 <TableCell sx={{ fontWeight: 'bold' }}>No</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Request ID</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>Phone</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
@@ -115,7 +114,6 @@ const AppointmentCalendar = () => {
                 .map((booking, index) => (
                   <TableRow key={booking._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{booking._id}</TableCell>
                     <TableCell>{booking.name}</TableCell>
                     <TableCell>{booking.phoneNumber}</TableCell>
                     <TableCell>
