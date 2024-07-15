@@ -22,7 +22,7 @@ const AboutUsGuest = () => {
 
   return (
     <GuestLayout>
-    <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '514%', backgroundColor: '#E5E4E2' }} />
+    <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: '#E5E4E2' }} />
 
     <Box
       display="flex"
