@@ -22,7 +22,7 @@ const AboutUsGuest = () => {
 
   return (
     <GuestLayout>
-    <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '514%', backgroundColor: '#E5E4E2' }} />
+    <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: '#E5E4E2' }} />
 
     <Box
       display="flex"
@@ -236,21 +236,6 @@ const AboutUsGuest = () => {
           />
         </Box>
       </Box>
-    </Box>
-    {/* Footer Section */}
-    <Box
-      sx={{
-        backgroundColor: '#033F63', // Same background color as the body
-        color: '#fff',
-        textAlign: 'center',
-        padding: '20px',
-        marginTop: 'auto', // Use 'auto' to push the footer to the bottom
-        width: '100%', // Ensure footer spans the entire width
-      }}
-    >
-      <Typography variant="body1" sx={{ fontFamily: "'Poppins', sans-serif" }}>
-        © 2024 DiamondScope. All rights reserved.
-      </Typography>
     </Box>
   </GuestLayout>
   );

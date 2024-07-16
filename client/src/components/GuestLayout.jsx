@@ -1,104 +1,204 @@
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  AppBar,
+  Container,
+  Drawer,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemText,
+  Toolbar,
+  Typography,
+  MenuItem,
+  Grid,
+  useMediaQuery,
+  useTheme
+} from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import MenuIcon from '@mui/icons-material/Menu';
 
 const GuestLayout = ({ children }) => {
-  const [showContainer, setShowContainer] = useState(true);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const navigate = useNavigate();
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleSignIn = () => {
+    navigate('/login');
   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
   };
+
+  const drawerContent = (
+    <List>
+      <ListItemButton component={Link} to="/" onClick={toggleDrawer}>
+        <ListItemText primary="HOME" />
+      </ListItemButton>
+      <ListItemButton component={Link} to="/about-us-guest" onClick={toggleDrawer}>
+        <ListItemText primary="ABOUT US" />
+      </ListItemButton>
+      <ListItemButton component={Link} to="/consulting-services-guest" onClick={toggleDrawer}>
+        <ListItemText primary="CONSULTING SERVICE" />
+      </ListItemButton>
+      <ListItemButton component={Link} to="/valuation-tool" onClick={toggleDrawer}>
+        <ListItemText primary="VALUATION TOOL" />
+      </ListItemButton>
+      <ListItemButton component={Link} to="/blogs" onClick={toggleDrawer}>
+        <ListItemText primary="BLOGS" />
+      </ListItemButton>
+    </List>
+  );
+
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
-    <div className="home-container" style={{ backgroundColor: '#033F63', position: '', zIndex: 1 }}>
-      <div
-        style={{
-          position: 'fixed',
-          top: showContainer ? '0px' : '-80px',
-          width: '101%',
-          zIndex: 1100,
+    <div className="home-container" style={{ position: 'relative', zIndex: 1, backgroundColor: '#e5e4e2' }}>
+      {/* Navigation Bar */}
+      <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor: '#021732',
           boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
           transition: 'top 0.3s',
-          backgroundColor: '#FAFAFA', // Light gray similar to Netlify
+          zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
-        <Container maxWidth="lg" disableGutters style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '11px', marginLeft:'100px'}}>
-          <div style={{ display: 'flex', gap: '50px' }}>
-          <MenuItem component={Link} to="/" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                HOME
-              </Typography>
-            </MenuItem>
-            <MenuItem component={Link} to="/about-us-guest" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                ABOUT US
-              </Typography>
-            </MenuItem>
-            <MenuItem component={Link} to="/consulting-services-guest" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                CONSULTING SERVICE
-              </Typography>
-            </MenuItem>
-            <MenuItem component={Link} to="/valuation-tool" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                VALUATION TOOL
-              </Typography>
-            </MenuItem>
-            <MenuItem component={Link} to="/blogs" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                BLOGS 
-              </Typography>
-            </MenuItem>
-            
-            
+        <Toolbar>
+          {/* Logo on the left */}
+          <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-start', padding: '10px' }}>
+            <img
+              style={{ width: '80px', height: 'auto' }}
+              src='LogoHeader.jpg'
+              alt='Logo'
+            />
           </div>
-          <IconButton
-            color="inherit"
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            aria-haspopup="true"
-            onClick={handleMenu}
-            sx={{ ml: 'auto' }}
-          >
-            <AccountCircleIcon sx={{ color: 'black' }} />
-          </IconButton>
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-            sx={{ marginTop: '40px' }}
-          >
-            <MenuItem component={Link} to="/login" onClick={handleClose}>
-              <Typography variant="body2" color="text.primary" sx={{ ml: 1, textAlign: 'center' }}>
-                Sign In
-              </Typography>
-            </MenuItem>
-          </Menu>
-        </Container>
-      </div>
-      <Container maxWidth="lg" style={{ marginTop: '68px', marginBottom: '0px', padding: '20px'}}>
+
+          {/* Navigation items in the middle */}
+          {isMdUp && (
+            <div style={{ flex: '2', display: 'flex', justifyContent: 'center', gap: '50px' }}>
+              <MenuItem component={Link} to="/" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+                <Typography sx={{ fontSize: '14px' }}>
+                  HOME
+                </Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/about-us-guest" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+                <Typography sx={{ fontSize: '14px' }}>
+                  ABOUT US
+                </Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/consulting-services-guest" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+                <Typography sx={{ fontSize: '14px' }}>
+                  CONSULTING SERVICE
+                </Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/valuation-tool" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+                <Typography sx={{ fontSize: '14px' }}>
+                  VALUATION TOOL
+                </Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/blogs" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+                <Typography sx={{ fontSize: '14px' }}>
+                  BLOGS
+                </Typography>
+              </MenuItem>
+            </div>
+          )}
+
+          {/* Sign In and Shopping Cart on the right */}
+          <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px' }} onClick={handleSignIn}>
+            <Typography variant="h6" sx={{ fontSize: '14px', color: 'white', cursor: 'pointer' }}>
+              Sign In
+            </Typography>
+            <IconButton style={{ color: 'white' }}>
+              <ShoppingCartIcon />
+            </IconButton>
+          </div>
+
+          {/* Drawer toggle button */}
+          {!isMdUp && (
+            <IconButton
+              edge="end"
+              aria-label="menu"
+              onClick={toggleDrawer}
+              sx={{ color: 'white' }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+        </Toolbar>
+      </AppBar>
+
+      {/* Drawer for medium screens and above */}
+      {!isMdUp && (
+        <Drawer
+          anchor="right"
+          open={drawerOpen}
+          onClose={toggleDrawer}
+          sx={{ '& .MuiDrawer-paper': { width: '250px' } }}
+        >
+          <div onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+            {drawerContent}
+          </div>
+        </Drawer>
+      )}
+
+      <Container maxWidth="lg" sx={{ marginTop: '90px', marginBottom: '0px', padding: '20px' }}>
         {children}
       </Container>
+
+      {/* Footer */}
+      <footer style={{ backgroundColor: '#021732', color: 'white', padding: '20px 0' }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <div style={{ display: 'flex', justifyContent: 'center', paddingRight: '350px',paddingTop:'50px' }}>
+                <img
+                  style={{ width: '120px', height: 'auto' }}
+                  src='LogoHeader.jpg'
+                  alt='Logo'
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <div>
+              <Typography variant="h5" sx={{ marginBottom: '10px' }}>
+                About Us
+              </Typography>
+              <List>
+                <ListItemButton component={Link} to="/about-us-guest" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                  <ListItemText primary="Our Mission" />
+                </ListItemButton>
+                <ListItemButton component={Link} to="/about-us-guest" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                  <ListItemText primary="Our Team" />
+                </ListItemButton>
+                <ListItemButton component={Link} to="/about-us-guest" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                  <ListItemText primary="Contact Us" />
+                </ListItemButton>
+              </List>
+              </div>     
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant="h5" sx={{ marginBottom: '10px' }}>
+                Contact Us
+              </Typography>
+              <Typography variant="body2">
+                Hotline: +1 (234) 567-890
+              </Typography>
+              <Typography variant="body2">
+                Email: info@diamondappraisals.com
+              </Typography>
+              <Typography variant="h5" sx={{ marginTop: '10px' }}>
+                Showrooms
+              </Typography>
+            </Grid>
+          </Grid>
+          <Typography variant="body2" align="center" gutterBottom sx={{ marginTop: '20px' }}>
+            © 2024 Diamond Appraisals. All rights reserved.
+          </Typography>
+        </Container>
+      </footer>
     </div>
   );
 };

@@ -25,7 +25,8 @@ const valuationRecordSchema = new Schema({
   valuationMethod: { type: String },
   certificateNumber: { type: String },
   commitmentRequested: { type: Boolean, default: false },
-  status: { type: String, enum: ['In Progress', 'Completed','Sealed','Picked Up'], default: 'In Progress' }
+  status: { type: String, enum: ['In Progress', 'Completed','Sealed','Picked Up'], default: 'In Progress' },
+  receiptNumber: { type: String, ref: 'Receipt', required: true } // Reference to the receipt number
 });
 
 const ValuationRecord = mongoose.model('ValuationRecord', valuationRecordSchema);

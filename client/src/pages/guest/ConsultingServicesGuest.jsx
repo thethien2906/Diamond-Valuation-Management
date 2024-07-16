@@ -68,18 +68,23 @@ const ConsultingServicesGuest = () => {
           sx={{
             width: { sm: '100%', md: '60%' },
             textAlign: { sm: 'left', md: 'center' },
-            height:''
+            height: ''
           }}
         >
-          <Typography component="h2" variant="h3" fontWeight="bold" color="white">
+          <Typography component="h2" variant="h3" fontWeight="bold" color="black">
             Consulting Services
           </Typography>
 
-          <Typography variant="body1" color="white">
+          <Typography variant="body1" color="black">
             Unlock the true value of your diamonds with our personalized guidance.
           </Typography>
         </Box>
-        <Grid container spacing={2} alignItems="stretch" justifyContent="center">
+        <Grid
+          container
+          spacing={{ xs: 4, sm: 4, md: 2 }} // Adjusted spacing for different screen sizes
+          alignItems="stretch"
+          justifyContent="center"
+        >
           {services.map((service) => (
             <Grid item key={service._id} xs={12} sm={6} md={3}>
               <Card

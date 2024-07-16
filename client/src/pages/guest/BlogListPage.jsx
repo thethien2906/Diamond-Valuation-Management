@@ -35,7 +35,7 @@ const BlogListPage = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minheight: '100vh' }}>
         <CircularProgress />
       </Box>
     );
@@ -43,7 +43,7 @@ const BlogListPage = () => {
 
   return (
     <GuestLayout sx={{ backgroundColor: '#f0f0f0' }}>
-      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '340%', backgroundColor: 'white' }} />
+      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minheight: '100vh', backgroundColor: 'white' }} />
 
 
       {/* Large background image */}

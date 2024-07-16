@@ -21,6 +21,7 @@ import {
   Button
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 
 const ViewStaff = () => {
@@ -68,6 +69,10 @@ const ViewStaff = () => {
     navigate("/admin/add-user");
   };
 
+  const handleEditUser = (staffId) => {
+    navigate(`/admin/edit/${staffId}`);
+  };
+
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h4" component="h2" sx={{ mb: 4 }}>
@@ -98,6 +103,12 @@ const ViewStaff = () => {
                 <TableCell>{staffMember.email}</TableCell>
                 <TableCell>{staffMember.role}</TableCell>
                 <TableCell>
+                  <IconButton
+                    color="primary"
+                    onClick={() => handleEditUser(staffMember._id)}
+                  >
+                    <EditIcon />
+                  </IconButton>
                   <IconButton
                     color="secondary"
                     onClick={() => handleOpen(staffMember._id)}

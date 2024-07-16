@@ -41,14 +41,14 @@ const ManagerSealingRequests = () => {
   if (requests.length === 0) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-        <Typography variant="h6">No sealing requests found</Typography>
+        <Typography variant="h4">No sealing requests found</Typography>
       </Box>
     );
   }
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h6" component="h2" gutterBottom>
+      <Typography variant="h4" component="h2" gutterBottom>
         Sealing Requests (Pending)
       </Typography>
       <TableContainer component={Paper}>

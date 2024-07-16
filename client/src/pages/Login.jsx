@@ -84,7 +84,7 @@ export default function SignInSide() {
         navigate("/appraiser");
         break;
       case "manager":
-        navigate("/manager");
+        navigate("/manager/dashboard");
         break;
       default:
         navigate("/about-us-customer");

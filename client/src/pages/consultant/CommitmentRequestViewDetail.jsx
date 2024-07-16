@@ -104,7 +104,7 @@ const CommitmentRequestViewDetail = () => {
           </Button>
           <Button
             variant="contained"
-            color="error"
+            color="secondary"
             onClick={handleDenyRequest}
             sx={{ ml: 2 }}
           >
