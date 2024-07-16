@@ -23,7 +23,17 @@ const RecordViewDetail = () => {
     const fetchRecordData = async () => {
       try {
         const response = await axios.get(`/api/valuation-records/${recordId}`);
-        setRecord(response.data);
+        const serviceResponse = await axios.get(`/api/services/${response.data.serviceId}`);
+        const consultantResponse = await axios.get(`/api/users/${response.data.consultantId}`);
+        const appraiserResponse = await axios.get(`/api/users/${response.data.appraiserId}`);
+        const receiptResponse = await axios.get(`/api/receipts/${response.data.receiptId}`);
+        setRecord({
+          ...response.data,
+          serviceName: serviceResponse.data.name,
+          appraiserName: appraiserResponse.data.name,
+          consultantName: consultantResponse.data.name,
+          receiptIssuedAt: receiptResponse.data.issueDate
+        });
       } catch (error) {
         console.error('Error fetching valuation record data:', error);
         toast.error('Failed to fetch valuation record data');
@@ -37,6 +47,17 @@ const RecordViewDetail = () => {
 
   const handleSeal = () => {
     navigate(`/consultant/record-sealing/${recordId}`);
+  };
+
+  const handleVerify = async () => {
+    try {
+      const response = await axios.put(`/api/valuation-records/${recordId}/complete`);
+      setRecord(response.data);
+      toast.success('Record status updated to Completed');
+    } catch (error) {
+      console.error('Error updating record status:', error);
+      toast.error('Failed to update record status');
+    }
   };
 
   if (loading) {
@@ -86,9 +107,8 @@ const RecordViewDetail = () => {
                 <Typography variant="body2">Email: {record.email}</Typography>
                 <Typography variant="body2">Appointment Date: {new Date(record.appointmentDate).toLocaleDateString()}</Typography>
                 <Typography variant="body2">Appointment Time: {record.appointmentTime}</Typography>
-                <Typography variant="body2">Services: {record.services}</Typography>
-                <Typography variant="body2">Payment Method: {record.paymentMethod}</Typography>
-                <Typography variant="body2">Consultant ID: {record.consultantId}</Typography>
+                <Typography variant="body2">Service Name: {record.serviceName}</Typography>
+                <Typography variant="body2">Consultant: {record.consultantName}</Typography>
               </Box>
             </AccordionDetails>
           </Accordion>
@@ -102,9 +122,9 @@ const RecordViewDetail = () => {
             </AccordionSummary>
             <AccordionDetails>
               <Box sx={{ width: '100%' }}>
-                <Typography variant="body2">Appraiser ID: {record.appraiserId || 'Not assigned yet'}</Typography>
+                <Typography variant="body2">Appraiser: {record.appraiserName || 'Not assigned yet'}</Typography>
                 <Typography variant="body2">Shape and Cut: {record.shapeAndCut || 'Not filled yet'}</Typography>
-                <Typography variant="body2">Carat Weight: {record.caratWeight || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Carat Weight: {record.caratWeight?.toString() || 'Not filled yet'}</Typography>
                 <Typography variant="body2">Clarity: {record.clarity || 'Not filled yet'}</Typography>
                 <Typography variant="body2">Cut Grade: {record.cutGrade || 'Not filled yet'}</Typography>
                 <Typography variant="body2">Measurements: {record.measurements || 'Not filled yet'}</Typography>
@@ -117,11 +137,43 @@ const RecordViewDetail = () => {
               </Box>
             </AccordionDetails>
           </Accordion>
+          <Accordion sx={{ mt: 2 }}>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="status-timestamps-content"
+              id="status-timestamps-header"
+            >
+              <Typography variant="subtitle1">Status Timestamps</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Box sx={{ width: '100%' }}>
+                {record.receiptIssuedAt && (
+                  <Typography variant="body2">
+                    {new Date(record.receiptIssuedAt).toLocaleString()} - Create Receipt
+                  </Typography>
+                )}
+                <Typography variant="body2">
+                  {new Date(record.createdAt).toLocaleString()} - Hand over to Appraiser
+                </Typography>
+                <Typography variant="body2">
+                  {new Date(record.updatedAt).toLocaleString()} - Appraiser done valuating
+                </Typography>
+                {record.validatedAt && (
+                  <Typography variant="body2">
+                    {new Date(record.validatedAt).toLocaleString()} - Completed
+                  </Typography>
+                )}
+              </Box>
+            </AccordionDetails>
+          </Accordion>
         </AccordionDetails>
       </Accordion>
       <Box sx={{ mt: 3 }}>
         <Button variant="contained" color="secondary" onClick={handleSeal}>
           Seal
+        </Button>
+        <Button variant="contained" color="primary" onClick={handleVerify}>
+          Verify
         </Button>
       </Box>
     </Box>

@@ -25,7 +25,7 @@ const TaskView = () => {
   useEffect(() => {
     const fetchRecords = async () => {
       try {
-        const response = await axios.get('/api/valuation-records-completed');
+        const response = await axios.get('/api/valuation-records-valuated');
         setRecords(response.data);
       } catch (error) {
         console.error('Error fetching records:', error);

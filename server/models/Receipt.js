@@ -16,6 +16,11 @@ const receiptSchema = new Schema({
     ref: 'Service',
     required: true,
   },
+  bookingId: {
+    type: Schema.Types.ObjectId,
+    ref: 'Booking',
+    required: true,
+  },
   
   
 });

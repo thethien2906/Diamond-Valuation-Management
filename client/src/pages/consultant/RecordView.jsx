@@ -29,7 +29,12 @@ const RecordView = () => {
     const fetchRecords = async () => {
       try {
         const response = await axios.get('/api/valuation-records');
-        setRecords(response.data);
+        // Ensure the response is an array
+        if (Array.isArray(response.data)) {
+          setRecords(response.data);
+        } else {
+          throw new Error('Invalid data format');
+        }
       } catch (error) {
         console.error('Error fetching records:', error);
         toast.error('Failed to fetch records');

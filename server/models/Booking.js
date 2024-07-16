@@ -12,7 +12,7 @@ const bookingSchema = new Schema({
   createdAt: { type: Date, default: Date.now },
   status: {
     type: String,
-    enum: ['pending', 'approved', 'rejected', 'done', 'completed'], // Possible statuses
+    enum: ['pending', 'approved', 'rejected', 'valuating', 'completed'], // Possible statuses
     default: 'pending' // Default status is 'pending'
   },
   consultantId: {

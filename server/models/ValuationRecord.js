@@ -8,12 +8,13 @@ const valuationRecordSchema = new Schema({
   email: { type: String, required: true },
   appointmentDate: { type: Date, required: true },
   appointmentTime: { type: String, required: true },
+  receiptId: { type: Schema.Types.ObjectId, ref: 'Receipt', required: true },
   serviceId: { type: Schema.Types.ObjectId, ref: 'Service', required: true },
   consultantId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   appraiserId: { type: Schema.Types.ObjectId, ref: 'User' },
   shapeAndCut: { type: String },
-  caratWeight: { type: Number },
+  caratWeight: { type: mongoose.SchemaTypes.Decimal },
   clarity: { type: String },
   cutGrade: { type: String },
   colour: { type: String },
@@ -25,8 +26,12 @@ const valuationRecordSchema = new Schema({
   valuationMethod: { type: String },
   certificateNumber: { type: String },
   commitmentRequested: { type: Boolean, default: false },
-  status: { type: String, enum: ['In Progress', 'Completed','Sealed','Picked Up'], default: 'In Progress' },
-  receiptNumber: { type: String, ref: 'Receipt', required: true } // Reference to the receipt number
+  status: { type: String, enum: ['In Progress','Valuated', 'Completed','Sealed','Picked Up'], default: 'In Progress' },
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date},
+  validatedAt: { type: Date},
+  completedAt: { type: Date},
+
 });
 
 const ValuationRecord = mongoose.model('ValuationRecord', valuationRecordSchema);

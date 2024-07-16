@@ -98,7 +98,7 @@ export default function SignInSide() {
   }, [user]);
 
   const handleClose = () => {
-    navigate('/Home');
+    navigate('/');
   };
 
   return (

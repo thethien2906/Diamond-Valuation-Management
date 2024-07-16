@@ -24,6 +24,7 @@ const generateReceipt = async (req, res) => {
         consultantId: booking.consultantId._id,
         customerId: booking.customerId,
         serviceId: booking.serviceId,
+        bookingId: booking._id
       });
   
       const savedReceipt = await newReceipt.save();
