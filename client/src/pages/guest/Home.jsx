@@ -193,11 +193,7 @@ const Home = () => {
           </Grid>
         </HowItWorksSection>
 
-        <FooterSection>
-          <Typography variant="body2" align="center" gutterBottom>
-            © {new Date().getFullYear()} Diamond Appraisals. All rights reserved.
-          </Typography>
-        </FooterSection>
+
       </GuestLayout>
     </PageContainer>
   );

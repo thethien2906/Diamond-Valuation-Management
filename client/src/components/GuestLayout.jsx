@@ -11,6 +11,7 @@ import {
   Toolbar,
   Typography,
   MenuItem,
+  Grid,
   useMediaQuery,
   useTheme
 } from '@mui/material';
@@ -18,9 +19,8 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import MenuIcon from '@mui/icons-material/Menu';
 
 const GuestLayout = ({ children }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleSignIn = () => {
     navigate('/login');
@@ -54,7 +54,7 @@ const GuestLayout = ({ children }) => {
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
-    <div className="home-container" style={{ position: 'relative', zIndex: 1 }}>
+    <div className="home-container" style={{ position: 'relative', zIndex: 1, backgroundColor: '#e5e4e2' }}>
       {/* Navigation Bar */}
       <AppBar
         position="fixed"
@@ -67,7 +67,7 @@ const GuestLayout = ({ children }) => {
       >
         <Toolbar>
           {/* Logo on the left */}
-          <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-start',padding:'10px' }}>
+          <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-start', padding: '10px' }}>
             <img
               style={{ width: '80px', height: 'auto' }}
               src='LogoHeader.jpg'
@@ -107,7 +107,7 @@ const GuestLayout = ({ children }) => {
           )}
 
           {/* Sign In and Shopping Cart on the right */}
-          <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px'}} onClick={handleSignIn}>
+          <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px' }} onClick={handleSignIn}>
             <Typography variant="h6" sx={{ fontSize: '14px', color: 'white', cursor: 'pointer' }}>
               Sign In
             </Typography>
@@ -143,10 +143,62 @@ const GuestLayout = ({ children }) => {
           </div>
         </Drawer>
       )}
-      
-      <Container maxWidth="lg" style={{ marginTop: '100px', marginBottom: '0px', padding: '20px' }}>
+
+      <Container maxWidth="lg" sx={{ marginTop: '90px', marginBottom: '0px', padding: '20px' }}>
         {children}
       </Container>
+
+      {/* Footer */}
+      <footer style={{ backgroundColor: '#021732', color: 'white', padding: '20px 0' }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <div style={{ display: 'flex', justifyContent: 'center', paddingRight: '350px',paddingTop:'50px' }}>
+                <img
+                  style={{ width: '120px', height: 'auto' }}
+                  src='LogoHeader.jpg'
+                  alt='Logo'
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <div>
+              <Typography variant="h5" sx={{ marginBottom: '10px' }}>
+                About Us
+              </Typography>
+              <List>
+                <ListItemButton component={Link} to="/about-us-guest" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                  <ListItemText primary="Our Mission" />
+                </ListItemButton>
+                <ListItemButton component={Link} to="/about-us-guest" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                  <ListItemText primary="Our Team" />
+                </ListItemButton>
+                <ListItemButton component={Link} to="/about-us-guest" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                  <ListItemText primary="Contact Us" />
+                </ListItemButton>
+              </List>
+              </div>     
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant="h5" sx={{ marginBottom: '10px' }}>
+                Contact Us
+              </Typography>
+              <Typography variant="body2">
+                Hotline: +1 (234) 567-890
+              </Typography>
+              <Typography variant="body2">
+                Email: info@diamondappraisals.com
+              </Typography>
+              <Typography variant="h5" sx={{ marginTop: '10px' }}>
+                Showrooms
+              </Typography>
+            </Grid>
+          </Grid>
+          <Typography variant="body2" align="center" gutterBottom sx={{ marginTop: '20px' }}>
+            © 2024 Diamond Appraisals. All rights reserved.
+          </Typography>
+        </Container>
+      </footer>
     </div>
   );
 };
