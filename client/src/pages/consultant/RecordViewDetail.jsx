@@ -22,11 +22,15 @@ const RecordViewDetail = () => {
   useEffect(() => {
     const fetchRecordData = async () => {
       try {
+        // Fetch the valuation record
         const response = await axios.get(`/api/valuation-records/${recordId}`);
         const serviceResponse = await axios.get(`/api/services/${response.data.serviceId}`);
         const consultantResponse = await axios.get(`/api/users/${response.data.consultantId}`);
         const appraiserResponse = await axios.get(`/api/users/${response.data.appraiserId}`);
+        
+        // Fetch the receipt data
         const receiptResponse = await axios.get(`/api/receipts/${response.data.receiptId}`);
+        
         setRecord({
           ...response.data,
           serviceName: serviceResponse.data.name,
@@ -52,7 +56,7 @@ const RecordViewDetail = () => {
   const handleVerify = async () => {
     try {
       const response = await axios.put(`/api/valuation-records/${recordId}/complete`);
-      setRecord(response.data);
+      setRecord(response.data); // Update the record in the state
       toast.success('Record status updated to Completed');
     } catch (error) {
       console.error('Error updating record status:', error);
@@ -124,7 +128,7 @@ const RecordViewDetail = () => {
               <Box sx={{ width: '100%' }}>
                 <Typography variant="body2">Appraiser: {record.appraiserName || 'Not assigned yet'}</Typography>
                 <Typography variant="body2">Shape and Cut: {record.shapeAndCut || 'Not filled yet'}</Typography>
-                <Typography variant="body2">Carat Weight: {record.caratWeight?.toString() || 'Not filled yet'}</Typography>
+                <Typography variant="body2">Carat Weight: {record.caratWeight || 'Not filled yet'}</Typography>
                 <Typography variant="body2">Clarity: {record.clarity || 'Not filled yet'}</Typography>
                 <Typography variant="body2">Cut Grade: {record.cutGrade || 'Not filled yet'}</Typography>
                 <Typography variant="body2">Measurements: {record.measurements || 'Not filled yet'}</Typography>
@@ -140,29 +144,21 @@ const RecordViewDetail = () => {
           <Accordion sx={{ mt: 2 }}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
-              aria-controls="status-timestamps-content"
-              id="status-timestamps-header"
+              aria-controls="status-content"
+              id="status-header"
             >
-              <Typography variant="subtitle1">Status Timestamps</Typography>
+              <Typography variant="subtitle1">Status Timeline</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Box sx={{ width: '100%' }}>
-                {record.receiptIssuedAt && (
+              {record.receiptIssuedAt && (
                   <Typography variant="body2">
                     {new Date(record.receiptIssuedAt).toLocaleString()} - Create Receipt
                   </Typography>
-                )}
-                <Typography variant="body2">
-                  {new Date(record.createdAt).toLocaleString()} - Hand over to Appraiser
-                </Typography>
-                <Typography variant="body2">
-                  {new Date(record.updatedAt).toLocaleString()} - Appraiser done valuating
-                </Typography>
-                {record.validatedAt && (
-                  <Typography variant="body2">
-                    {new Date(record.validatedAt).toLocaleString()} - Completed
-                  </Typography>
-                )}
+                )}                <Typography variant="body2">{new Date(record.createdAt).toLocaleString()} - Hand Over Appraiser</Typography>
+                {record.actions && record.actions.map((action, index) => (
+                  <Typography key={index} variant="body2">{new Date(action.timestamp).toLocaleString()} - {action.action}</Typography>
+                ))}
               </Box>
             </AccordionDetails>
           </Accordion>

@@ -52,8 +52,8 @@ const TaskDoneViewDetail = () => {
     setUpdating(true);
     try {
       await axios.put(`/api/valuation-records/${recordId}`, {
-        ...record,
-        status: 'Completed',
+        ...record
+        
       });
       toast.success('Valuation record updated successfully');
       navigate('/appraiser');
@@ -127,7 +127,7 @@ const TaskDoneViewDetail = () => {
                   <Typography variant="body1" sx={{ marginBottom: '8px' }}>Carat Weight:</Typography>
                   <TextField
                     name="caratWeight"
-                    type="number"
+     
                     value={record.caratWeight || ''}
                     onChange={handleChange}
                     variant="standard"
@@ -226,6 +226,7 @@ const TaskDoneViewDetail = () => {
                     variant="standard"
                     fullWidth // Ensures the TextField takes full width
                   />
+                  
                 </Box>
               </Grid>
             </Grid>

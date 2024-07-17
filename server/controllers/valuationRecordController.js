@@ -49,7 +49,7 @@ const createRecord = async (req, res) => {
       consultantId: receipt.consultantId,
       customerId: receipt.customerId,
       appraiserId: appraiser._id,
-      status: 'In Progress' // Set default status
+      status: 'In Progress',
     });
 
     const savedValuationRecord = await newValuationRecord.save();
@@ -129,10 +129,10 @@ const getRecordById = async (req, res) => {
     if (!record) {
       return res.status(404).json({ error: 'Record not found' });
     }
-    const recordData = {
-      ...record.toObject(),
-      caratWeight: record.caratWeight.toString()
-    };
+    const recordData = record.toObject();
+    if (record.caratWeight !== undefined) {
+      recordData.caratWeight = record.caratWeight.toString();
+    }
     res.status(200).json(recordData);
   } catch (error) {
     console.error('Error fetching record:', error);
@@ -143,18 +143,41 @@ const updateRecordById = async (req, res) => {
   try {
     const { recordId } = req.params;
     const updatedData = req.body;
-    const record = await ValuationRecord.findByIdAndUpdate(recordId, updatedData, { new: true });
+
+    // Fetch the current record to check the actions array and update the updatedAt field
+    const record = await ValuationRecord.findById(recordId);
     if (!record) {
       return res.status(404).json({ error: 'Record not found' });
     }
-    //update updatedAt field in record model to now
-    await ValuationRecord.findByIdAndUpdate(recordId, { updatedAt: Date.now() }, { new: true });
-    res.status(200).json(record);
+
+    // Determine the action to add
+    let action;
+    if (record.actions.length === 0) {
+      action = 'Diamond Valuated';
+    } else {
+      const updateCount = record.actions.filter(action => action.action.startsWith('Update by appraiser')).length + 1;
+      action = `Update by appraiser ${updateCount}`;
+    }
+
+    // Add the new action to the actions array
+    record.actions.push({ action });
+
+    // Update the record with the new data and actions array
+    const updatedRecord = await ValuationRecord.findByIdAndUpdate(
+      recordId,
+      { ...updatedData, actions: record.actions, updatedAt: Date.now() },
+      { new: true }
+    );
+
+    res.status(200).json(updatedRecord);
   } catch (error) {
     console.error('Error updating record:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+
 const getRecordsByUserId = async (req, res) => {
   try {
     const { customerId } = req.params;
@@ -196,19 +219,35 @@ const requestCommitment = async (req, res) => {
 const updateRecordStatusToCompleted = async (req, res) => {
   try {
     const { recordId } = req.params;
-    const record = await ValuationRecord.findByIdAndUpdate(
-      recordId,
-      { status: 'Completed', validatedAt: Date.now() },
-      { new: true }
-    );
 
+    // Fetch the current record to check the actions array
+    const record = await ValuationRecord.findById(recordId);
     if (!record) {
       return res.status(404).json({ error: 'Record not found' });
     }
 
+    // Determine the action to add
+    let action;
+    if (record.actions.length === 0) {
+      action = 'Verify by consultant 1';
+    } else {
+      const verifyCount = record.actions.filter(action => action.action.startsWith('Verify by consultant')).length + 1;
+      action = `Verify by consultant ${verifyCount}`;
+    }
+
+    // Add the new action to the actions array
+    record.actions.push({ action, timestamp: Date.now() });
+
+    // Update the record with the new status, validatedAt, and actions array
+    const updatedRecord = await ValuationRecord.findByIdAndUpdate(
+      recordId,
+      { status: 'Completed', validatedAt: Date.now(), actions: record.actions },
+      { new: true }
+    );
+
     const recordData = {
-      ...record.toObject(),
-      caratWeight: record.caratWeight.toString()
+      ...updatedRecord.toObject(),
+      caratWeight: updatedRecord.caratWeight.toString()
     };
 
     res.status(200).json(recordData);
@@ -217,6 +256,8 @@ const updateRecordStatusToCompleted = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
 const getNamesByIds = async (req, res) => {
   try {
     const { recordId } = req.params;
@@ -230,15 +271,19 @@ const getNamesByIds = async (req, res) => {
     if (!record) {
       return res.status(404).json({ error: 'Record not found' });
     }
-
+    const recordData = record.toObject();
+    if (record.caratWeight !== undefined) {
+      recordData.caratWeight = record.caratWeight.toString();
+    }
+    
     const { serviceId, consultantId, customerId, appraiserId } = record;
     res.json({
-      ...record.toObject(),
+      ...recordData,
       serviceName: serviceId ? serviceId.name : 'Not assigned',
-      consultantName: consultantId ? consultantId.name : 'Not assigned',
+      consultantName: consultantId ? appraiserId.name : 'Not assigned',
       customerName: customerId ? customerId.name : 'Not assigned',
       appraiserName: appraiserId ? appraiserId.name : 'Not assigned',
-    });
+    })
   } catch (error) {
     console.error('Error fetching valuation record details:', error);
     res.status(500).json({ error: 'Internal server error' });

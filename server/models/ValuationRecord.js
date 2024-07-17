@@ -1,6 +1,9 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-
+const actionSchema = new mongoose.Schema({
+  timestamp: { type: Date, default: Date.now },
+  action: { type: String, required: true }
+});
 const valuationRecordSchema = new Schema({
   recordNumber: { type: String, unique: true, required: true },
   customerName: { type: String, required: true },
@@ -31,7 +34,7 @@ const valuationRecordSchema = new Schema({
   updatedAt: { type: Date},
   validatedAt: { type: Date},
   completedAt: { type: Date},
-
+  actions: [actionSchema]
 });
 
 const ValuationRecord = mongoose.model('ValuationRecord', valuationRecordSchema);

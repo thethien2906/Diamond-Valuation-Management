@@ -143,6 +143,7 @@ const ValuationRecordAppraiserDetail = () => {
         <Typography variant="body1">Appraiser ID: {record.appraiserName || 'Not assigned yet'}</Typography>
 
         <form onSubmit={handleSubmit}>
+          
           <TextField
             label="Shape and Cut"
             name="shapeAndCut"
@@ -160,15 +161,17 @@ const ValuationRecordAppraiserDetail = () => {
             fullWidth
             margin="normal"
           />
+          {/* add measurements textfield with type string */}
           <TextField
-            label="Mesurements"
-            name="Mesurements"
-            type="number"
+            label="Measurement"
+            name="measurement"
             value={record.measurements || ''}
             onChange={handleChange}
             fullWidth
             margin="normal"
           />
+          
+
           <TextField
             label="Clarity"
             name="clarity"
@@ -236,7 +239,7 @@ const ValuationRecordAppraiserDetail = () => {
           
           <TextField
             label="Estimate Value"
-            name="estimateValue"
+            name="estimatedValue"
             value={record.estimatedValue || ''}
             onChange={handleChange}
             fullWidth
