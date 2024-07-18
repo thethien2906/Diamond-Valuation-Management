@@ -144,7 +144,7 @@ const GuestLayout = ({ children }) => {
         </Drawer>
       )}
 
-      <Container maxWidth="lg" sx={{ marginTop: '90px', marginBottom: '0px', padding: '20px' }}>
+      <Container >
         {children}
       </Container>
 

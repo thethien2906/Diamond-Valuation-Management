@@ -95,8 +95,8 @@ const ValuationTool = () => {
   };
 
   return (
-    <GuestLayout>
-      <Box sx={{ p: 3, maxWidth: '800px', mx: 'auto' }}>
+    <GuestLayout >
+      <Box sx={{ p: 3, maxWidth: '800px', mx: 'auto',marginTop:'90px' }}>
         <Paper elevation={3} sx={{ p: 3, backgroundColor: '#FAFAFA' }}>
           <Typography variant="h4" gutterBottom align="center" sx={{ mb: 3, color: '#033F63' }}>
             Diamond Price Predictor
