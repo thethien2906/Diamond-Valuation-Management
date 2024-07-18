@@ -59,7 +59,21 @@ const CommitmentRequestViewDetail = () => {
       console.error('Error denying commitment request:', error);
     }
   };
-
+  
+  const handlePrintReceipt = async () => {
+    try {
+      // Fetch the record using the recordId from the commitment details
+      const recordResponse = await axios.get(`/api/valuation-records/${commit.recordId}`);
+      const receiptId = recordResponse.data.receiptId;
+      
+      // Redirect to the receipt page using the fetched receiptId
+      navigate(`/consultant/receipt-print/${receiptId}`);
+    } catch (error) {
+      console.error('Error fetching receipt details:', error);
+      toast.error('Failed to fetch receipt details');
+    }
+  };
+  
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
@@ -109,6 +123,14 @@ const CommitmentRequestViewDetail = () => {
             sx={{ ml: 2 }}
           >
             Deny
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={handlePrintReceipt}
+            sx={{ ml: 2 }}
+          >
+            Print
           </Button>
         </Box>
       </Paper>

@@ -63,7 +63,17 @@ const RecordViewDetail = () => {
       toast.error('Failed to update record status');
     }
   };
-
+  const handleComplete = async () => {
+    try {
+      const response = await axios.put(`/api/valuation-records/${recordId}/picked-up`);
+      setRecord(response.data); // Update the record in the state
+      toast.success('Record status updated to picked up');
+      navigate('/consultant/valuation-records');
+    } catch (error) {
+      console.error('Error updating record status:', error);
+      toast.error('Failed to update record status');
+    }
+  };
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -141,27 +151,7 @@ const RecordViewDetail = () => {
               </Box>
             </AccordionDetails>
           </Accordion>
-          <Accordion sx={{ mt: 2 }}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="status-content"
-              id="status-header"
-            >
-              <Typography variant="subtitle1">Status Timeline</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Box sx={{ width: '100%' }}>
-              {record.receiptIssuedAt && (
-                  <Typography variant="body2">
-                    {new Date(record.receiptIssuedAt).toLocaleString()} - Create Receipt
-                  </Typography>
-                )}                <Typography variant="body2">{new Date(record.createdAt).toLocaleString()} - Hand Over Appraiser</Typography>
-                {record.actions && record.actions.map((action, index) => (
-                  <Typography key={index} variant="body2">{new Date(action.timestamp).toLocaleString()} - {action.action}</Typography>
-                ))}
-              </Box>
-            </AccordionDetails>
-          </Accordion>
+          
         </AccordionDetails>
       </Accordion>
       <Box sx={{ mt: 3 }}>
@@ -169,7 +159,10 @@ const RecordViewDetail = () => {
           Seal
         </Button>
         <Button variant="contained" color="primary" onClick={handleVerify}>
-          Verify
+          Verify 
+        </Button>
+        <Button variant="contained" color="secondary" onClick={handleComplete}>
+          Complete Record
         </Button>
       </Box>
     </Box>

@@ -256,7 +256,22 @@ const updateRecordStatusToCompleted = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+const updateRecordStatusToPickedUp = async (req, res) => {
+  try {
+    const { recordId } = req.params;
+    const record = await ValuationRecord.findById(recordId);
+    if (!record) {
+      return res.status(404).json({ error: 'Record not found' });
+    }
 
+    record.status = 'Picked Up';
+    await record.save();
+    res.status(200).json({ message: 'Record status updated successfully' });
+  } catch (error) {
+    console.error('Error updating record status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 
 const getNamesByIds = async (req, res) => {
   try {
@@ -302,4 +317,5 @@ module.exports = {
   getRecordsByUserId, 
   requestCommitment, 
   updateRecordStatusToCompleted,
+  updateRecordStatusToPickedUp,
   getNamesByIds }; 
