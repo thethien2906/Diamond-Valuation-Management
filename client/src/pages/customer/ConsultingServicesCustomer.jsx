@@ -79,12 +79,13 @@ const ConsultingServicesCustomer = () => {
           sx={{
             width: { sm: '100%', md: '60%' },
             textAlign: { sm: 'left', md: 'center' },
+            marginTop:'100px',
           }}
         >
-          <Typography component="h2" variant="h3" fontWeight="bold" color="white">
+          <Typography component="h2" variant="h3" fontWeight="bold" >
             Consulting Services
           </Typography>
-          <Typography variant="body1" color="white">
+          <Typography variant="body1" >
             Unlock the true value of your diamonds with our personalized guidance.
           </Typography>
         </Box>
