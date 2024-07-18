@@ -144,6 +144,7 @@ const theme = useTheme();
                 aria-label="menu"
                 onClick={toggleDrawer}
                 sx={{ color: 'white' }}
+
               >
                 <MenuIcon />
               </IconButton>
@@ -152,34 +153,40 @@ const theme = useTheme();
         </Toolbar>
       </AppBar>
 
-      {!isMdUp && (
-        <Drawer
-          anchor="right"
-          open={drawerOpen}
-          onClose={toggleDrawer}
-          sx={{ '& .MuiDrawer-paper': { width: '250px' } }}
-        >
-          <div onClick={toggleDrawer} onKeyDown={toggleDrawer}>
-            <List>
-              <ListItemButton component={Link} to="/Home" onClick={toggleDrawer}>
-                <ListItemText primary="HOME" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/about-us-customer" onClick={toggleDrawer}>
-                <ListItemText primary="ABOUT US" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/consulting-services-customer" onClick={toggleDrawer}>
-                <ListItemText primary="CONSULTING SERVICE" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/valuation-tool" onClick={toggleDrawer}>
-                <ListItemText primary="VALUATION TOOL" />
-              </ListItemButton>
-              <ListItemButton component={Link} to="/blog" onClick={toggleDrawer}>
-                <ListItemText primary="BLOGS" />
-              </ListItemButton>
-            </List>
-          </div>
-        </Drawer>
-      )}
+    {!isMdUp && (
+  <Drawer
+    anchor="right"
+    open={drawerOpen}
+    onClose={toggleDrawer}
+    sx={{ '& .MuiDrawer-paper': { width: '250px' } }}
+  >
+    <div onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+      <List sx={{marginTop:'100px'}}>
+        {user && (
+            <ListItemText primary={user.name} sx={{textAlign:'center'}}/>
+
+        )}
+        <ListItemButton component={Link} to="/Home" onClick={toggleDrawer}>
+          <ListItemText primary="HOME" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/about-us-customer" onClick={toggleDrawer}>
+          <ListItemText primary="ABOUT US" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/consulting-services-customer" onClick={toggleDrawer}>
+          <ListItemText primary="CONSULTING SERVICE" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/valuation-tool" onClick={toggleDrawer}>
+          <ListItemText primary="VALUATION TOOL" />
+        </ListItemButton>
+        <ListItemButton component={Link} to="/blog" onClick={toggleDrawer}>
+          <ListItemText primary="BLOGS" />
+        </ListItemButton>
+        
+      </List>
+    </div>
+  </Drawer>
+)}
+
 
         {children}
 
