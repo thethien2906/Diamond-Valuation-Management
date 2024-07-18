@@ -107,13 +107,10 @@ const GuestLayout = ({ children }) => {
           )}
 
           {/* Sign In and Shopping Cart on the right */}
-          <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px' }} onClick={handleSignIn}>
+          <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px',marginRight:'50px' }} onClick={handleSignIn}>
             <Typography variant="h6" sx={{ fontSize: '14px', color: 'white', cursor: 'pointer' }}>
               Sign In
             </Typography>
-            <IconButton style={{ color: 'white' }}>
-              <ShoppingCartIcon />
-            </IconButton>
           </div>
 
           {/* Drawer toggle button */}
@@ -144,9 +141,8 @@ const GuestLayout = ({ children }) => {
         </Drawer>
       )}
 
-      <Container >
+
         {children}
-      </Container>
 
       {/* Footer */}
       <footer style={{ backgroundColor: '#021732', color: 'white', padding: '20px 0' }}>
@@ -171,10 +167,10 @@ const GuestLayout = ({ children }) => {
                   <ListItemText primary="Our Mission" />
                 </ListItemButton>
                 <ListItemButton component={Link} to="/about-us-guest" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
-                  <ListItemText primary="Our Team" />
+                  <ListItemText primary="Why choose Us" />
                 </ListItemButton>
-                <ListItemButton component={Link} to="/about-us-guest" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
-                  <ListItemText primary="Contact Us" />
+                <ListItemButton component={Link} to="/consulting-services-guest" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                  <ListItemText primary="Service" />
                 </ListItemButton>
               </List>
               </div>     
