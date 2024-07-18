@@ -13,6 +13,10 @@ const createCommitRequest = async (req, res) => {
     }
     //set commimentRequested to true
     record.commitmentRequested = true;
+    record.actions.push({
+      action: 'Commitment Requested by Customer',
+      timestamp: Date.now(),
+    })
     await record.save();
     // Create a new commit request
     const newCommit = new Commit({
@@ -25,6 +29,9 @@ const createCommitRequest = async (req, res) => {
     });
 
     await newCommit.save();
+    // add new action to action array
+    
+
     res.status(201).json({ message: 'Commit request submitted successfully', commit: newCommit });
   } catch (error) {
     console.error('Error creating commit request:', error);
@@ -160,7 +167,19 @@ const updateCommitStatus = async (req, res) => {
       </div>
       `;
       sendEmail(commit.email, `Commitment Request ${status}`, emailText);
-  
+      // populate recordId from commit and add new action "Commitment Request Approved" to actions array
+      const record = await ValuationRecord.findById(commit.recordId);
+      const actions = record.actions;
+      const newAction = {
+        action: `Commitment Request ${status}`,
+        timestamp: Date.now(),
+      };
+      actions.push(newAction);
+      record.actions = actions;
+      await record.save();
+      
+
+
       res.status(200).json({ message: 'Commitment request status updated successfully', commit });
     } catch (error) {
       console.error('Error updating commitment request status:', error);

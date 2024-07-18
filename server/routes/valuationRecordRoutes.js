@@ -13,4 +13,5 @@ router.get('/valuation-records/user/:customerId', valuationRecordController.getR
 router.post('/valuation-records/request-commitment/:recordId', valuationRecordController.requestCommitment); // Add this line
 router.get('/valuation-records/details/:recordId', valuationRecordController.getNamesByIds);
 router.put('/valuation-records/:recordId/complete', valuationRecordController.updateRecordStatusToCompleted);
+router.put('/valuation-records/:recordId/picked-up', valuationRecordController.updateRecordStatusToPickedUp);
 module.exports = router;

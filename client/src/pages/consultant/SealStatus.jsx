@@ -55,7 +55,7 @@ const ConsulatantSealStatus = () => {
   if (requests.length === 0) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
-        <Typography variant="h6">No sealing requests found</Typography>
+        <Typography variant="h6">No Sealed Record</Typography>
       </Box>
     );
   }
@@ -63,7 +63,7 @@ const ConsulatantSealStatus = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h4" component="h2" gutterBottom>
-        My Sealing Requests
+        My Sealed Records
       </Typography>
       <TableContainer component={Paper}>
         <Table>
@@ -80,7 +80,7 @@ const ConsulatantSealStatus = () => {
           <TableBody>
             {requests.map((request) => (
               <TableRow key={request._id}>
-                <TableCell>{request.recordId.recordNumber}</TableCell>
+                <TableCell>{request.recordId ? request.recordId.recordNumber : 'N/A'}</TableCell>
                 <TableCell>{request.customerName}</TableCell>
                 <TableCell>{request.reason}</TableCell>
                 <TableCell>{request.status}</TableCell>

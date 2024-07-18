@@ -15,11 +15,11 @@ import { UserContext } from "../../context/userContext";
 const stripePromise = loadStripe("pk_test_51PV2aGRx0XBTHEAYZABfhKcLlLs2bnM370uuzHyLBJzXvisiF7KHMxR8oEokE7cdPexsyw6SoV4PiB7ASJfgJo5u00gnrG8Oxe");
 
 const BookingForm = () => {
+  const { user } = useContext(UserContext);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    name: user?.name || "",
+    email: user?.email || "",
     phoneNumber: "",
-    identityCard: "",
     address: "",
     date: "",
     time: "",
@@ -29,7 +29,6 @@ const BookingForm = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useContext(UserContext);
 
   useEffect(() => {
     if (user) {
@@ -67,9 +66,9 @@ const BookingForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, phoneNumber, identityCard, address, date, time } = formData;
+    const { name, email, phoneNumber, address, date, time } = formData;
 
-    if (!name || !email || !phoneNumber || !identityCard || !address || !date || !time || !serviceId) {
+    if (!name || !email || !phoneNumber || !address || !date || !time || !serviceId) {
       toast.error("Please fill out all fields before booking.");
       return;
     }
@@ -267,39 +266,6 @@ WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark backgro
               }}
             />
             <TextField
-              label="Identity Card"
-              name="identityCard"
-              value={formData.identityCard}
-              onChange={handleChange}
-              fullWidth
-              InputLabelProps={{
-                style: { color: '#B0C4DE' }, // Light blue text for the label
-              }}
-              InputProps={{
-                style: { color: '#FFFFFF' }, // White text
-              }}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#B0C4DE', // Light blue border color
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
-                  },
-                  '&.Mui-disabled fieldset': {
-                    borderColor: '#B0C4DE', // Light blue border color when disabled
-                  },
-                },
-                '&:-webkit-autofill': {
-                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
-                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
-                },
-              }}
-            />
-            <TextField
               label="Date"
               name="date"
               type="date"
@@ -335,43 +301,31 @@ InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }} // White label t
                 },
               }}
             />
-
             <TextField
-              label="Time"
+              label="Appointment Time"
               name="time"
               type="time"
               value={formData.time}
               onChange={handleChange}
-              InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }} // White label text color
-              inputProps={{
-                min: "09:00",
-                max: "17:00",
-                style: { color: '#B0C4DE' } // White input text color
-              }}
-              fullWidth
+              InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }}
+              inputProps={{ style: { color: '#FFFFFF' } }}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {
-                    borderColor: '#B0C4DE', // Light blue border color
+                    borderColor: '#B0C4DE',
                   },
                   '&:hover fieldset': {
-                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                    borderColor: '#00BFFF',
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                    borderColor: '#00BFFF',
                   },
-                  '&.Mui-disabled fieldset': {
-                    borderColor: '#B0C4DE', // Light blue border color when disabled
-                  },
-                },
-                '&:-webkit-autofill': {
-                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
-                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
                 },
               }}
+              fullWidth
             />
-            <Button type="submit" variant="contained" sx={{ bgcolor: '#00BFFF' }} fullWidth>
-              BOOK
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              Submit
             </Button>
           </Box>
           {showConfirmation && (
