@@ -59,8 +59,13 @@ const CustomerLayout = ({ children }) => {
           transition: 'top 0.3s',
         }}
       >
-        <Container maxWidth="lg" disableGutters style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '11px' }}>
+        <Container maxWidth="lg" disableGutters style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '11px',marginLeft:'100px' }}>
           <div style={{ display: 'flex', gap: '50px' }}>
+          <MenuItem component={Link} to="/Home" style={{ padding: '12px 12px', borderRadius: '10px' }}>
+              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
+                HOME
+              </Typography>
+            </MenuItem>
             <MenuItem component={Link} to="/about-us-customer" style={{ padding: '12px 12px', borderRadius: '10px' }}>
               <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
                 ABOUT US
@@ -71,7 +76,7 @@ const CustomerLayout = ({ children }) => {
                 CONSULTING SERVICES
               </Typography>
             </MenuItem>
-            <MenuItem component={Link} to="/valuation-tool" style={{ padding: '12px 12px', borderRadius: '10px' }}>
+            <MenuItem component={Link} to="/Valuation" style={{ padding: '12px 12px', borderRadius: '10px' }}>
               <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
                 VALUATION TOOL
               </Typography>
@@ -87,7 +92,7 @@ const CustomerLayout = ({ children }) => {
               </Typography>
             </MenuItem>
           </div>
-          <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center', borderRadius: '30px' }}>
+          <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center', borderRadius: '30px' ,ml: 'auto'}}>
             <IconButton
               color="inherit"
               aria-label="account of current user"

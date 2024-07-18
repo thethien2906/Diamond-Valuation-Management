@@ -12,17 +12,14 @@ import toast, { Toaster } from "react-hot-toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 
-// Assuming `handleChange` and `formData` are defined elsewhere
-
-const today = new Date().toISOString().split('T')[0]; // Get today's date in "yyyy-mm-dd" format
 const stripePromise = loadStripe("pk_test_51PV2aGRx0XBTHEAYZABfhKcLlLs2bnM370uuzHyLBJzXvisiF7KHMxR8oEokE7cdPexsyw6SoV4PiB7ASJfgJo5u00gnrG8Oxe");
 
 const BookingForm = () => {
+  const { user } = useContext(UserContext);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
+    name: user?.name || "",
+    email: user?.email || "",
     phoneNumber: "",
-    identityCard: "",
     address: "",
     date: "",
     time: "",
@@ -32,9 +29,16 @@ const BookingForm = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useContext(UserContext);
 
   useEffect(() => {
+    if (user) {
+      setFormData((prevData) => ({
+        ...prevData,
+        name: user.name,
+        email: user.email,
+      }));
+    }
+
     const queryParams = new URLSearchParams(location.search);
     setServiceId(queryParams.get("serviceId"));
 
@@ -53,7 +57,7 @@ const BookingForm = () => {
     };
 
     fetchConsultantId();
-  }, [location.search]);
+  }, [location.search, user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,9 +66,9 @@ const BookingForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, phoneNumber, identityCard, address, date, time } = formData;
+    const { name, email, phoneNumber, address, date, time } = formData;
 
-    if (!name || !email || !phoneNumber || !identityCard || !address || !date || !time || !serviceId) {
+    if (!name || !email || !phoneNumber || !address || !date || !time || !serviceId) {
       toast.error("Please fill out all fields before booking.");
       return;
     }
@@ -86,7 +90,7 @@ const BookingForm = () => {
         toast.success("Booking created successfully!");
 
         const stripe = await stripePromise;
-        const checkoutSession = await axios.post('/api/create-checkout-session', {
+const checkoutSession = await axios.post('/api/create-checkout-session', {
           bookingId: response.data.booking._id,
         });
 
@@ -110,7 +114,7 @@ const BookingForm = () => {
   const today = new Date().toISOString().split('T')[0];
 
   const handleNavigateBack = () => {
-    navigate("/dashboard");
+    navigate("/home");
   };
 
   return (
@@ -156,7 +160,7 @@ const BookingForm = () => {
                   },
                 },
                 '&:-webkit-autofill': {
-                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
                   WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
                 },
               }}
@@ -226,7 +230,7 @@ const BookingForm = () => {
                   WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
                   WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
                 },
-              }}
+}}
             />
             <TextField
               label="Address"
@@ -262,45 +266,12 @@ const BookingForm = () => {
               }}
             />
             <TextField
-              label="Identity Card"
-              name="identityCard"
-              value={formData.identityCard}
-              onChange={handleChange}
-              fullWidth
-              InputLabelProps={{
-                style: { color: '#B0C4DE' }, // Light blue text for the label
-              }}
-              InputProps={{
-                style: { color: '#FFFFFF' }, // White text
-              }}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#B0C4DE', // Light blue border color
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
-                  },
-                  '&.Mui-disabled fieldset': {
-                    borderColor: '#B0C4DE', // Light blue border color when disabled
-                  },
-                },
-                '&:-webkit-autofill': {
-                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
-                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
-                },
-              }}
-            />
-            <TextField
               label="Date"
               name="date"
               type="date"
               value={formData.date}
               onChange={handleChange}
-              InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }} // White label text color
+InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }} // White label text color
               inputProps={{
                 min: today,
                 style: { color: '#B0C4DE' } // White input text color
@@ -330,48 +301,36 @@ const BookingForm = () => {
                 },
               }}
             />
-
             <TextField
-              label="Time"
+              label="Appointment Time"
               name="time"
               type="time"
               value={formData.time}
               onChange={handleChange}
-              InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }} // White label text color
-              inputProps={{
-                min: "09:00",
-                max: "17:00",
-                style: { color: '#B0C4DE' } // White input text color
-              }}
-              fullWidth
+              InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }}
+              inputProps={{ style: { color: '#FFFFFF' } }}
               sx={{
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {
-                    borderColor: '#B0C4DE', // Light blue border color
+                    borderColor: '#B0C4DE',
                   },
                   '&:hover fieldset': {
-                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                    borderColor: '#00BFFF',
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                    borderColor: '#00BFFF',
                   },
-                  '&.Mui-disabled fieldset': {
-                    borderColor: '#B0C4DE', // Light blue border color when disabled
-                  },
-                },
-                '&:-webkit-autofill': {
-                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
-                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
                 },
               }}
+              fullWidth
             />
-            <Button type="submit" variant="contained" sx={{ bgcolor: '#00BFFF' }} fullWidth>
-              BOOK
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              Submit
             </Button>
           </Box>
           {showConfirmation && (
             <Box sx={{ mt: 4 }}>
-              <Typography variant="body1" color="primary" sx={{ textAlign: "center" }}>
+<Typography variant="body1" color="primary" sx={{ textAlign: "center" }}>
                 Thank you for booking!
               </Typography>
             </Box>

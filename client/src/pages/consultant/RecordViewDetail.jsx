@@ -22,8 +22,22 @@ const RecordViewDetail = () => {
   useEffect(() => {
     const fetchRecordData = async () => {
       try {
+        // Fetch the valuation record
         const response = await axios.get(`/api/valuation-records/${recordId}`);
-        setRecord(response.data);
+        const serviceResponse = await axios.get(`/api/services/${response.data.serviceId}`);
+        const consultantResponse = await axios.get(`/api/users/${response.data.consultantId}`);
+        const appraiserResponse = await axios.get(`/api/users/${response.data.appraiserId}`);
+        
+        // Fetch the receipt data
+        const receiptResponse = await axios.get(`/api/receipts/${response.data.receiptId}`);
+        
+        setRecord({
+          ...response.data,
+          serviceName: serviceResponse.data.name,
+          appraiserName: appraiserResponse.data.name,
+          consultantName: consultantResponse.data.name,
+          receiptIssuedAt: receiptResponse.data.issueDate
+        });
       } catch (error) {
         console.error('Error fetching valuation record data:', error);
         toast.error('Failed to fetch valuation record data');
@@ -39,6 +53,27 @@ const RecordViewDetail = () => {
     navigate(`/consultant/record-sealing/${recordId}`);
   };
 
+  const handleVerify = async () => {
+    try {
+      const response = await axios.put(`/api/valuation-records/${recordId}/complete`);
+      setRecord(response.data); // Update the record in the state
+      toast.success('Record status updated to Completed');
+    } catch (error) {
+      console.error('Error updating record status:', error);
+      toast.error('Failed to update record status');
+    }
+  };
+  const handleComplete = async () => {
+    try {
+      const response = await axios.put(`/api/valuation-records/${recordId}/picked-up`);
+      setRecord(response.data); // Update the record in the state
+      toast.success('Record status updated to picked up');
+      navigate('/consultant/valuation-records');
+    } catch (error) {
+      console.error('Error updating record status:', error);
+      toast.error('Failed to update record status');
+    }
+  };
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -86,9 +121,8 @@ const RecordViewDetail = () => {
                 <Typography variant="body2">Email: {record.email}</Typography>
                 <Typography variant="body2">Appointment Date: {new Date(record.appointmentDate).toLocaleDateString()}</Typography>
                 <Typography variant="body2">Appointment Time: {record.appointmentTime}</Typography>
-                <Typography variant="body2">Services: {record.services}</Typography>
-                <Typography variant="body2">Payment Method: {record.paymentMethod}</Typography>
-                <Typography variant="body2">Consultant ID: {record.consultantId}</Typography>
+                <Typography variant="body2">Service Name: {record.serviceName}</Typography>
+                <Typography variant="body2">Consultant: {record.consultantName}</Typography>
               </Box>
             </AccordionDetails>
           </Accordion>
@@ -102,7 +136,7 @@ const RecordViewDetail = () => {
             </AccordionSummary>
             <AccordionDetails>
               <Box sx={{ width: '100%' }}>
-                <Typography variant="body2">Appraiser ID: {record.appraiserId || 'Not assigned yet'}</Typography>
+                <Typography variant="body2">Appraiser: {record.appraiserName || 'Not assigned yet'}</Typography>
                 <Typography variant="body2">Shape and Cut: {record.shapeAndCut || 'Not filled yet'}</Typography>
                 <Typography variant="body2">Carat Weight: {record.caratWeight || 'Not filled yet'}</Typography>
                 <Typography variant="body2">Clarity: {record.clarity || 'Not filled yet'}</Typography>
@@ -117,11 +151,18 @@ const RecordViewDetail = () => {
               </Box>
             </AccordionDetails>
           </Accordion>
+          
         </AccordionDetails>
       </Accordion>
       <Box sx={{ mt: 3 }}>
         <Button variant="contained" color="secondary" onClick={handleSeal}>
           Seal
+        </Button>
+        <Button variant="contained" color="primary" onClick={handleVerify}>
+          Verify 
+        </Button>
+        <Button variant="contained" color="secondary" onClick={handleComplete}>
+          Complete Record
         </Button>
       </Box>
     </Box>

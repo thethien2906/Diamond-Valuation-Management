@@ -44,7 +44,7 @@ const AddingForm = () => {
           padding: 3,
           boxShadow: 3,
           borderRadius: 2,
-          backgroundColor: '#212121',
+          backgroundColor: '#686b69',
           color: 'white',
         }}
       >
@@ -122,7 +122,7 @@ const AddingForm = () => {
             color="primary"
             sx={{ bgcolor: '#212529', '&:hover': { bgcolor: '#333' } }}
           >
-            Add
+            Submit
           </Button>
         </Box>
       </Box>

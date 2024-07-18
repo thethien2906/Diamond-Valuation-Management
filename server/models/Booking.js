@@ -5,14 +5,13 @@ const bookingSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   phoneNumber: { type: String, required: true },
-  identityCard: { type: String, required: true },
   address: { type: String, required: true },
   date: { type: String, required: true },
   time: { type: String, required: true },
   createdAt: { type: Date, default: Date.now },
   status: {
     type: String,
-    enum: ['pending', 'approved', 'rejected', 'done', 'completed'], // Possible statuses
+    enum: ['pending', 'approved', 'rejected', 'valuating', 'completed'], // Possible statuses
     default: 'pending' // Default status is 'pending'
   },
   consultantId: {

@@ -13,6 +13,10 @@ const createCommitRequest = async (req, res) => {
     }
     //set commimentRequested to true
     record.commitmentRequested = true;
+    record.actions.push({
+      action: 'Commitment Requested by Customer',
+      timestamp: Date.now(),
+    })
     await record.save();
     // Create a new commit request
     const newCommit = new Commit({
@@ -25,6 +29,9 @@ const createCommitRequest = async (req, res) => {
     });
 
     await newCommit.save();
+    // add new action to action array
+    
+
     res.status(201).json({ message: 'Commit request submitted successfully', commit: newCommit });
   } catch (error) {
     console.error('Error creating commit request:', error);
@@ -131,7 +138,7 @@ const updateCommitStatus = async (req, res) => {
       await commit.save();
       
       // Send email based on status change
-      const emailText = status === 'Approved' ? 
+      const emailHtml = status === 'Approved' ? 
       `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
         <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
@@ -159,8 +166,20 @@ const updateCommitStatus = async (req, res) => {
         <p style="color: #fff;">Your Company Team</p>
       </div>
       `;
-      sendEmail(commit.email, `Commitment Request ${status}`, emailText);
-  
+      sendEmail(commit.email, `Commitment Request ${status}`, emailHtml, 'html');
+      // populate recordId from commit and add new action "Commitment Request Approved" to actions array
+      const record = await ValuationRecord.findById(commit.recordId);
+      const actions = record.actions;
+      const newAction = {
+        action: `Commitment Request ${status}`,
+        timestamp: Date.now(),
+      };
+      actions.push(newAction);
+      record.actions = actions;
+      await record.save();
+      
+
+
       res.status(200).json({ message: 'Commitment request status updated successfully', commit });
     } catch (error) {
       console.error('Error updating commitment request status:', error);

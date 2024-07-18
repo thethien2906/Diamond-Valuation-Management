@@ -1,146 +1,252 @@
 import * as React from 'react';
-import { useTheme } from '@mui/material/styles';
-import { LineChart, axisClasses } from '@mui/x-charts';
-import { Typography, Box, List, ListItem, ListItemText } from '@mui/material';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { BarChart } from '@mui/x-charts/BarChart';
+import {
+  Box,
+  Typography,
+  Card,
+  CardContent,
+  FormControl,
+  Select,
+  Grid,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  styled,
+  TablePagination,
+  TextField,
+  InputAdornment,
+  IconButton,
+} from '@mui/material';
+import { axisClasses } from '@mui/x-charts/ChartsAxis';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import SearchIcon from '@mui/icons-material/Search';
+
+const valueFormatter = (value) => `$${value?.toLocaleString()}`;
+
+const RightAlignedBox = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+  height: '100%',
+  '& .MuiBox-root .recharts-wrapper .recharts-yAxis': {
+    right: '10px',
+  },
+}));
 
 export default function EarningChart() {
-  const theme = useTheme();
+  const [transactions, setTransactions] = useState([]);
+  const [monthlyEarnings, setMonthlyEarnings] = useState(new Array(12).fill(0));
+  const [totalPayments, setTotalPayments] = useState(0);
+  const [selectedMonth, setSelectedMonth] = useState(1);
+  const [page, setPage] = useState(0);
+  const rowsPerPage = 5;
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filteredTransactions, setFilteredTransactions] = useState([]);
 
-  // Initialize the data state with the time values from 9AM to 5PM and initial amounts
-  const initialData = [
-    { time: '09:00', amount: 0 },
-    { time: '10:00', amount: 0 },
-    { time: '11:00', amount: 0 },
-    { time: '12:00', amount: 0 },
-    { time: '13:00', amount: 0 },
-    { time: '14:00', amount: 0 },
-    { time: '15:00', amount: 0 },
-    { time: '16:00', amount: 0 },
-    { time: '17:00', amount: 0 },
-  ];
+  useEffect(() => {
+    const fetchTransactions = async () => {
+      try {
+        const response = await axios.get('/api/transactions');
+        let transactions = response.data;
 
-  const [data, setData] = React.useState(initialData);
-  const [transactions, setTransactions] = React.useState([]);
-  const [currentDate, setCurrentDate] = React.useState(new Date());
+        transactions.sort((a, b) => new Date(b.created) - new Date(a.created));
 
-  const fetchTransactions = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/api/transactions');
-      const transactions = response.data;
+        const earnings = new Array(12).fill(0);
+        let total = 0;
 
-      const updatedData = initialData.map(slot => {
-        // Extract hour from slot.time and filter transactions accordingly
-        const hour = slot.time.substring(0, 2); // Extract 'HH' from 'HH:00'
-
-        const transactionsInHour = transactions.filter(t => {
-          const transactionHour = new Date(t.time).getUTCHours().toString().padStart(2, '0');
-          return transactionHour === hour;
+        transactions.forEach(transaction => {
+          const month = new Date(transaction.created).getUTCMonth();
+          earnings[month] += transaction.amount;
+          total += transaction.amount;
         });
 
-        const totalAmount = transactionsInHour.reduce((acc, transaction) => acc + transaction.amount, 0);
+        setMonthlyEarnings(earnings);
+        setTotalPayments(total);
+        setTransactions(transactions);
+        setFilteredTransactions(transactions);
+      } catch (error) {
+        console.error('Error fetching transactions:', error);
+      }
+    };
 
-        return {
-          ...slot,
-          amount: totalAmount,
-        };
-      });
+    fetchTransactions();
+  }, []);
 
-      setData(updatedData);
-      setTransactions(transactions);
-    } catch (error) {
-      console.error('Error fetching transactions:', error);
+  const handleMonthChange = (event) => {
+    setSelectedMonth(event.target.value);
+  };
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const handleSearch = () => {
+    setFilteredTransactions(
+      transactions.filter(transaction =>
+        transaction.customerName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  };
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSearch();
     }
   };
 
-  // Effect to fetch transactions initially and set interval to update data every 5 seconds
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      fetchTransactions();
-    }, 5000);
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June', 
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
 
-    // Fetch transactions initially on component mount
-    fetchTransactions();
+  const dataset = monthlyEarnings.map((value, index) => ({
+    month: monthNames[index],
+    earnings: value,
+  }));
 
-    // Clean up the interval on component unmount
-    return () => clearInterval(interval);
-  }, []); // Empty dependency array to run effect only once
+  const chartSetting = {
+    yAxis: [
+      {
+        position: 'right',
+        valueFormatter: (value) => `$${value.toLocaleString()}`,
+      },
+    ],
+    series: [{ dataKey: 'earnings', label: 'Monthly Earnings', valueFormatter }],
+    height: 500,
+    width: 1000,
+    sx: {
+      [`& .${axisClasses.directionX} .${axisClasses.label}`]: {
+        fontSize: '12px',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+      },
+    },
+  };
 
-  // Get current date and format day/month
-  const formattedDate = `${currentDate.getDate()}/${currentDate.getMonth() + 1}`;
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' };
+    return new Date(dateString).toLocaleString('sv-SE', options).replace(' ', 'T') + 'Z';
+  };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-      <Box sx={{ width: 'calc(70% - 16px)', marginRight: '16px' }}>
-        <Typography variant="h6" style={{ top: 16, left: 16 }}>
-          Day: {formattedDate}
-        </Typography>
-        <LineChart
-          dataset={data}
-          margin={{
-            top: 40,
-            right: 20,
-            left: 70,
-            bottom: 30,
-          }}
-          xAxis={[
-            {
-              scaleType: 'point',
-              dataKey: 'time',
-              tickNumber: 9, // Adjust tickNumber based on the number of time slots
-              tickLabelStyle: theme.typography.body2,
-            },
-          ]}
-          yAxis={[
-            {
-              label: 'Sales ($)',
-              labelStyle: {
-                ...theme.typography.body1,
-                fill: theme.palette.text.primary,
-              },
-              tickLabelStyle: theme.typography.body2,
-              max: 3000,
-              tickNumber: 3,
-            },
-          ]}
-          series={[
-            {
-              dataKey: 'amount',
-              showMark: false,
-              color: theme.palette.primary.light,
-            },
-          ]}
-          sx={{
-            [`.${axisClasses.root} line`]: { stroke: theme.palette.text.secondary },
-            [`.${axisClasses.root} text`]: { fill: theme.palette.text.secondary },
-            [`& .${axisClasses.left} .${axisClasses.label}`]: {
-              transform: 'translateX(-25px)',
-            },
-          }}
-          height={300} // Set the height explicitly for the chart
-        />
-      </Box>
-      <Box sx={{ width: '30%' }}>
-        <Typography variant="h6" gutterBottom>
-          Recent Transactions
-        </Typography>
-        <List sx={{ maxHeight: '300px', overflow: 'auto' }}>
-          {transactions.length === 0 ? (
-            <ListItem>
-              <ListItemText primary="No transactions" />
-            </ListItem>
-          ) : (
-            transactions.map((transaction, index) => (
-              <ListItem key={index}>
-                <ListItemText
-                  primary={`Amount: $${transaction.amount}`}
-                  secondary={`Time: ${transaction.time}, Customer: ${transaction.customerName}`}
-                />
-              </ListItem>
-            ))
-          )}
-        </List>
-      </Box>
+    <Box sx={{ width: '100%', marginTop: 4 }}>
+      <Card>
+        <CardContent>
+          <Typography variant="h6" component="div" gutterBottom>
+            Monthly Earnings
+          </Typography>
+          <Grid container direction="column" alignItems="center" spacing={2}>
+            <Grid item>
+              <FormControl sx={{ minWidth: 120 }}>
+                <Select
+                  native
+                  value={selectedMonth}
+                  onChange={handleMonthChange}
+                  inputProps={{ 'aria-label': 'Select Month' }}
+                  sx={{ borderRadius: 16, minWidth: 120 }}
+                >
+                  {monthNames.map((month, index) => (
+                    <option key={index + 1} value={index + 1}>{month}</option>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item>
+              <Paper elevation={3} sx={{ p: 2, display: 'flex', alignItems: 'center', borderRadius: 16, backgroundColor: '#f0f0f0' }}>
+                <MonetizationOnIcon sx={{ mr: 1 }} />
+                <Typography variant="body1">
+                  Total Payments: ${monthlyEarnings[selectedMonth - 1].toLocaleString()}
+                </Typography>
+              </Paper>
+            </Grid>
+          </Grid>
+          <RightAlignedBox>
+            <BarChart
+              dataset={dataset}
+              xAxis={[
+                { scaleType: 'band', dataKey: 'month', tickPlacement: 'middle', tickLabelPlacement: 'middle' },
+              ]}
+              {...chartSetting}
+            />
+          </RightAlignedBox>
+          <Typography variant="h6" component="div" gutterBottom>
+            Transaction Details
+          </Typography>
+          <Grid container direction="row" justifyContent="space-between" alignItems="center">
+            <Grid item>
+              <TextField
+                label="Search by Name"
+                variant="outlined"
+                value={searchQuery}
+                onChange={handleSearchChange}
+                onKeyDown={handleKeyDown}
+                sx={{ marginBottom: 2, width: 200 }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={handleSearch}>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Grid>
+          </Grid>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="Transaction table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Created</TableCell>
+                  <TableCell>Time</TableCell>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Currency</TableCell>
+                  <TableCell>Customer Email</TableCell>
+                  <TableCell>Customer Name</TableCell>
+                  <TableCell>Payment Method</TableCell>
+                  <TableCell>Is Live Mode</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {filteredTransactions
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((transaction, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{formatDate(transaction.created)}</TableCell>
+                      <TableCell>{transaction.time}</TableCell>
+                      <TableCell>${transaction.amount.toLocaleString()}</TableCell>
+                      <TableCell>{transaction.currency}</TableCell>
+                      <TableCell>{transaction.customerEmail}</TableCell>
+                      <TableCell>{transaction.customerName}</TableCell>
+                      <TableCell>{transaction.paymentMethod}</TableCell>
+                      <TableCell>{transaction.isLiveMode ? 'Yes' : 'No'}</TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[rowsPerPage]}
+            component="div"
+            count={filteredTransactions.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handlePageChange}
+          />
+        </CardContent>
+      </Card>
     </Box>
   );
 }

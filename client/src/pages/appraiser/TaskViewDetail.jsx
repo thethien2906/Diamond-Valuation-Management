@@ -17,16 +17,17 @@ const ValuationRecordAppraiserDetail = () => {
   const [record, setRecord] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
-  const [image, setImage] = useState(null); // State to store the uploaded image
+  const [image, setImage] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecordData = async () => {
       try {
         const response = await axios.get(`/api/valuation-records/${recordId}`);
-        const serviceResponse = await axios.get(`/api/services/${response.data.serviceId}`); // Fetch service details
-        
-        setRecord({ ...response.data, serviceName: serviceResponse.data.name }); // Update record with serviceName
+        const serviceResponse = await axios.get(`/api/services/${response.data.serviceId}`);
+        const consultantResponse = await axios.get(`/api/users/${response.data.consultantId}`);
+        const appraiserResponse = await axios.get(`/api/users/${response.data.appraiserId}`);
+        setRecord({ ...response.data, serviceName: serviceResponse.data.name, appraiserName: appraiserResponse.data.name, consultantName: consultantResponse.data.name });
       } catch (error) {
         console.error('Error fetching valuation record data:', error);
         toast.error('Failed to fetch valuation record data');
@@ -46,7 +47,6 @@ const ValuationRecordAppraiserDetail = () => {
     setImage(e.target.files[0]);
   };
 
-
   const generateCertificateNumber = () => {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let number = '';
@@ -55,6 +55,7 @@ const ValuationRecordAppraiserDetail = () => {
     }
     return number;
   };
+
   const handlePredict = async () => {
     if (!image) {
       toast.error('Please upload an image');
@@ -65,7 +66,7 @@ const ValuationRecordAppraiserDetail = () => {
     formData.append('file', image);
 
     try {
-      const response = await axios.post('http://localhost:8000/predict-cnn/', formData, {
+      const response = await axios.post('http://localhost:8000/predict-features/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -74,9 +75,9 @@ const ValuationRecordAppraiserDetail = () => {
       setRecord({
         ...record,
         shapeAndCut: prediction.shape,
-        caratWeight: prediction.carat,
+        caratWeight: prediction.carat, // Update if you have a carat model
         clarity: prediction.clarity,
-        colour: prediction.colour,
+        colour: prediction.color,
         cutGrade: prediction.cut,
         polish: prediction.polish,
         symmetry: prediction.symmetry,
@@ -84,7 +85,6 @@ const ValuationRecordAppraiserDetail = () => {
         valuationMethod: 'Machine Learning',
         certificateNumber: generateCertificateNumber(),
       });
-      
       toast.success('Prediction successful');
     } catch (error) {
       console.error('Error during prediction:', error);
@@ -98,7 +98,7 @@ const ValuationRecordAppraiserDetail = () => {
     try {
       await axios.put(`/api/valuation-records/${recordId}`, {
         ...record,
-        status: 'Completed',
+        status: 'Valuated',
       });
       toast.success('Valuation record updated successfully');
       navigate('/appraiser');
@@ -109,9 +109,6 @@ const ValuationRecordAppraiserDetail = () => {
       setUpdating(false);
     }
   };
-
-  
-
 
   if (loading) {
     return (
@@ -142,10 +139,11 @@ const ValuationRecordAppraiserDetail = () => {
         <Typography variant="body1">Appointment Date: {new Date(record.appointmentDate).toLocaleDateString()}</Typography>
         <Typography variant="body1">Appointment Time: {record.appointmentTime}</Typography>
         <Typography variant="body1">Service: {record.serviceName || 'Service not found'}</Typography>
-        <Typography variant="body1">Consultant ID: {record.consultantId}</Typography>
-        <Typography variant="body1">Appraiser ID: {record.appraiserId || 'Not assigned yet'}</Typography>
+        <Typography variant="body1">Consultant ID: {record.consultantName}</Typography>
+        <Typography variant="body1">Appraiser ID: {record.appraiserName || 'Not assigned yet'}</Typography>
 
         <form onSubmit={handleSubmit}>
+          
           <TextField
             label="Shape and Cut"
             name="shapeAndCut"
@@ -163,6 +161,17 @@ const ValuationRecordAppraiserDetail = () => {
             fullWidth
             margin="normal"
           />
+          {/* add measurements textfield with type string */}
+          <TextField
+            label="Measurement"
+            name="measurement"
+            value={record.measurements || ''}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          
+
           <TextField
             label="Clarity"
             name="clarity"
@@ -212,23 +221,6 @@ const ValuationRecordAppraiserDetail = () => {
             margin="normal"
           />
           <TextField
-            label="Measurements"
-            name="measurements"
-            value={record.measurements || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Estimated Value"
-            name="estimatedValue"
-            type="number"
-            value={record.estimatedValue || ''}
-            onChange={handleChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
             label="Valuation Method"
             name="valuationMethod"
             value={record.valuationMethod || ''}
@@ -244,29 +236,39 @@ const ValuationRecordAppraiserDetail = () => {
             fullWidth
             margin="normal"
           />
-          <Box sx={{ mt: 3 }}>
+          
+          <TextField
+            label="Estimate Value"
+            name="estimatedValue"
+            value={record.estimatedValue || ''}
+            onChange={handleChange}
+            fullWidth
+            margin="normal"
+          />
+          <Box sx={{ mt: 2 }}>
+            <input type="file" onChange={handleImageChange} />
+          </Box>
+          <Box sx={{ mt: 2 }}>
             <Button
-              type="submit"
               variant="contained"
               color="primary"
+              onClick={handlePredict}
               disabled={updating}
             >
-              {updating ? 'Updating...' : 'Update and Complete'}
+              Predict
+            </Button>
+          </Box>
+          <Box sx={{ mt: 2 }}>
+            <Button
+              variant="contained"
+              color="primary"
+              type="submit"
+              disabled={updating}
+            >
+              {updating ? <CircularProgress size={24} /> : 'Update Record'}
             </Button>
           </Box>
         </form>
-
-        <Box sx={{ mt: 3 }}>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handlePredict}
-            sx={{ mt: 2 }}
-          >
-            Predict
-          </Button>
-        </Box>
       </Paper>
     </Box>
   );

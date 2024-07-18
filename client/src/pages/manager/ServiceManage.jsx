@@ -130,7 +130,7 @@ const ManagerServices = () => {
   return (
     <Box sx={{ p: 3 }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-        <Typography variant="h6" component="h2" gutterBottom>
+        <Typography variant="h4" component="h2" gutterBottom>
           Manage Service Packages
         </Typography>
       </Box>

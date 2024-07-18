@@ -28,6 +28,7 @@ import AddingForm from './pages/admin/AddingForm';
 import AboutUsGuest from './pages/guest/AboutUsGuest';
 import ConsultingServicesGuest from './pages/guest/ConsultingServicesGuest';
 import ValuationTool from './pages/guest/ValuationTool';
+import ValuationToolCus from './pages/customer/ValuationToolCus';
 import BlogListPage from './pages/guest/BlogListPage';
 import BlogDetailPage from './pages/guest/BlogDetailPage';
 
@@ -50,9 +51,10 @@ import GenerateReceiptForm from './pages/consultant/ReceiptForm';
 import ReceiptDetail from './pages/consultant/ReceiptDetail';
 import RecordView from './pages/consultant/RecordView';
 import RecordViewDetail from './pages/consultant/RecordViewDetail';
+import RecordViewStatus from './pages/consultant/RecordViewStatus';
 import RecordSealing from './pages/consultant/RecordSeal';
 import ConsulatantSealStatus from './pages/consultant/SealStatus';
-
+import ReceiptPrint from './pages/consultant/ReceiptPrint';
 
 import TaskView from './pages/appraiser/TaskView';
 import ValuationRecordAppraiserDetail from './pages/appraiser/TaskViewDetail';
@@ -67,10 +69,23 @@ import ManagerCommitRequestDetail from './pages/manager/CommitRequestDetail';
 import ManagerSealingRequests from './pages/manager/SealRequest';
 import ManagerSealRequestDetail from './pages/manager/SealRequestDetail';
 import ManagerServices from './pages/manager/ServiceManage';
-import ManagerDashboard from './pages/manager/ManagerDashboard';
 import BlogCRUD from './pages/manager/BlogManage';
 import BlogListPageGuest from './pages/guest/BlogListPage';
 import BlogDetailPageGuest from './pages/guest/BlogDetailPage';
+import Protected from './ProtectedRoute';
+import EarningChart from './pages/manager/EarningChart';
+import HomeCus from './pages/customer/HomeCus';
+import ViewStaffEdit from './pages/admin/ViewStaffEdit';
+
+
+import HistoricalPricesGraph from './pages/_graph/HistoricalPricesGraph';
+import GraphLayout from './pages/_graph/GraphLayout';
+
+
+
+
+
+
 
 axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.withCredentials = true;
@@ -81,7 +96,9 @@ function App() {
       <ConsultantContextProvider>
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
-          <Route path="/" element={<AboutUsGuest />} />
+          
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<HomeCus />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify/:token" element={<Verify />} />
@@ -90,14 +107,15 @@ function App() {
           <Route path="/reset-password" element={<PasswordMailVerify />} />
           <Route path="/reset-password/:userId" element={<ResetPassword />} />
           {/* Nested routes under AdminDashboard */}
-          <Route path="/admin" element={<AdminDashboard />}>
+          <Route path="/admin" element={<Protected allowedRoles={['admin']}><AdminDashboard /></Protected>}>
             <Route path="users" element={<ViewUsers />} />
             <Route path="staff" element={<ViewStaffs />} />
+            <Route path="edit/:staffId" element={<ViewStaffEdit />} />
             <Route path="add-user" element={<AddingForm />} />
           </Route>
 
           {/* Nested routes under ConsultantDashboard */}
-          <Route path="/consultant" element={<ConsultantDashboardLayout />}>
+          <Route path="/consultant" element={<Protected allowedRoles={['consultant']}><ConsultantDashboardLayout /></Protected>}>
             <Route index element={<PendingRequests />} />
             <Route path="requestView/:bookingId" element={<RequestView/>}/>
             <Route path="receipt" element={<Receipt/>}/>
@@ -106,16 +124,18 @@ function App() {
             <Route path="appointments/:bookingId" element={<AppointmentViewDetail />} />
             <Route path="receipt-form/:bookingId" element={<GenerateReceiptForm />} />
             <Route path="receipts/:receiptId" element={<ReceiptDetail />} />
+            <Route path="receipt-print/:receiptId" element={<ReceiptPrint />} />
             <Route path="valuation-records" element={<RecordView />} />
             <Route path="valuation-records/:recordId" element={<RecordViewDetail />} />
             <Route path="commit-requests" element={<CommitmentRequests />} />
             <Route path="commit-requests/:commitId" element={<CommitmentRequestDetail />} />
             <Route path="record-sealing/:recordId" element={<RecordSealing />} />
             <Route path="seal-status" element={<ConsulatantSealStatus />} />
+            <Route path="record-view-status/:recordId" element={<RecordViewStatus />} />
           </Route>
 
           {/* Nested routes under AppraiserDashboard */}
-          <Route path="/appraiser" element={<AppraiserDashboard />}>
+          <Route path="/appraiser" element={<Protected allowedRoles={['appraiser']}><AppraiserDashboard /></Protected>}>
             <Route index element={<AppraiserDashboard />} />
             <Route path="task-view" element={<TaskView />} />
             <Route path="valuation-records/:recordId" element={<ValuationRecordAppraiserDetail />} />
@@ -124,8 +144,8 @@ function App() {
             <Route path="diamond-classify" element={<DiamondClassify />} />
           </Route>
 
-          <Route path="/manager" element={<ManagerLayout />}>
-          <Route path="manager-dashboard" element={<ManagerDashboard/>}/>
+          <Route path="/manager" element={<Protected allowedRoles={['manager']}><ManagerLayout /></Protected>}>
+          <Route path="dashboard" element={<EarningChart/>}/>
           <Route path="commit-requests" element={<ManagerCommitRequests />} />
           <Route path="commit-requests/:commitId" element={<ManagerCommitRequestDetail />} />
           <Route path="seal-requests" element={<ManagerSealingRequests />} />
@@ -142,6 +162,13 @@ function App() {
 
 
 
+          <Route path="/historical-prices/:shape" element={<HistoricalPricesGraph />} />
+          <Route path="/historical-prices" element={<GraphLayout />} />
+
+
+
+          
+          <Route path="/Valuation" element={<ValuationToolCus/>}/>
           <Route path="/about-us-customer" element={<AboutUsCustomer />} />
           <Route path="/consulting-services-customer" element={<ConsultingServicesCustomer />} />
           <Route path="/booking" element={<BookingForm />} />

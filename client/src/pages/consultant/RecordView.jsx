@@ -29,7 +29,12 @@ const RecordView = () => {
     const fetchRecords = async () => {
       try {
         const response = await axios.get('/api/valuation-records');
-        setRecords(response.data);
+        // Ensure the response is an array
+        if (Array.isArray(response.data)) {
+          setRecords(response.data);
+        } else {
+          throw new Error('Invalid data format');
+        }
       } catch (error) {
         console.error('Error fetching records:', error);
         toast.error('Failed to fetch records');
@@ -53,7 +58,9 @@ const RecordView = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const handleViewStatus = (recordId) => {
+    navigate(`/consultant/record-view-status/${recordId}`);
+  }
   const getStatusColor = (status) => {
     if (status === 'Completed') {
       return 'green';
@@ -104,8 +111,13 @@ const RecordView = () => {
                           backgroundColor: getStatusColor(record.status),
                           mr: 1
                         }}
-                      />
-                      {record.status}
+                      /> 
+
+                      <button onClick={() => handleViewStatus(record._id)}>
+
+                        {record.status}
+                      </button>
+                      
                     </Box>
                   </TableCell>
                   <TableCell>

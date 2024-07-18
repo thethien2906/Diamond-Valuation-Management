@@ -1,7 +1,9 @@
 const ValuationRecord = require('../models/ValuationRecord');
 const Receipt = require('../models/Receipt');
 const User = require('../models/User');
+const Booking = require('../models/Booking');
 const mongoose = require('mongoose');
+
 let currentRecordNumber = 1;
 
 // Generate a new record number
@@ -42,14 +44,27 @@ const createRecord = async (req, res) => {
       email: receipt.email,
       appointmentDate: receipt.appointmentDate,
       appointmentTime: receipt.appointmentTime,
+      receiptId: receipt._id,
       serviceId: receipt.serviceId,
       consultantId: receipt.consultantId,
       customerId: receipt.customerId,
       appraiserId: appraiser._id,
-      status: 'In Progress' // Set default status
+      status: 'In Progress',
     });
 
     const savedValuationRecord = await newValuationRecord.save();
+    const bookingId = receipt.bookingId;
+    if (!mongoose.Types.ObjectId.isValid(bookingId)) {
+      return res.status(400).json({ error: 'Invalid booking ID' });
+    }
+    
+    const booking = await Booking.findById(bookingId);
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+
+    booking.status = 'valuating';
+    await booking.save();
     res.status(201).json(savedValuationRecord);
   } catch (error) {
     console.error('Error creating valuation record:', error);
@@ -58,17 +73,15 @@ const createRecord = async (req, res) => {
 };
 const getRecordsByStatus = async (req, res) => {
   try {
-    const statuses = ['In Progress', 'Completed','Sealed'];
+    const statuses = ['In Progress', 'Completed', 'Sealed','Valuated'];
     const records = await ValuationRecord.find({ status: { $in: statuses } });
-    if (records.length === 0) {
-      return res.status(200).json({ message: 'No records found' }); // Return a 200 with the message
-  }
-    res.status(200).json(records);
+    res.status(200).json(records); // Always return an array
   } catch (error) {
     console.error('Error fetching records by status:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 const getRecordsInProgress = async (req, res) => {
   try {
     const statuses = 'In Progress';
@@ -96,6 +109,19 @@ const getRecordsCompleted = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+const getRecordsvaluated = async (req, res) => {
+  try {
+    const statuses = ['Valuated','Completed'];
+    const records = await ValuationRecord.find({ status: { $in: statuses } });
+    if (records.length === 0) {
+      return res.status(200).json({ message: 'No records found' }); // Return a 200 with the message
+    }
+    res.status(200).json(records);
+  } catch (error) {
+    console.error('Error fetching records with status "Completed":', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 const getRecordById = async (req, res) => {
   try {
     const { recordId } = req.params;
@@ -103,7 +129,11 @@ const getRecordById = async (req, res) => {
     if (!record) {
       return res.status(404).json({ error: 'Record not found' });
     }
-    res.status(200).json(record);
+    const recordData = record.toObject();
+    if (record.caratWeight !== undefined) {
+      recordData.caratWeight = record.caratWeight.toString();
+    }
+    res.status(200).json(recordData);
   } catch (error) {
     console.error('Error fetching record:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -113,16 +143,41 @@ const updateRecordById = async (req, res) => {
   try {
     const { recordId } = req.params;
     const updatedData = req.body;
-    const record = await ValuationRecord.findByIdAndUpdate(recordId, updatedData, { new: true });
+
+    // Fetch the current record to check the actions array and update the updatedAt field
+    const record = await ValuationRecord.findById(recordId);
     if (!record) {
       return res.status(404).json({ error: 'Record not found' });
     }
-    res.status(200).json(record);
+
+    // Determine the action to add
+    let action;
+    if (record.actions.length === 0) {
+      action = 'Diamond Valuated';
+    } else {
+      const updateCount = record.actions.filter(action => action.action.startsWith('Update by appraiser')).length + 1;
+      action = `Update by appraiser ${updateCount}`;
+    }
+
+    // Add the new action to the actions array
+    record.actions.push({ action });
+
+    // Update the record with the new data and actions array
+    const updatedRecord = await ValuationRecord.findByIdAndUpdate(
+      recordId,
+      { ...updatedData, actions: record.actions, updatedAt: Date.now() },
+      { new: true }
+    );
+
+    res.status(200).json(updatedRecord);
   } catch (error) {
     console.error('Error updating record:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
+
 const getRecordsByUserId = async (req, res) => {
   try {
     const { customerId } = req.params;
@@ -161,6 +216,63 @@ const requestCommitment = async (req, res) => {
   }
 };
 
+const updateRecordStatusToCompleted = async (req, res) => {
+  try {
+    const { recordId } = req.params;
+
+    // Fetch the current record to check the actions array
+    const record = await ValuationRecord.findById(recordId);
+    if (!record) {
+      return res.status(404).json({ error: 'Record not found' });
+    }
+
+    // Determine the action to add
+    let action;
+    if (record.actions.length === 0) {
+      action = 'Verify by consultant 1';
+    } else {
+      const verifyCount = record.actions.filter(action => action.action.startsWith('Verify by consultant')).length + 1;
+      action = `Verify by consultant ${verifyCount}`;
+    }
+
+    // Add the new action to the actions array
+    record.actions.push({ action, timestamp: Date.now() });
+
+    // Update the record with the new status, validatedAt, and actions array
+    const updatedRecord = await ValuationRecord.findByIdAndUpdate(
+      recordId,
+      { status: 'Completed', validatedAt: Date.now(), actions: record.actions },
+      { new: true }
+    );
+
+    const recordData = {
+      ...updatedRecord.toObject(),
+      caratWeight: updatedRecord.caratWeight.toString()
+    };
+
+    res.status(200).json(recordData);
+  } catch (error) {
+    console.error('Error updating record status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+const updateRecordStatusToPickedUp = async (req, res) => {
+  try {
+    const { recordId } = req.params;
+    const record = await ValuationRecord.findById(recordId);
+    if (!record) {
+      return res.status(404).json({ error: 'Record not found' });
+    }
+
+    record.status = 'Picked Up';
+    await record.save();
+    res.status(200).json({ message: 'Record status updated successfully' });
+  } catch (error) {
+    console.error('Error updating record status:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
+
 const getNamesByIds = async (req, res) => {
   try {
     const { recordId } = req.params;
@@ -174,15 +286,19 @@ const getNamesByIds = async (req, res) => {
     if (!record) {
       return res.status(404).json({ error: 'Record not found' });
     }
-
+    const recordData = record.toObject();
+    if (record.caratWeight !== undefined) {
+      recordData.caratWeight = record.caratWeight.toString();
+    }
+    
     const { serviceId, consultantId, customerId, appraiserId } = record;
     res.json({
-      ...record.toObject(),
+      ...recordData,
       serviceName: serviceId ? serviceId.name : 'Not assigned',
-      consultantName: consultantId ? consultantId.name : 'Not assigned',
+      consultantName: consultantId ? appraiserId.name : 'Not assigned',
       customerName: customerId ? customerId.name : 'Not assigned',
       appraiserName: appraiserId ? appraiserId.name : 'Not assigned',
-    });
+    })
   } catch (error) {
     console.error('Error fetching valuation record details:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -190,4 +306,16 @@ const getNamesByIds = async (req, res) => {
 };
 
 
-module.exports = { createRecord, getRecordsByStatus, getRecordById, updateRecordById, getRecordsInProgress, getRecordsCompleted, getRecordsByUserId, requestCommitment, getNamesByIds }; 
+module.exports = { 
+  createRecord, 
+  getRecordsByStatus, 
+  getRecordById, 
+  updateRecordById, 
+  getRecordsInProgress, 
+  getRecordsCompleted, 
+  getRecordsvaluated,
+  getRecordsByUserId, 
+  requestCommitment, 
+  updateRecordStatusToCompleted,
+  updateRecordStatusToPickedUp,
+  getNamesByIds }; 
