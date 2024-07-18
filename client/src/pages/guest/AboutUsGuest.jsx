@@ -35,6 +35,7 @@ const AboutUsGuest = () => {
         textAlign: 'center',
         borderRadius: 0,
         marginLeft: '-99px', // Shift the box to the left
+        marginTop:'90px'
       }}
     >
       <Box
