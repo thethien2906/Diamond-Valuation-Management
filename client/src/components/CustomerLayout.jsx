@@ -1,14 +1,27 @@
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  AppBar,
+  Container,
+  Drawer,
+  IconButton,
+  List,
+  ListItemButton,
+  ListItemText,
+  Toolbar,
+  Typography,
+  MenuItem,
+  Grid,
+  useMediaQuery,
+  useTheme,
+  Box,
+  Menu,
+} from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { UserContext } from "../context/userContext";
+import axios from 'axios';
+import { UserContext } from '../context/userContext';
 
 const CustomerLayout = ({ children }) => {
   const navigate = useNavigate();
@@ -16,8 +29,8 @@ const CustomerLayout = ({ children }) => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
-  const toggleDrawer = (open) => () => {
-    setDrawerOpen(open);
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
   };
 
   const handleMenu = (event) => {
@@ -30,111 +43,197 @@ const CustomerLayout = ({ children }) => {
 
   const handleLogout = async () => {
     try {
-      await axios.post("/auth/logout");
+      await axios.post('/auth/logout');
       setUser(null);
-      localStorage.removeItem("user");
-      navigate("/"); // Redirect to the homepage or any other desired page
+      localStorage.removeItem('user');
+      navigate('/'); // Redirect to the homepage or any other desired page
     } catch (error) {
-      console.error("Logout error:", error);
+      console.error('Logout error:', error);
       // Handle logout errors here if needed
     }
   };
-
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
+const handleRecordTracking = () => {
+navigate('/record-tracking');
+}  
+const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
-    <div className="home-container" style={{ backgroundColor: '#033F63', position: '', zIndex: 1 }}>
-      <div
-        style={{
-          position: 'fixed',
-          top: '0px',
-          width: '100%',
-          zIndex: 1100,
-          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-          backgroundColor: '#FAFAFA', // Light gray similar to Netlify
-          transition: 'top 0.3s',
-        }}
-      >
-        <Container maxWidth="lg" disableGutters style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center', margin: '11px',marginLeft:'100px' }}>
-          <div style={{ display: 'flex', gap: '50px' }}>
-          <MenuItem component={Link} to="/Home" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                HOME
-              </Typography>
-            </MenuItem>
-            <MenuItem component={Link} to="/about-us-customer" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                ABOUT US
-              </Typography>
-            </MenuItem>
-            <MenuItem component={Link} to="/consulting-services-customer" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                CONSULTING SERVICES
-              </Typography>
-            </MenuItem>
-            <MenuItem component={Link} to="/Valuation" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                VALUATION TOOL
-              </Typography>
-            </MenuItem>
-            <MenuItem component={Link} to="/blog" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                BLOGS
-              </Typography>
-            </MenuItem>
-            <MenuItem component={Link} to="/record-tracking" style={{ padding: '12px 12px', borderRadius: '10px' }}>
-              <Typography variant="h6" style={{ fontWeight: 'bold', fontSize: '14px', fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif' }}>
-                RECORD TRACKING
-              </Typography>
-            </MenuItem>
-          </div>
-          <Box sx={{ display: 'flex', gap: 0.5, alignItems: 'center', borderRadius: '30px' ,ml: 'auto'}}>
-            <IconButton
-              color="inherit"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-            >
-              <AccountCircleIcon sx={{ color: 'black' }} />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              sx={{ marginTop: '40px' }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <Typography variant="body2" color="text.primary" sx={{ ml: 1, textAlign: 'center' }}>
-                {user?.name}
-              </Typography>
-              <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
-            </Menu>
-          </Box>       
-        </Container>
-      </div>
-      <Container
-        maxWidth="lg"
+    <div className="customer-layout">
+      <AppBar
+        position="fixed"
         sx={{
-          marginTop: '68px', // Adjust this value based on the height of the AppBar
-          padding: '20px',
+          backgroundColor: '#021732',
+          boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
+          transition: 'top 0.3s',
+          zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
+        <Toolbar>
+          <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-start', padding: '10px' }}>
+            <img
+              style={{ width: '80px', height: 'auto' }}
+              src="LogoHeader.jpg"
+              alt="Logo"
+            />
+          </div>
+
+          {isMdUp && (
+            <div style={{ flex: '2', display: 'flex', justifyContent: 'center', gap: '50px' }}>
+              <MenuItem component={Link} to="/Home" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+                <Typography sx={{ fontSize: '14px' }}>
+                  HOME
+                </Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/about-us-customer" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+                <Typography sx={{ fontSize: '14px' }}>
+                  ABOUT US
+                </Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/consulting-services-customer" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+                <Typography sx={{ fontSize: '14px' }}>
+                  CONSULTING SERVICE
+                </Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/Valuation" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+                <Typography sx={{ fontSize: '14px' }}>
+                  VALUATION TOOL
+                </Typography>
+              </MenuItem>
+              <MenuItem component={Link} to="/blog" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+                <Typography sx={{ fontSize: '14px' }}>
+                  BLOGS
+                </Typography>
+              </MenuItem>
+            </div>
+          )}
+
+          <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px', marginRight: '50px' }}>
+            {isMdUp ? (
+              <>
+                <Typography variant="h6" sx={{ fontSize: '14px', color: 'white', cursor: 'pointer' }} onClick={handleMenu}>
+                  {user ? user.name : 'Sign In'}
+                </Typography>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                  }}
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                  sx={{ marginTop: '40px' }}
+                >
+                  {user && (
+                    <>
+                      <MenuItem onClick={handleRecordTracking}>Record Tracking</MenuItem>
+                      <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
+                    </>
+                  )}
+                </Menu>
+              </>
+            ) : (
+              <IconButton
+                edge="end"
+                aria-label="menu"
+                onClick={toggleDrawer}
+                sx={{ color: 'white' }}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
+          </div>
+        </Toolbar>
+      </AppBar>
+
+      {!isMdUp && (
+        <Drawer
+          anchor="right"
+          open={drawerOpen}
+          onClose={toggleDrawer}
+          sx={{ '& .MuiDrawer-paper': { width: '250px' } }}
+        >
+          <div onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+            <List>
+              <ListItemButton component={Link} to="/Home" onClick={toggleDrawer}>
+                <ListItemText primary="HOME" />
+              </ListItemButton>
+              <ListItemButton component={Link} to="/about-us-customer" onClick={toggleDrawer}>
+                <ListItemText primary="ABOUT US" />
+              </ListItemButton>
+              <ListItemButton component={Link} to="/consulting-services-customer" onClick={toggleDrawer}>
+                <ListItemText primary="CONSULTING SERVICE" />
+              </ListItemButton>
+              <ListItemButton component={Link} to="/valuation-tool" onClick={toggleDrawer}>
+                <ListItemText primary="VALUATION TOOL" />
+              </ListItemButton>
+              <ListItemButton component={Link} to="/blog" onClick={toggleDrawer}>
+                <ListItemText primary="BLOGS" />
+              </ListItemButton>
+            </List>
+          </div>
+        </Drawer>
+      )}
+
         {children}
-      </Container>
+
+
+      <footer style={{ backgroundColor: '#021732', color: 'white', padding: '20px 0' }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <div style={{ display: 'flex', justifyContent: 'center', paddingRight: '350px', paddingTop: '50px' }}>
+                <img
+                  style={{ width: '120px', height: 'auto' }}
+                  src="LogoHeader.jpg"
+                  alt="Logo"
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <div>
+                <Typography variant="h5" sx={{ marginBottom: '10px' }}>
+                  About Us
+                </Typography>
+                <List>
+                  <ListItemButton component={Link} to="/about-us-customer" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                    <ListItemText primary="Our Mission" />
+                  </ListItemButton>
+                  <ListItemButton component={Link} to="/about-us-customer" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                    <ListItemText primary="Why choose Us" />
+                  </ListItemButton>
+                  <ListItemButton component={Link} to="/consulting-services-customer" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                    <ListItemText primary="Service" />
+                  </ListItemButton>
+                </List>
+              </div>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant="h5" sx={{ marginBottom: '10px' }}>
+                Contact Us
+              </Typography>
+              <Typography variant="body2">
+                Hotline: +1 (234) 567-890
+              </Typography>
+              <Typography variant="body2">
+                Email: info@diamondappraisals.com
+              </Typography>
+              <Typography variant="h5" sx={{ marginTop: '10px' }}>
+                Showrooms
+              </Typography>
+            </Grid>
+          </Grid>
+          <Typography variant="body2" align="center" gutterBottom sx={{ marginTop: '20px' }}>
+            © 2024 Diamond Appraisals. All rights reserved.
+          </Typography>
+        </Container>
+      </footer>
     </div>
   );
 };
