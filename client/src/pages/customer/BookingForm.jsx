@@ -90,7 +90,7 @@ const BookingForm = () => {
         toast.success("Booking created successfully!");
 
         const stripe = await stripePromise;
-const checkoutSession = await axios.post('/api/create-checkout-session', {
+        const checkoutSession = await axios.post('/api/create-checkout-session', {
           bookingId: response.data.booking._id,
         });
 
@@ -114,17 +114,18 @@ const checkoutSession = await axios.post('/api/create-checkout-session', {
   const today = new Date().toISOString().split('T')[0];
 
   const handleNavigateBack = () => {
-    navigate("/home");
+    navigate(-1);
   };
 
   return (
     <Box sx={{ backgroundColor: '#121212', minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
-      <Toaster />
+      <Toaster />    
       <Container maxWidth="sm" sx={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Box sx={{ mt: 8, mb: 4, width: '100%', position: 'relative' }}>
-          <IconButton onClick={handleNavigateBack} sx={{ position: 'absolute', left: 50, top: 50 }}>
+      <IconButton onClick={handleNavigateBack} sx={{ position: 'absolute', top: 30, left: 30, color: '#FFFFFF' }}>
             <ArrowBackIcon />
           </IconButton>
+        <Box sx={{ mt: 8, mb: 4, width: '100%', position: 'relative' }}>
+
           <Typography variant="h4" component="h2" gutterBottom sx={{ textAlign: "center", color: '#FFFFFF' }}>
             Please fill out this form to book an appointment.
           </Typography>
@@ -160,7 +161,7 @@ const checkoutSession = await axios.post('/api/create-checkout-session', {
                   },
                 },
                 '&:-webkit-autofill': {
-WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
                   WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
                 },
               }}
@@ -202,6 +203,7 @@ WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark backgro
             <TextField
               label="Phone Number"
               name="phoneNumber"
+              type="tel"
               value={formData.phoneNumber}
               onChange={handleChange}
               fullWidth
@@ -230,7 +232,7 @@ WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark backgro
                   WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
                   WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
                 },
-}}
+              }}
             />
             <TextField
               label="Address"
@@ -265,76 +267,80 @@ WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark backgro
                 },
               }}
             />
-            <TextField
-              label="Date"
-              name="date"
-              type="date"
-              value={formData.date}
-              onChange={handleChange}
-InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }} // White label text color
-              inputProps={{
-                min: today,
-                style: { color: '#B0C4DE' } // White input text color
-              }}
-              fullWidth
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#B0C4DE', // Light blue border color
+             <Box sx={{ display: 'flex', gap: 2 }}>
+              <TextField
+                label="Date"
+                name="date"
+                type="date"
+                value={formData.date}
+                onChange={handleChange}
+                InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }} // White label text color
+                inputProps={{
+                  min: today,
+                  style: { color: '#B0C4DE' } // White input text color
+                }}
+                fullWidth
+                sx={{
+                  flex: 1,
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#B0C4DE', // Light blue border color
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                    },
+                    '&.Mui-disabled fieldset': {
+                      borderColor: '#00BFFF', // White border color when disabled
+                    },
+                    '& .MuiInputBase-input': {
+                      color: '#FFFFFF', // White text color
+                    },
                   },
-                  '&:hover fieldset': {
-                    borderColor: '#00BFFF', // Fluorescent blue border color on hover
+                  '&:-webkit-autofill': {
+                    WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
+                    WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
                   },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#00BFFF', // Fluorescent blue border color when focused
+                }}
+              />
+              <TextField
+                label="Appointment Time"
+                name="time"
+                type="time"
+                value={formData.time}
+                onChange={handleChange}
+                InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }}
+                inputProps={{ style: { color: '#FFFFFF' } }}
+                sx={{
+                  flex: 1,
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#B0C4DE',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#00BFFF',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#00BFFF',
+                    },
                   },
-                  '&.Mui-disabled fieldset': {
-                    borderColor: '#00BFFF', // White border color when disabled
-                  },
-                  '& .MuiInputBase-input': {
-                    color: '#FFFFFF', // White text color
-                  },
-                },
-                '&:-webkit-autofill': {
-                  WebkitBoxShadow: '0 0 0 30px #121212 inset !important', // Maintain dark background on autofill
-                  WebkitTextFillColor: '#FFFFFF !important', // White text on autofill
-                },
-              }}
-            />
-            <TextField
-              label="Appointment Time"
-              name="time"
-              type="time"
-              value={formData.time}
-              onChange={handleChange}
-              InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }}
-              inputProps={{ style: { color: '#FFFFFF' } }}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#B0C4DE',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#00BFFF',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#00BFFF',
-                  },
-                },
-              }}
-              fullWidth
-            />
+                }}
+                fullWidth
+              />
+            </Box>
             <Button type="submit" variant="contained" color="primary" fullWidth>
               Submit
             </Button>
+            {showConfirmation && (
+              <Box sx={{ mt: 4 }}>
+                <Typography variant="body1" color="primary" sx={{ textAlign: "center" }}>
+                  Thank you for booking!
+                </Typography>
+              </Box>
+            )}
           </Box>
-          {showConfirmation && (
-            <Box sx={{ mt: 4 }}>
-<Typography variant="body1" color="primary" sx={{ textAlign: "center" }}>
-                Thank you for booking!
-              </Typography>
-            </Box>
-          )}
         </Box>
       </Container>
     </Box>
