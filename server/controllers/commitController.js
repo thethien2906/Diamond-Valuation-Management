@@ -157,6 +157,7 @@ const updateCommitStatus = async (req, res) => {
       <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
         <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
       </div>
+
       <h2 style="color: #fff;">Commitment Request Denied</h2>
       <p style="color: #fff;">Dear ${commit.customerName},</p>
       <p style="color: #fff;">Your commitment request has been denied.</p>
@@ -168,6 +169,7 @@ const updateCommitStatus = async (req, res) => {
     `;
 
     sendEmail(commit.email, `Commitment Request ${status}`, emailHtml);
+
       // populate recordId from commit and add new action "Commitment Request Approved" to actions array
       const record = await ValuationRecord.findById(commit.recordId);
       const actions = record.actions;
