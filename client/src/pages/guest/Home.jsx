@@ -1,8 +1,9 @@
 import { keyframes } from '@emotion/react';
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, Typography } from '@mui/material';
 import { styled } from '@mui/system';
 import React, { useEffect, useState } from 'react';
 import GuestLayout from "../../components/GuestLayout";
+import { Link } from 'react-router-dom';
 
 const images = [
   'https://st.depositphotos.com/1864147/1520/i/450/depositphotos_15204605-stock-photo-diamonds.jpg',
@@ -30,8 +31,8 @@ const HeroSection = styled(Box)(({ theme, backgroundImage }) => ({
   backgroundImage: `url(${backgroundImage})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  width: '110.9%',
-  height: '80vh',
+  width: '100%', // Adjusted width to cover more area for large screens
+  height: '80vh', // Maintain the height for consistency
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'center',
@@ -42,7 +43,6 @@ const HeroSection = styled(Box)(({ theme, backgroundImage }) => ({
   position: 'relative',
   zIndex: 10,
   marginTop: '-19px',
-  marginLeft: '-90px',
   transition: 'background-image 0.5s ease-in-out', // Adding transition for background image change
   animation: `${fadeIn} 1s ease-in-out`, // Apply fadeIn animation
   '&::before': {
@@ -63,17 +63,6 @@ const ContentSection = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(8), // Adjust the top margin to create space for the navigation bar
   marginBottom: theme.spacing(8),
   color: 'black',
-  animation: `${fadeIn} 1s ease-in-out`, // Apply fadeIn animation
-}));
-
-const FooterSection = styled(Box)(({ theme }) => ({
-  backgroundColor: '#033F63',
-  color: 'white',
-  padding: theme.spacing(4, 0),
-  position: 'relative',
-  zIndex: 10,
-  marginLeft: '-89px',
-  marginRight: '-100px',
   animation: `${fadeIn} 1s ease-in-out`, // Apply fadeIn animation
 }));
 
@@ -113,8 +102,8 @@ const Home = () => {
   }, []);
 
   return (
-    <PageContainer>
-      <GuestLayout>
+    <PageContainer sx={{ marginTop: '100px'}}>
+      <GuestLayout >
         <HeroSection backgroundImage={images[currentImageIndex]}>
           <Typography variant="h3" component="h1" gutterBottom sx={{ color: 'white', fontWeight: 'bold' }}>
             UNLOCK THE TRUE VALUE OF YOUR DIAMONDS
@@ -125,20 +114,26 @@ const Home = () => {
         </HeroSection>
 
         <HowItWorksSection>
-          <Typography variant="h1" component="h2" gutterBottom style={{fontWeight: 'bold', textAlign: 'center', marginBottom: '100px', color: 'black' }}>
-            HOW WE WORKS
+          <Typography variant="h2" component="h2" gutterBottom style={{fontWeight: 'bold', textAlign: 'center', marginBottom: '100px', color: 'black' }}>
+            INTRODUCTION TO DIAMOND SCOPE
           </Typography>
           <Grid container spacing={4}>
-            <Grid container spacing={2} alignItems="center" style={{ marginBottom: '200px' }}>
+            <Grid container spacing={2} alignItems="center" style={{ marginBottom: '100px' }}>
               <Grid item xs={12} md={6} style={{ textAlign: 'left' }}>
-                <HowItWorksItem style={{ height: '235px', width: '500px' }}>
+                <HowItWorksItem style={{ height: '230px', width: '500px' }}>
                   <div style={{ position: 'absolute', top: 0, right: 0, width: '2%', height: '100%', background: '#033F63', zIndex: 1 }} />
                   <Typography variant="h3" gutterBottom style={{ textAlign: 'left', color: '#033F63' }}>
-                    SUBMITTING
+                    Our Service
                   </Typography>
                   <Typography variant="body1" style={{ textAlign: 'left' }}>
-                    Provide details about your diamond through our secure submission form.
+                    At Diamond Shine, we understand that each diamond is unique, with its own story and characteristics. 
+                    Our certified gemologists and valuation experts meticulously assess diamonds using industry-leading techniques and state-of-the-art equipment to provide accurate and detailed valuation reports.
                   </Typography>
+                  <Box mt={2}>
+                    <Button component={Link} to="/consulting-services-guest" variant="contained" color="primary">
+                      Learn More
+                    </Button>
+                  </Box>
                 </HowItWorksItem>
               </Grid>
               <Grid item xs={12} md={6} style={{ position: 'relative' }}>
@@ -150,7 +145,7 @@ const Home = () => {
               </Grid>
             </Grid>
 
-            <Grid container spacing={2} alignItems="center" style={{ marginBottom: '200px' }}>
+            <Grid container spacing={2} alignItems="center" style={{ marginBottom: '100px' }}>
               <Grid item xs={12} md={6} order={{ xs: 2, md: 1 }} style={{ position: 'relative' }}>
                 <img
                   src="https://austindiamondbuyer.net/wp-content/uploads/2022/09/Diamond-Evaluation-Everything-You-Need-To-Know-1080x675.jpg"
@@ -159,14 +154,19 @@ const Home = () => {
                 />
               </Grid>
               <Grid item xs={12} md={6} order={{ xs: 1, md: 2, opacity: 1 }}>
-                <HowItWorksItem style={{ height: '235px', width: '500px', marginLeft: '40px' }}>
+                <HowItWorksItem style={{ height: '260px', width: '500px', marginLeft: '40px' }}>
                   <div style={{ position: 'absolute', top: 0, left: 0, width: '2%', height: '100%', background: '#F0E68C', zIndex: 1 }} />
                   <Typography variant="h3" gutterBottom style={{ textAlign: 'left' }}>
-                    EVALUATION
+                    Valuation Tool
                   </Typography>
                   <Typography variant="body1" style={{ textAlign: 'left' }}>
-                    Our expert gemologists carefully assess the value of your diamond based on its unique characteristics.
+                    Enter specific details about your diamond, including carat weight, cut, clarity, and color. 
+                    Our intuitive interface guides you through each step, ensuring you provide all necessary information.
+                    Once you've inputted the details, our tool uses advanced algorithms and market data to calculate the current market value of your diamond. Within moments, you receive a price of your diamond right at your fingertips.
                   </Typography>
+                  <Button component={Link} to="/valuation-tool" variant="contained" color="primary">
+                    Learn More
+                  </Button>
                 </HowItWorksItem>
               </Grid>
             </Grid>
@@ -175,11 +175,17 @@ const Home = () => {
                 <HowItWorksItem style={{ height: '235px', width: '500px' }}>
                   <div style={{ position: 'absolute', top: 0, right: 0, width: '2%', height: '100%', background: '#32CD32', zIndex: 1 }} />
                   <Typography variant="h3" gutterBottom style={{ textAlign: 'left', color: '#32CD32' }}>
-                    REPORT
+                    Blogs
                   </Typography>
                   <Typography variant="body1" style={{ textAlign: 'left' }}>
-                    Get a detailed valuation report outlining the appraisal results and the estimated market value of your diamond.
+                    Diamond Insights Blog—a treasure trove of knowledge curated to empower and inform diamond enthusiasts like you. 
+                    Whether you're a seasoned collector, first-time buyer, or simply curious about these exquisite gems, our blog offers valuable insights and expert advice to enrich your understanding of diamonds.
                   </Typography>
+                  <Box mt={2}>
+                    <Button component={Link} to="/blogs" variant="contained" color="primary">
+                      Learn More
+                    </Button>
+                  </Box>
                 </HowItWorksItem>
               </Grid>
               <Grid item xs={12} md={6} style={{ position: 'relative' }}>
@@ -192,8 +198,6 @@ const Home = () => {
             </Grid>
           </Grid>
         </HowItWorksSection>
-
-
       </GuestLayout>
     </PageContainer>
   );

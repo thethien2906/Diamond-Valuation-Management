@@ -101,7 +101,7 @@ const ValuationRecordAppraiserDetail = () => {
         status: 'Valuated',
       });
       toast.success('Valuation record updated successfully');
-      navigate('/appraiser');
+      navigate('/appraiser/task-done-view');
     } catch (error) {
       console.error('Error updating valuation record:', error);
       toast.error('Failed to update valuation record');
@@ -155,7 +155,6 @@ const ValuationRecordAppraiserDetail = () => {
           <TextField
             label="Carat Weight"
             name="caratWeight"
-            type="number"
             value={record.caratWeight || ''}
             onChange={handleChange}
             fullWidth
@@ -163,8 +162,8 @@ const ValuationRecordAppraiserDetail = () => {
           />
           {/* add measurements textfield with type string */}
           <TextField
-            label="Measurement"
-            name="measurement"
+            label="Measurements"
+            name="measurements"
             value={record.measurements || ''}
             onChange={handleChange}
             fullWidth

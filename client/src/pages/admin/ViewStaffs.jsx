@@ -109,12 +109,14 @@ const ViewStaff = () => {
                   >
                     <EditIcon />
                   </IconButton>
-                  <IconButton
-                    color="secondary"
-                    onClick={() => handleOpen(staffMember._id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
+                  {staffMember.role !== 'admin' && (
+                    <IconButton
+                      color="secondary"
+                      onClick={() => handleOpen(staffMember._id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

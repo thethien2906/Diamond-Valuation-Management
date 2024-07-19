@@ -58,7 +58,9 @@ const RecordView = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const handleViewStatus = (recordId) => {
+    navigate(`/consultant/record-view-status/${recordId}`);
+  }
   const getStatusColor = (status) => {
     if (status === 'Completed') {
       return 'green';
@@ -109,8 +111,13 @@ const RecordView = () => {
                           backgroundColor: getStatusColor(record.status),
                           mr: 1
                         }}
-                      />
-                      {record.status}
+                      /> 
+
+                      <button onClick={() => handleViewStatus(record._id)}>
+
+                        {record.status}
+                      </button>
+                      
                     </Box>
                   </TableCell>
                   <TableCell>
