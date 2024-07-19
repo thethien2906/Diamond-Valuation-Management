@@ -19,6 +19,13 @@ const createSealRequest = async (req, res) => {
     });
 
     await newSeal.save();
+    //add new actions to action array 
+    record.actions.push({
+      action: 'Seal Requested by Consultant',
+      timestamp: Date.now(),
+    });
+    await record.save();
+
     res.status(201).json({ message: 'Seal request created successfully', seal: newSeal });
   } catch (error) {
     console.error('Error creating seal request:', error);
@@ -75,6 +82,14 @@ const updateSealRequestStatus = async (req, res) => {
 
         // 3. Send Response
         res.json({ message: 'Seal request updated successfully' });
+        // 4. Add Action to Valuation Record
+        const record = await ValuationRecord.findById(updatedSeal.recordId);
+        record.actions.push({
+            action: `Seal Request ${status === 'Approved' ? 'Approved' : 'Rejected'}`,
+            timestamp: Date.now(),
+        });
+
+        await record.save();
     } catch (error) {
         console.error('Error updating seal request:', error);
         res.status(500).json({ error: 'Internal server error' });

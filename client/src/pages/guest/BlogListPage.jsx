@@ -43,7 +43,7 @@ const BlogListPage = () => {
 
   return (
     <GuestLayout sx={{ backgroundColor: '#f0f0f0' }}>
-      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minheight: '100vh', backgroundColor: 'white' }} />
+      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minheight: '100vh', backgroundColor: 'white',marginTop:'90px' }} />
 
 
       {/* Large background image */}
@@ -52,7 +52,7 @@ const BlogListPage = () => {
           position: 'relative',
           overflow: 'hidden',
           height: '400px',
-          marginTop: '-103px',
+          marginTop: '90px',
           marginLeft: '-99px',
           marginRight: '-98px',
           zIndex: 0,

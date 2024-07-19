@@ -51,9 +51,10 @@ import GenerateReceiptForm from './pages/consultant/ReceiptForm';
 import ReceiptDetail from './pages/consultant/ReceiptDetail';
 import RecordView from './pages/consultant/RecordView';
 import RecordViewDetail from './pages/consultant/RecordViewDetail';
+import RecordViewStatus from './pages/consultant/RecordViewStatus';
 import RecordSealing from './pages/consultant/RecordSeal';
 import ConsulatantSealStatus from './pages/consultant/SealStatus';
-
+import ReceiptPrint from './pages/consultant/ReceiptPrint';
 
 import TaskView from './pages/appraiser/TaskView';
 import ValuationRecordAppraiserDetail from './pages/appraiser/TaskViewDetail';
@@ -123,12 +124,14 @@ function App() {
             <Route path="appointments/:bookingId" element={<AppointmentViewDetail />} />
             <Route path="receipt-form/:bookingId" element={<GenerateReceiptForm />} />
             <Route path="receipts/:receiptId" element={<ReceiptDetail />} />
+            <Route path="receipt-print/:receiptId" element={<ReceiptPrint />} />
             <Route path="valuation-records" element={<RecordView />} />
             <Route path="valuation-records/:recordId" element={<RecordViewDetail />} />
             <Route path="commit-requests" element={<CommitmentRequests />} />
             <Route path="commit-requests/:commitId" element={<CommitmentRequestDetail />} />
             <Route path="record-sealing/:recordId" element={<RecordSealing />} />
             <Route path="seal-status" element={<ConsulatantSealStatus />} />
+            <Route path="record-view-status/:recordId" element={<RecordViewStatus />} />
           </Route>
 
           {/* Nested routes under AppraiserDashboard */}
