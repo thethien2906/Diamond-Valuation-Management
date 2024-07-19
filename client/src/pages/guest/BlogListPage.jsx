@@ -35,7 +35,7 @@ const BlogListPage = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minheight: '100vh' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
         <CircularProgress />
       </Box>
     );
@@ -43,8 +43,7 @@ const BlogListPage = () => {
 
   return (
     <GuestLayout sx={{ backgroundColor: '#f0f0f0' }}>
-      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minheight: '100vh', backgroundColor: 'white',marginTop:'90px' }} />
-
+      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '198vh', backgroundColor: 'white' }} />
 
       {/* Large background image */}
       <Box
@@ -52,7 +51,7 @@ const BlogListPage = () => {
           position: 'relative',
           overflow: 'hidden',
           height: '400px',
-          marginTop: '90px',
+          marginTop: '-103px',
           marginLeft: '-99px',
           marginRight: '-98px',
           zIndex: 0,
@@ -84,7 +83,7 @@ const BlogListPage = () => {
             Blogs
           </Typography>
         </Box>
-      </Box>;
+      </Box>
 
       {/* Small image on the right side */}
       <Box
@@ -104,7 +103,7 @@ const BlogListPage = () => {
         }}
       >
         <img
-          src="https://cdn.shopify.com/s/files/1/0242/8908/3447/files/Screen_Shot_2021-06-01_at_10.18.35_AM_480x480.png?v=1622567961"
+          src="https://i.ebayimg.com/images/g/lIwAAOSwomZkx5qF/s-l1600.jpg"
           alt="Small Image"
           style={{
             width: '100%',
@@ -119,7 +118,6 @@ const BlogListPage = () => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 3,
           alignItems: 'left',
           backgroundColor: 'white',
           p: 3,
@@ -133,57 +131,77 @@ const BlogListPage = () => {
       >
         {blogs.map((blog) => (
           <React.Fragment key={blog._id}>
-      <Box
-      sx={{
-        width: '100%',
-        display: 'flex',
-        flexDirection: { xs: 'column', sm: 'row' },
-        mb: 3,
-        p: 2,
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        borderRadius: '8px',
-        backgroundColor: '#fff'
-      }}
-    >
-      <Box
-        sx={{
-          flexShrink: 0,
-          width: { xs: '100%', sm: '120px' },
-          height: '120px',
-          mb: { xs: 2, sm: 0 },
-          borderRadius: '8px',
-          overflow: 'hidden'
-        }}
-      >
-        <img
-          src={blog.imageUrl}
-          alt={blog.title}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            borderRadius: 'inherit'
-          }}
-        />
-      </Box>
-      <Box sx={{ flexGrow: 1, ml: { sm: 2 } }}>
-        <CardContent sx={{ p: 0 }}>
-          <Typography variant="h6" component="h2" gutterBottom>
-            {blog.title}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" gutterBottom>
-            {new Date(blog.createdAt).toLocaleDateString()}
-          </Typography>
-          <Typography variant="body2" sx={{ color: 'text.primary' }} dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 100) + '...' }}>
-          </Typography>
-        </CardContent>
-        <CardActions sx={{ p: 0, mt: 2 }}>
-          <Button size="small" component={Link} to={`/blogs/${blog._id}`}>
-            Read More
-          </Button>
-        </CardActions>
-      </Box>
-    </Box>
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                mb: 0, // Reduced margin-bottom
+                p: 2,
+                
+                borderRadius: '8px',
+                backgroundColor: '#fff'
+              }}
+            >
+              <Box
+                sx={{
+                  flexShrink: 0,
+                  width: { xs: '100%', sm: '120px' },
+                  height: '120px',
+                  mb: { xs: 2, sm: 0 },
+                  borderRadius: '8px',
+                  overflow: 'hidden'
+                }}
+              >
+                <img
+                  src={blog.imageUrl}
+                  alt={blog.title}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    borderRadius: 'inherit'
+                  }}
+                />
+              </Box>
+              <Box sx={{ flexGrow: 1, ml: { sm: 2 } }}>
+                <CardContent sx={{ p: 0 }}>
+                <Typography
+                    variant="h5"
+                    component="h2"
+                    gutterBottom
+                    sx={{ fontWeight: 'bold', color: '#033F63', fontFamily:"Times New Roman" }}
+                  >
+                    {blog.title}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" gutterBottom sx={{ lineHeight: 0 }}>
+                    {new Date(blog.createdAt).toLocaleDateString()}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: 'text.primary', lineHeight: 0.5 }} dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 100) + '...' }}>
+                  </Typography>
+                </CardContent>
+                <CardActions sx={{ p: 0, mt: 2 }}>
+                  <Button
+                    size="small"
+                    component={Link}
+                    to={`/blogs/${blog._id}`}
+                    sx={{
+                      backgroundColor: '#033F63',
+                      color: '#ffffff',
+                      padding: '6px 12px',
+                      textTransform: 'none',
+                      fontWeight: 'bold',
+                      borderRadius: '4px',
+                      '&:hover': {
+                        backgroundColor: '#025b8a',
+                      },
+                    }}
+                  >
+                    Read More
+                  </Button>
+                </CardActions>
+              </Box>
+            </Box>
             <Divider sx={{ width: '100%' }} />
           </React.Fragment>
         ))}

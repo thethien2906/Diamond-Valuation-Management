@@ -43,17 +43,17 @@ const BlogListPageCustomer = () => {
 
   return (
     <CustomerLayout sx={{ backgroundColor: '#f0f0f0' }}>
-      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '340%', backgroundColor: 'white' }} />
+      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '198vh', backgroundColor: 'white' }} />
+
       {/* Large background image */}
       <Box
         sx={{
           position: 'relative',
           overflow: 'hidden',
           height: '400px',
-          width: '1349px',
           marginTop: '-103px',
           marginLeft: '-99px',
-          marginRight: '-100px',
+          marginRight: '-98px',
           zIndex: 0,
         }}
       >
@@ -67,7 +67,7 @@ const BlogListPageCustomer = () => {
             borderRadius: '0px',
             position: 'relative',
             zIndex: 0,
-            filter: 'brightness(50%)', // Blur effect
+            filter: 'brightness(50%)', 
           }}
         />
         <Box
@@ -93,8 +93,9 @@ const BlogListPageCustomer = () => {
           alignItems: 'center',
           position: 'relative',
           zIndex: 2,
-          marginTop: '50px',
-          marginLeft: '800px', // Adjust margin as needed
+          marginTop: '60px',
+          marginLeft: '800px',
+          marginRight: '20px',
           width: '350px',
           height: '450px',
           borderRadius: '0px',
@@ -102,7 +103,7 @@ const BlogListPageCustomer = () => {
         }}
       >
         <img
-          src="https://cdn.shopify.com/s/files/1/0242/8908/3447/files/Screen_Shot_2021-06-01_at_10.18.35_AM_480x480.png?v=1622567961"
+          src="https://i.ebayimg.com/images/g/lIwAAOSwomZkx5qF/s-l1600.jpg"
           alt="Small Image"
           style={{
             width: '100%',
@@ -117,7 +118,6 @@ const BlogListPageCustomer = () => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: 3,
           alignItems: 'left',
           backgroundColor: 'white',
           p: 3,
@@ -136,9 +136,9 @@ const BlogListPageCustomer = () => {
                 width: '100%',
                 display: 'flex',
                 flexDirection: { xs: 'column', sm: 'row' },
-                mb: 3,
+                mb: 0, // Reduced margin-bottom
                 p: 2,
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+                
                 borderRadius: '8px',
                 backgroundColor: '#fff'
               }}
@@ -166,17 +166,37 @@ const BlogListPageCustomer = () => {
               </Box>
               <Box sx={{ flexGrow: 1, ml: { sm: 2 } }}>
                 <CardContent sx={{ p: 0 }}>
-                  <Typography variant="h6" component="h2" gutterBottom>
+                <Typography
+                    variant="h5"
+                    component="h2"
+                    gutterBottom
+                    sx={{ fontWeight: 'bold', color: '#033F63', fontFamily:"Times New Roman" }}
+                  >
                     {blog.title}
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" gutterBottom>
+                  <Typography variant="body2" color="textSecondary" gutterBottom sx={{ lineHeight: 0 }}>
                     {new Date(blog.createdAt).toLocaleDateString()}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.primary' }} dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 100) + '...' }}>
+                  <Typography variant="body2" sx={{ color: 'text.primary', lineHeight: 0.5 }} dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 100) + '...' }}>
                   </Typography>
                 </CardContent>
                 <CardActions sx={{ p: 0, mt: 2 }}>
-                  <Button size="small" component={Link} to={`/blogs/${blog._id}`}>
+                  <Button
+                    size="small"
+                    component={Link}
+                    to={`/blogs/${blog._id}`}
+                    sx={{
+                      backgroundColor: '#033F63',
+                      color: '#ffffff',
+                      padding: '6px 12px',
+                      textTransform: 'none',
+                      fontWeight: 'bold',
+                      borderRadius: '4px',
+                      '&:hover': {
+                        backgroundColor: '#025b8a',
+                      },
+                    }}
+                  >
                     Read More
                   </Button>
                 </CardActions>

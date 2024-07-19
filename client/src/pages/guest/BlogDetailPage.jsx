@@ -1,50 +1,52 @@
 import {
   Box,
-  Button,
-  CardActions,
-  CardContent,
   CircularProgress,
-  Divider,
-  Typography
+  Typography,
 } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-hot-toast';
-import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import GuestLayout from "../../components/GuestLayout"; // Adjust the path as needed
 
-const BlogListPage = () => {
-  const [blogs, setBlogs] = useState([]);
+const BlogDetailPage = () => {
+  const { blogId } = useParams();
+  const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchBlogs = async () => {
+    const fetchBlog = async () => {
       try {
-        const response = await axios.get('/api/blogs');
-        setBlogs(response.data);
+        const response = await axios.get(`/api/blogs/${blogId}`);
+        setBlog(response.data);
       } catch (error) {
-        console.error('Error fetching blogs:', error);
-        toast.error('Failed to fetch blogs');
+        console.error('Error fetching blog:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchBlogs();
-  }, []);
+    fetchBlog();
+  }, [blogId]);
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (!blog) {
+    return (
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        <Typography variant="h6" component="h2">No blog found</Typography>
       </Box>
     );
   }
 
   return (
     <GuestLayout sx={{ backgroundColor: '#f0f0f0' }}>
-      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '250vh', backgroundColor: 'white' }} />
-
+      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '89%', backgroundColor: 'white' }} />
       {/* Large background image */}
       <Box
         sx={{
@@ -93,7 +95,7 @@ const BlogListPage = () => {
           alignItems: 'center',
           position: 'relative',
           zIndex: 2,
-          marginTop: '60px',
+          marginTop: '90px',
           marginLeft: '800px',
           marginRight: '20px',
           width: '350px',
@@ -103,7 +105,7 @@ const BlogListPage = () => {
         }}
       >
         <img
-          src="https://cdn.shopify.com/s/files/1/0242/8908/3447/files/Screen_Shot_2021-06-01_at_10.18.35_AM_480x480.png?v=1622567961"
+          src="https://i.ebayimg.com/images/g/lIwAAOSwomZkx5qF/s-l1600.jpg"
           alt="Small Image"
           style={{
             width: '100%',
@@ -113,96 +115,18 @@ const BlogListPage = () => {
         />
       </Box>
 
-      {/* Blog posts */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'left',
-          backgroundColor: 'white',
-          p: 3,
-          maxWidth: '740px',
-          mx: 'auto',
-          zIndex: 2,
-          position: 'relative',
-          marginTop: '-450px',
-          marginLeft: '0px',
-        }}
-      >
-        {blogs.map((blog) => (
-          <React.Fragment key={blog._id}>
-            <Box
-              sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: { xs: 'column', sm: 'row' },
-                mb: 0, // Reduced margin-bottom
-                p: 2,
-                
-                borderRadius: '8px',
-                backgroundColor: '#fff'
-              }}
-            >
-              <Box
-                sx={{
-                  flexShrink: 0,
-                  width: { xs: '100%', sm: '120px' },
-                  height: '120px',
-                  mb: { xs: 2, sm: 0 },
-                  borderRadius: '8px',
-                  overflow: 'hidden'
-                }}
-              >
-                <img
-                  src={blog.imageUrl}
-                  alt={blog.title}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    borderRadius: 'inherit'
-                  }}
-                />
-              </Box>
-              <Box sx={{ flexGrow: 1, ml: { sm: 2 } }}>
-                <CardContent sx={{ p: 0 }}>
-                  <Typography variant="h6" component="h2" gutterBottom>
-                    {blog.title}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary" gutterBottom>
-                    {new Date(blog.createdAt).toLocaleDateString()}
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.primary' }} dangerouslySetInnerHTML={{ __html: blog.content.substring(0, 100) + '...' }}>
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{ p: 0, mt: 2 }}>
-                  <Button
-                    size="small"
-                    component={Link}
-                    to={`/blogs/${blog._id}`}
-                    sx={{
-                      backgroundColor: '#033F63',
-                      color: '#ffffff',
-                      padding: '6px 12px',
-                      textTransform: 'none',
-                      fontWeight: 'bold',
-                      borderRadius: '4px',
-                      '&:hover': {
-                        backgroundColor: '#025b8a',
-                      },
-                    }}
-                  >
-                    Read More
-                  </Button>
-                </CardActions>
-              </Box>
-            </Box>
-            <Divider sx={{ width: '100%' }} />
-          </React.Fragment>
-        ))}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, alignItems: 'left', backgroundColor: 'white', p: 3, maxWidth: '740px', mx: 'auto', zIndex: 2, position: 'relative', marginTop: '-500px', marginLeft: '0px' }}>
+        <Typography variant="h4" component="h2" gutterBottom sx={{ fontFamily: 'Times New Roman, Times, serif', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0,0,0,0.6)' }}>
+          {blog.title.toUpperCase()}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" gutterBottom>
+          {new Date(blog.createdAt).toLocaleDateString()}
+        </Typography>
+        <Typography variant="body1" sx={{ fontFamily: 'Times New Roman' }} dangerouslySetInnerHTML={{ __html: blog.content }}>
+        </Typography>
       </Box>
     </GuestLayout>
   );
 };
 
-export default BlogListPage;
+export default BlogDetailPage;
