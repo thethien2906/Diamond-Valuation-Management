@@ -24,7 +24,6 @@ const TaskDoneViewDetail = () => {
     const fetchRecordData = async () => {
       try {
         const response = await axios.get(`/api/valuation-records/details/${recordId}`);
-        
         setRecord(response.data);
       } catch (error) {
         console.error('Error fetching valuation record data:', error);
@@ -51,10 +50,7 @@ const TaskDoneViewDetail = () => {
     e.preventDefault();
     setUpdating(true);
     try {
-      await axios.put(`/api/valuation-records/${recordId}`, {
-        ...record
-        
-      });
+      await axios.put(`/api/valuation-records/${recordId}`, { ...record });
       toast.success('Valuation record updated successfully');
       navigate('/appraiser/task-done-view');
     } catch (error) {
@@ -87,150 +83,134 @@ const TaskDoneViewDetail = () => {
         <Paper sx={{ p: 3, mt: 2, mb: 3 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
             <img src="/Diamond.jpg" alt="Logo" style={{ height: 150, marginRight: '16px' }} />
-            <Typography variant="h4" component="h2" sx={{ flexGrow: 1, textAlign: 'left', marginLeft:'100px' }}>
+            <Typography variant="h4" component="h2" sx={{ flexGrow: 1, textAlign: 'left' }}>
               Diamond Scope
               <Typography variant="body1">Record Number: {record.recordNumber}</Typography>
               <Typography variant="body1">Appointment Date: {new Date(record.appointmentDate).toLocaleDateString()}</Typography>
             </Typography>
           </Box>
           <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-  <Typography gutterBottom><b>Customer Information:</b></Typography>
-  <Typography variant="body1">• Customer Name: {record.customerName}</Typography>
-  <Typography variant="body1">• Phone Number: {record.phoneNumber}</Typography>
-  <Typography variant="body1">• Email: {record.email}</Typography>
-  <Typography gutterBottom><b>Staff Details:</b></Typography>
-  <Typography variant="body1">• Consultant Name: {record.consultantName}</Typography>
-  <Typography variant="body1">• Appraiser Name: {record.appraiserName || 'Not assigned yet'}</Typography>
-</Grid>
-<Grid item xs={12} sm={6}>
-  <Typography gutterBottom><b>Appointment Details:</b></Typography>
-  <Typography variant="body1">• Appointment Time: {record.appointmentTime}</Typography>
-  <Typography gutterBottom><b>Service Details:</b></Typography>
-  <Typography variant="body1">• Services: {record.serviceName}</Typography>
-</Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography gutterBottom><b>Customer Information:</b></Typography>
+              <Typography variant="body1">• Customer Name: {record.customerName}</Typography>
+              <Typography variant="body1">• Phone Number: {record.phoneNumber}</Typography>
+              <Typography variant="body1">• Email: {record.email}</Typography>
+              <Typography gutterBottom><b>Staff Details:</b></Typography>
+              <Typography variant="body1">• Consultant Name: {record.consultantName}</Typography>
+              <Typography variant="body1">• Appraiser Name: {record.appraiserName || 'Not assigned yet'}</Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography gutterBottom><b>Appointment Details:</b></Typography>
+              <Typography variant="body1">• Appointment Time: {record.appointmentTime}</Typography>
+              <Typography gutterBottom><b>Service Details:</b></Typography>
+              <Typography variant="body1">• Services: {record.serviceName}</Typography>
+            </Grid>
           </Grid>
           <form onSubmit={handleSubmit} style={{ marginTop: '20px' }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Shape and Cut:</Typography>
-                  <TextField
-                    name="shapeAndCut"
-                    value={record.shapeAndCut || ''}
-                    onChange={handleChange}
-                    variant="standard"
-                    fullWidth // Ensures the TextField takes full width
-                  />
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Carat Weight:</Typography>
-                  <TextField
-                    name="caratWeight"
-     
-                    value={record.caratWeight || ''}
-                    onChange={handleChange}
-                    variant="standard"
-                    fullWidth // Ensures the TextField takes full width
-                  />
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Clarity:</Typography>
-                  <TextField
-                    name="clarity"
-                    value={record.clarity || ''}
-                    onChange={handleChange}
-                    variant="standard"
-                    fullWidth // Ensures the TextField takes full width
-                  />
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Cut Grade:</Typography>
-                  <TextField
-                    name="cutGrade"
-                    value={record.cutGrade || ''}
-                    onChange={handleChange}
-                    variant="standard"
-                    fullWidth // Ensures the TextField takes full width
-                  />
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Measurements:</Typography>
-                  <TextField
-                    name="measurements"
-                    value={record.measurements || ''}
-                    onChange={handleChange}
-                    variant="standard"
-                    fullWidth // Ensures the TextField takes full width
-                  />
-                </Box>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Polish:</Typography>
-                  <TextField
-                    name="polish"
-                    value={record.polish || ''}
-                    onChange={handleChange}
-                    variant="standard"
-                    fullWidth // Ensures the TextField takes full width
-                  />
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Symmetry:</Typography>
-                  <TextField
-                    name="symmetry"
-                    value={record.symmetry || ''}
-                    onChange={handleChange}
-                    variant="standard"
-                    fullWidth // Ensures the TextField takes full width
-                  />
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Fluorescence:</Typography>
-                  <TextField
-                    name="fluorescence"
-                    value={record.fluorescence || ''}
-                    onChange={handleChange}
-                    variant="standard"
-                    fullWidth // Ensures the TextField takes full width
-                  />
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Estimated Value:</Typography>
-                  <TextField
-                    name="estimatedValue"
-                    type="number"
-                    value={record.estimatedValue || ''}
-                    onChange={handleChange}
-                    variant="standard"
-                    fullWidth // Ensures the TextField takes full width
-                  />
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Valuation Method:</Typography>
-                  <TextField
-                    name="valuationMethod"
-                    value={record.valuationMethod || ''}
-                    onChange={handleChange}
-                    variant="standard"
-                    fullWidth // Ensures the TextField takes full width
-                  />
-                </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'column', mb: 2 }}>
-                  <Typography variant="body1" sx={{ marginBottom: '8px' }}>Certificate Number:</Typography>
-                  <TextField
-                    name="certificateNumber"
-                    value={record.certificateNumber || ''}
-                    onChange={handleChange}
-                    variant="standard"
-                    fullWidth // Ensures the TextField takes full width
-                  />
-                  
-                </Box>
-              </Grid>
-            </Grid>
-            
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center'}}>
+                <Typography variant="body1" sx={{ width: '150px' }}>Shape and Cut:</Typography>
+                <TextField
+                  name="shapeAndCut"
+                  value={record.shapeAndCut || ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ width: '150px' }}>Carat Weight:</Typography>
+                <TextField
+                  name="caratWeight"
+                  value={record.caratWeight || ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ width: '150px' }}>Clarity:</Typography>
+                <TextField
+                  name="clarity"
+                  value={record.clarity || ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ width: '150px' }}>Cut Grade:</Typography>
+                <TextField
+                  name="cutGrade"
+                  value={record.cutGrade || ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ width: '150px' }}>Measurements:</Typography>
+                <TextField
+                  name="measurements"
+                  value={record.measurements || ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ width: '150px' }}>Polish:</Typography>
+                <TextField
+                  name="polish"
+                  value={record.polish || ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ width: '150px' }}>Symmetry:</Typography>
+                <TextField
+                  name="symmetry"
+                  value={record.symmetry || ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ width: '150px' }}>Fluorescence:</Typography>
+                <TextField
+                  name="fluorescence"
+                  value={record.fluorescence || ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ width: '150px' }}>Valuation Method:</Typography>
+                <TextField
+                  name="valuationMethod"
+                  value={record.valuationMethod || ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
+                />
+              </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ width: '150px' }}>Certificate Number:</Typography>
+                <TextField
+                  name="certificateNumber"
+                  value={record.certificateNumber || ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
+                />
+              </Box>
+            </Box>
+
+                <Typography variant="body1" sx={{textAlign:'end',mr:'150px',mt:'50px', mb:'88px'  }}>Symmetry</Typography>
           </form>
         </Paper>
       </div>
