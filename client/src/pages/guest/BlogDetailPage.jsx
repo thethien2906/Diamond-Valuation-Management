@@ -46,8 +46,8 @@ const BlogDetailPage = () => {
 
   return (
     <GuestLayout sx={{ backgroundColor: '#f0f0f0' }}>
-      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '450%', backgroundColor: 'white' }} />
-      <Box sx={{ p: 3, maxWidth: '1200px', mx: 'auto', zIndex: 1 }}>
+      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: 'white' }} />
+      <Box sx={{ p: 3, maxWidth: '1200px', mx: 'auto'}}>
         <Typography variant="h4" component="h2" gutterBottom>
           Blog Details
         </Typography>

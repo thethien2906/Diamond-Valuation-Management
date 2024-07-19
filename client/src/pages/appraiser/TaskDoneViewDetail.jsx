@@ -56,7 +56,7 @@ const TaskDoneViewDetail = () => {
         
       });
       toast.success('Valuation record updated successfully');
-      navigate('/appraiser');
+      navigate('/appraiser/task-done-view');
     } catch (error) {
       console.error('Error updating valuation record:', error);
       toast.error('Failed to update valuation record');

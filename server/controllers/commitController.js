@@ -136,7 +136,7 @@ const updateCommitStatus = async (req, res) => {
   
       commit.status = status;
       await commit.save();
-      
+  
       // Send email based on status change
       const emailHtml = status === 'Approved' ? 
       `
@@ -166,8 +166,10 @@ const updateCommitStatus = async (req, res) => {
         <p style="color: #fff;">Your Company Team</p>
       </div>
       `;
-      sendEmail(commit.email, `Commitment Request ${status}`, emailHtml, 'html');
-      // populate recordId from commit and add new action "Commitment Request Approved" to actions array
+  
+      sendEmail(commit.email, `Commitment Request ${status}`, emailHtml);
+  
+      // Populate recordId from commit and add new action "Commitment Request Approved" to actions array
       const record = await ValuationRecord.findById(commit.recordId);
       const actions = record.actions;
       const newAction = {
@@ -177,9 +179,7 @@ const updateCommitStatus = async (req, res) => {
       actions.push(newAction);
       record.actions = actions;
       await record.save();
-      
-
-
+  
       res.status(200).json({ message: 'Commitment request status updated successfully', commit });
     } catch (error) {
       console.error('Error updating commitment request status:', error);
