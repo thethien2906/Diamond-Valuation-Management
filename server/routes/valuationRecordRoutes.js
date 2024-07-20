@@ -14,4 +14,5 @@ router.post('/valuation-records/request-commitment/:recordId', valuationRecordCo
 router.get('/valuation-records/details/:recordId', valuationRecordController.getNamesByIds);
 router.put('/valuation-records/:recordId/complete', valuationRecordController.updateRecordStatusToCompleted);
 router.put('/valuation-records/:recordId/picked-up', valuationRecordController.updateRecordStatusToPickedUp);
+router.get('/valuationrecords/:appraiserId', valuationRecordController.getRecordsByAppraiserId);
 module.exports = router;

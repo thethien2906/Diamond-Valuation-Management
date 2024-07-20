@@ -74,6 +74,11 @@ const RecordViewDetail = () => {
       toast.error('Failed to update record status');
     }
   };
+  
+  const handleFeedback = () => {
+    navigate(`/consultant/record-feedback/${recordId}`);
+  };
+  
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
@@ -151,18 +156,20 @@ const RecordViewDetail = () => {
               </Box>
             </AccordionDetails>
           </Accordion>
-          
         </AccordionDetails>
       </Accordion>
       <Box sx={{ mt: 3 }}>
-        <Button variant="contained" color="secondary" onClick={handleSeal}>
+        <Button variant="contained" color="secondary" onClick={handleSeal} sx={{ mr: 2 }}>
           Seal
         </Button>
-        <Button variant="contained" color="primary" onClick={handleVerify}>
+        <Button variant="contained" color="primary" onClick={handleVerify} sx={{ mr: 2 }}>
           Verify 
         </Button>
-        <Button variant="contained" color="secondary" onClick={handleComplete}>
+        <Button variant="contained" color="secondary" onClick={handleComplete} sx={{ mr: 2 }}>
           Complete Record
+        </Button>
+        <Button variant="contained" color="primary" onClick={handleFeedback}>
+          Give Feedback
         </Button>
       </Box>
     </Box>

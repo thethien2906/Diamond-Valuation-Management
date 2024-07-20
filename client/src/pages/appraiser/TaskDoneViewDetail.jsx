@@ -18,13 +18,19 @@ const TaskDoneViewDetail = () => {
   const [record, setRecord] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [feedback, setFeedback] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRecordData = async () => {
       try {
-        const response = await axios.get(`/api/valuation-records/details/${recordId}`);
-        setRecord(response.data);
+        const response = await axios.get(`/api/valuation-records/${recordId}`);
+        const serviceResponse = await axios.get(`/api/services/${response.data.serviceId}`);
+        const consultantResponse = await axios.get(`/api/users/${response.data.consultantId}`);
+        const appraiserResponse = await axios.get(`/api/users/${response.data.appraiserId}`);
+        const feedbackResponse = await axios.get(`/api/feedback/${response.data.feedbackId}`);
+        setRecord({ ...response.data, serviceName: serviceResponse.data.name, appraiserName: appraiserResponse.data.name, consultantName: consultantResponse.data.name });
+        setFeedback(feedbackResponse.data);
       } catch (error) {
         console.error('Error fetching valuation record data:', error);
         toast.error('Failed to fetch valuation record data');
@@ -209,11 +215,18 @@ const TaskDoneViewDetail = () => {
                 />
               </Box>
             </Box>
-
-                <Typography variant="body1" sx={{textAlign:'end',mr:'150px',mt:'50px', mb:'88px'  }}>Symmetry</Typography>
           </form>
         </Paper>
       </div>
+      {feedback && (
+        <Box sx={{ mt: 3 }}>
+          <Typography variant="h6" component="h2" gutterBottom>Feedback from Consultant</Typography>
+          <Paper sx={{ p: 3, mt: 2 }}>
+            <Typography variant="body1">{feedback.feedback}</Typography>
+            <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>Submitted on: {new Date(feedback.createdAt).toLocaleString()}</Typography>
+          </Paper>
+        </Box>
+      )}
       <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
         <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mr: 2 }}>
           Print Receipt

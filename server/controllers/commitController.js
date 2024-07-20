@@ -242,4 +242,14 @@ const updateCommitStatus = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   }
-  module.exports = { createCommitRequest, updateCommitStatus, getCommitsByConsultant, getCommitById, denyCommitRequest, getPendingByConsultantCommits, updateCommitStatusByManager };
+  const countPendingCommits = async (req, res) => {
+    try {
+      const status = req.query.status || 'Pending by Customer';
+      const count = await Commit.countDocuments({ status });
+      res.json({ count });
+    } catch (error) {
+      res.status(500).json({ error: 'An error occurred while counting commitments' });
+    }
+  };
+  
+  module.exports = { countPendingCommits, createCommitRequest, updateCommitStatus, getCommitsByConsultant, getCommitById, denyCommitRequest, getPendingByConsultantCommits, updateCommitStatusByManager };
