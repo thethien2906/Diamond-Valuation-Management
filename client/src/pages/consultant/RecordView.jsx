@@ -114,7 +114,6 @@ const RecordView = () => {
                       /> 
 
                       <button onClick={() => handleViewStatus(record._id)}>
-
                         {record.status}
                       </button>
                       
