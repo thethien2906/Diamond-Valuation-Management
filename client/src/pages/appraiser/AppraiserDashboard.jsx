@@ -1,4 +1,5 @@
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Badge from '@mui/material/Badge';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import HomeIcon from '@mui/icons-material/Home';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -21,7 +22,7 @@ import {
   useTheme
 } from "@mui/material";
 import axios from "axios";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 
@@ -32,6 +33,7 @@ const AppraiserDashboard = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [inProgressCount, setInProgressCount] = useState(0);
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -55,6 +57,22 @@ const AppraiserDashboard = () => {
       console.error("Logout error:", error);
     }
   };
+
+  useEffect(() => {
+    const fetchInProgressCount = async () => {
+      try {
+        const response = await axios.get(`/api/valuationrecords/${user._id}`);
+        setInProgressCount(response.data.count); // Update state with count
+      } catch (error) {
+        console.error("Error fetching valuation records:", error);
+      }
+    };
+  
+    if (user) {
+      fetchInProgressCount();
+    }
+  }, [user]);
+  
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -142,7 +160,9 @@ const AppraiserDashboard = () => {
         <List sx={{gap: 2}}>
           <ListItemButton onClick={toggleDrawer} component={Link} to="/appraiser/task-view">
             <ListItemIcon>
-              <CalendarTodayIcon sx={{ color: '#fff' }} />
+              <Badge badgeContent={inProgressCount} color="error">
+                <CalendarTodayIcon sx={{ color: '#fff' }} />
+              </Badge>
             </ListItemIcon>
             <ListItemText primary="View Assigned Task" />
           </ListItemButton>
@@ -182,7 +202,9 @@ const AppraiserDashboard = () => {
         <List>
           <ListItemButton component={Link} to="/appraiser/task-view">
             <ListItemIcon>
-              <CalendarTodayIcon sx={{ color: '#fff' }} />
+              <Badge badgeContent={inProgressCount} color="error">
+                <CalendarTodayIcon sx={{ color: '#fff' }} />
+              </Badge>
             </ListItemIcon>
             <ListItemText primary="View Assigned Task" />
           </ListItemButton>

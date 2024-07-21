@@ -11,5 +11,5 @@ router.delete('/bookings/:bookingId', bookingController.deleteBooking);
 router.get('/approved-appointments', bookingController.getApprovedAppointments);
 router.get('/consultants/:consultantId/appointments', bookingController.getConsultantAppointments);
 router.get('/bookings', bookingController.getAllBookings);
-
+router.get('/booking-count', bookingController.countPendingBookings);
 module.exports = router;

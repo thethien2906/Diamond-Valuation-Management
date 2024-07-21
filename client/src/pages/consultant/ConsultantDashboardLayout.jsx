@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate, Link, Outlet } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import {
@@ -15,7 +15,8 @@ import {
   ListItemButton,
   ListItemIcon,
   Menu,
-  MenuItem
+  MenuItem,
+  Badge,
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
@@ -35,6 +36,8 @@ const ConsultantDashboardLayout = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [pendingRequestsCount, setPendingRequestsCount] = useState(0);
+  const [commitmentRequestsCount, setCommitmentRequestsCount] = useState(0);
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -58,6 +61,22 @@ const ConsultantDashboardLayout = () => {
       console.error("Logout error:", error);
     }
   };
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const pendingResponse = await axios.get("/api/booking-count?status=pending");
+        const commitmentResponse = await axios.get("/api/commitment-count?status=Pending by Customer");
+
+        setPendingRequestsCount(pendingResponse.data.count);
+        setCommitmentRequestsCount(commitmentResponse.data.count);
+      } catch (error) {
+        console.error("Error fetching counts:", error);
+      }
+    };
+
+    fetchCounts();
+  }, []);
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -153,6 +172,7 @@ const ConsultantDashboardLayout = () => {
               <PendingActionsIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Pending Requests" />
+            <Badge badgeContent={pendingRequestsCount} color="error" />
           </ListItemButton>
           <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant/valuation-records">
             <ListItemIcon>
@@ -165,6 +185,7 @@ const ConsultantDashboardLayout = () => {
               <EditOffIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Commitment Requests" />
+            <Badge badgeContent={commitmentRequestsCount} color="error" />
           </ListItemButton>
           <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant/seal-status">
             <ListItemIcon>
@@ -211,6 +232,7 @@ const ConsultantDashboardLayout = () => {
               <PendingActionsIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Pending Requests" />
+            <Badge badgeContent={pendingRequestsCount} color="error" />
           </ListItemButton>
           <ListItemButton component={Link} to="/consultant/valuation-records">
             <ListItemIcon>
@@ -223,6 +245,7 @@ const ConsultantDashboardLayout = () => {
               <EditOffIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Commitment Requests" />
+            <Badge badgeContent={commitmentRequestsCount} color="error" />
           </ListItemButton>
           <ListItemButton component={Link} to="/consultant/seal-status">
             <ListItemIcon>
@@ -231,30 +254,20 @@ const ConsultantDashboardLayout = () => {
             <ListItemText primary="Seal Status" />
           </ListItemButton>
         </List>
+        <Divider sx={{ bgcolor: '#6c757d' }} />
         <Box sx={{ p: 2, mt: 'auto', textAlign: 'center', bgcolor: '#343a40', color: '#717e87' }}>
-          <Typography variant="body2" sx={{ fontSize: '1rem' }}>
-            Logged in as: {user?.name}
+          <Typography variant="body2" sx={{ fontSize: '1.1rem' }}>
+            Logged in as: {user?.name || 'Guest'}
           </Typography>
         </Box>
       </Drawer>
-      
+
       {/* Main Content */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          bgcolor: 'background.default',
-          p: 3,
-          maxWidth: 1000,
-          marginLeft:20,
-        }}
-      >
-        <Toolbar />
+      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         <Outlet />
       </Box>
     </Box>
   );
-
 };
 
 export default ConsultantDashboardLayout;

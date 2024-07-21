@@ -21,7 +21,7 @@ const Transaction = require('./models/Transaction');
 const blogRoutes = require('./routes/blogRoutes');
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
 const historicalPricesRouter = require('./routes/historicalPrices');
-
+const feedbackRoutes = require('./routes/feedbackRoutes');
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log('Connected to MongoDB'))
   .catch((err) => console.log(err));
@@ -121,7 +121,7 @@ app.use('/api', paymentRoutes);
 app.use('/api', transactionRoutes);
 app.use('/api', blogRoutes);
 app.use('/api', historicalPricesRouter);
-
+app.use('/api', feedbackRoutes);
 // const modelPath = 'diamond_price_model.onnx'; // replace with the path to your ONNX model
 
 // // Function to preprocess input data

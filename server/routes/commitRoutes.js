@@ -9,4 +9,5 @@ router.get('/commit-requests/:consultantId', commitController.getCommitsByConsul
 router.put('/commit-request/:commitId/deny', commitController.denyCommitRequest);
 router.get('/commit-requests-pending-by-consultant', commitController.getPendingByConsultantCommits); //
 router.put('/commit-request-manager/:commitId', commitController.updateCommitStatusByManager);
+router.get('/commitment-count', commitController.countPendingCommits)
 module.exports = router;

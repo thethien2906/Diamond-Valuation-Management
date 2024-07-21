@@ -266,6 +266,12 @@ const updateRecordStatusToPickedUp = async (req, res) => {
 
     record.status = 'Picked Up';
     await record.save();
+    //update the booking status to "completed" using receiptId
+    const receipt = await Receipt.findById(record.receiptId);
+    const booking = await Booking.findById(receipt.bookingId);
+    booking.status = 'completed';
+    await booking.save();
+
     res.status(200).json({ message: 'Record status updated successfully' });
   } catch (error) {
     console.error('Error updating record status:', error);
@@ -304,8 +310,19 @@ const getNamesByIds = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+const getRecordsByAppraiserId = async (req, res) => {
+  try {
+    const { appraiserId } = req.params;
 
+    // Fetch the count of records with status "In Progress"
+    const count = await ValuationRecord.countDocuments({ appraiserId, status: "In Progress" });
 
+    res.status(200).json({ count }); // Send count in the response
+  } catch (error) {
+    console.error('Error fetching records by appraiser ID:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 module.exports = { 
   createRecord, 
   getRecordsByStatus, 
@@ -318,4 +335,5 @@ module.exports = {
   requestCommitment, 
   updateRecordStatusToCompleted,
   updateRecordStatusToPickedUp,
-  getNamesByIds }; 
+  getNamesByIds,
+  getRecordsByAppraiserId, };

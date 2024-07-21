@@ -11,10 +11,10 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.8.2",
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
+    "@emotion/react": "^11.12.0",
+    "@emotion/styled": "^11.12.0",
     "@mui/icons-material": "^5.15.20",
-    "@mui/material": "^5.15.20",
+    "@mui/material": "^5.16.4",
     "@mui/x-charts": "^7.8.0",
     "@square/web-sdk": "^2.0.1",
     "@stripe/react-stripe-js": "^2.7.1",

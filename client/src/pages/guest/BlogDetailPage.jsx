@@ -46,33 +46,37 @@ const BlogDetailPage = () => {
 
   return (
     <GuestLayout sx={{ backgroundColor: '#f0f0f0' }}>
-      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '100vh', backgroundColor: 'white' }} />
-      <Box sx={{ p: 3, maxWidth: '1200px', mx: 'auto'}}>
-        <Typography variant="h4" component="h2" gutterBottom>
-          Blog Details
-        </Typography>
-      </Box>
-      <Box sx={{ flex: 1, height: '350px', overflow: 'hidden', zIndex: 0, marginTop: '-103px', marginLeft: '-99px', marginRight: '-98px' }}>
+      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '89%', backgroundColor: 'white' }} />
+      {/* Large background image */}
+      <Box
+        sx={{
+          position: 'relative',
+          overflow: 'hidden',
+          height: '400px',
+          marginTop: '-103px',
+          marginLeft: '-99px',
+          marginRight: '-98px',
+          zIndex: 0,
+        }}
+      >
         <img
-          src={blog.imageUrl || "https://jewelryinformer.com/wp-content/uploads/2023/10/diamond-color-1024x576-1.jpg"}
-          alt={blog.title}
+          src="https://jewelryinformer.com/wp-content/uploads/2023/10/diamond-color-1024x576-1.jpg"
+          alt="Trusted"
           style={{
             width: '100%',
-            height: '90%',
+            height: '100%',
             objectFit: 'cover',
             borderRadius: '0px',
             position: 'relative',
             zIndex: 0,
-            filter: 'brightness(50%)',
+            filter: 'brightness(50%)', 
           }}
         />
         <Box
           sx={{
-            position: 'relative',
-            marginLeft:'20px',
-            marginTop:'-70px',
+            position: 'absolute',
             bottom: '20px',
-            left: '20px',
+            left: '40px',
             zIndex: 1,
             color: 'white',
           }}
@@ -101,7 +105,7 @@ const BlogDetailPage = () => {
         }}
       >
         <img
-          src="https://cdn.shopify.com/s/files/1/0242/8908/3447/files/Screen_Shot_2021-06-01_at_10.18.35_AM_480x480.png?v=1622567961"
+          src="https://i.ebayimg.com/images/g/lIwAAOSwomZkx5qF/s-l1600.jpg"
           alt="Small Image"
           style={{
             width: '100%',
@@ -110,6 +114,7 @@ const BlogDetailPage = () => {
           }}
         />
       </Box>
+
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, alignItems: 'left', backgroundColor: 'white', p: 3, maxWidth: '740px', mx: 'auto', zIndex: 2, position: 'relative', marginTop: '-500px', marginLeft: '0px' }}>
         <Typography variant="h4" component="h2" gutterBottom sx={{ fontFamily: 'Times New Roman, Times, serif', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0,0,0,0.6)' }}>
           {blog.title.toUpperCase()}

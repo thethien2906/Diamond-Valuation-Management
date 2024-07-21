@@ -55,6 +55,7 @@ import RecordViewStatus from './pages/consultant/RecordViewStatus';
 import RecordSealing from './pages/consultant/RecordSeal';
 import ConsulatantSealStatus from './pages/consultant/SealStatus';
 import ReceiptPrint from './pages/consultant/ReceiptPrint';
+import FeedbackForm from './pages/consultant/RecordFeedback';
 
 import TaskView from './pages/appraiser/TaskView';
 import ValuationRecordAppraiserDetail from './pages/appraiser/TaskViewDetail';
@@ -132,6 +133,7 @@ function App() {
             <Route path="record-sealing/:recordId" element={<RecordSealing />} />
             <Route path="seal-status" element={<ConsulatantSealStatus />} />
             <Route path="record-view-status/:recordId" element={<RecordViewStatus />} />
+            <Route path="record-feedback/:recordId" element={<FeedbackForm />} />
           </Route>
 
           {/* Nested routes under AppraiserDashboard */}

@@ -207,7 +207,15 @@ const getAllBookings = async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 };
-
+const countPendingBookings = async (req, res) => {
+  try {
+    const status = req.query.status || 'pending';
+    const count = await Booking.countDocuments({ status });
+    res.json({ count });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while counting bookings' });
+  }
+};
 module.exports = {
   createBooking,
   getBookingById,
@@ -218,4 +226,5 @@ module.exports = {
   getApprovedAppointments,
   getConsultantAppointments,
   getAllBookings,
+  countPendingBookings
 };

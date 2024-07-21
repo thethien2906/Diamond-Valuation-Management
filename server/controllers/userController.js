@@ -79,12 +79,26 @@ const getUserById = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-
+const updateUserById = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const updates = req.body;
+    const user = await User.findByIdAndUpdate(userId, updates, { new: true });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+}
 module.exports = {
   getUsers,
   createUser,
   deleteUser,
   getAvailableConsultant,
   getAvailableAppraiser,
-  getUserById
+  getUserById,
+  updateUserById
 };
