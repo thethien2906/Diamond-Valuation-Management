@@ -84,19 +84,20 @@ const ReceiptPrint = () => {
               <Typography variant="body1">Appointment Time: {receipt.appointmentTime}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="body1">Consultant ID: {receipt.consultantId}</Typography>
+              <Typography variant="body1">Consultant Name: {receipt.consultantId}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="body1">Service: {service.name}</Typography>
             </Grid>
           </Grid>
+          </Paper>
           <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
         <Button variant="contained" color="primary" onClick={handlePrint}>
           Print Receipt
         </Button>
         
       </Box>
-        </Paper>
+        
       </div>
 
     </Box>
