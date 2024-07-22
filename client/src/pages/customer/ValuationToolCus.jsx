@@ -20,8 +20,6 @@ const ValuationToolCus = () => {
     cut: '',
     color: '',
     clarity: '',
-    depth: '',
-    table: 60,
     x: '',
     y: '',
     z: ''
@@ -94,10 +92,8 @@ const ValuationToolCus = () => {
       return;
     }
 
-    const depth = (2 * parseFloat(formData.z)) / (parseFloat(formData.x) + parseFloat(formData.y));
     try {
-      const response = await axios.post('http://localhost:8000/predict-price', { ...formData, depth });
-      console.log('API response:', response.data); // Add this line for debugging
+      const response = await axios.post('http://localhost:8000/predict-price/', formData);
       setPredictedPrice(response.data.predicted_price);
     } catch (error) {
       console.error('Error predicting price:', error);
@@ -215,18 +211,7 @@ const ValuationToolCus = () => {
                   helperText={errors.z}
                 />
 
-                <FormControl fullWidth sx={{ mb: 2 }}>
-                  <Typography gutterBottom>Table</Typography>
-                  <Slider
-                    value={formData.table}
-                    min={40}
-                    max={100}
-                    step={1}
-                    onChange={handleSliderChange('table')}
-                    valueLabelDisplay="auto"
-                    sx={{ color: '#033F63' }}
-                  />
-                </FormControl>
+                
 
                 <Button type="submit" variant="contained" sx={{ width: '100%', backgroundColor: '#033F63', color: 'white', '&:hover': { backgroundColor: '#022D48' } }}>
                   Predict Price
