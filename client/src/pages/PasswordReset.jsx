@@ -37,10 +37,23 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Manual validation
+    if (!newPassword || !confirmPassword) {
+      toast.error('All fields are required');
+      return;
+    }
+
+    if (newPassword.length < 6 || confirmPassword.length < 6) {
+      toast.error('Passwords must be at least 6 characters long');
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       toast.error('Passwords do not match');
       return;
     }
+
     try {
       const response = await axios.post('/auth/reset-password', { userId, newPassword });
       toast.success(response.data.message);
@@ -71,7 +84,7 @@ const ResetPassword = () => {
             Reset Password
           </Typography>
           <Paper sx={{ p: 3, mt: 2, bgcolor: 'background.paper' }}>
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -88,6 +101,7 @@ const ResetPassword = () => {
                 InputProps={{
                   style: { color: '#FFFFFF' }, // White text
                 }}
+                inputProps={{ minLength: 6 }}
               />
               <TextField
                 margin="normal"
@@ -105,6 +119,7 @@ const ResetPassword = () => {
                 InputProps={{
                   style: { color: '#FFFFFF' }, // White text
                 }}
+                inputProps={{ minLength: 6 }}
               />
               <Button
                 type="submit"
