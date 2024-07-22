@@ -106,8 +106,12 @@ const TaskView = () => {
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={4} sx={{ textAlign: 'center' }}>No records found</TableCell>
-              </TableRow>
+              <TableCell colSpan={4} sx={{ textAlign: 'center' }}>
+                <Typography variant="h6">
+                  No records found
+                </Typography>
+              </TableCell>
+            </TableRow>
             )}
           </TableBody>
         </Table>

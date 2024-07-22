@@ -159,7 +159,7 @@ const PendingRequests = () => {
           />
         </TableContainer>
       ) : (
-        <Typography variant="body1" component="p" sx={{ mt: 3 }}>
+        <Typography variant="h6" align="center" sx={{ mt: 3 }}>
           No pending requests found.
         </Typography>
       )}

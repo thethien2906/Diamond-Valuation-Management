@@ -109,7 +109,7 @@ const RecordMonitoring = () => {
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h6" component="h2" gutterBottom>
+      <Typography variant="h4" component="h2" gutterBottom>
         Valuation Records
       </Typography>
       <Box

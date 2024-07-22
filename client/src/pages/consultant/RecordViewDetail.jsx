@@ -165,11 +165,11 @@ const RecordViewDetail = () => {
         <Button variant="contained" color="success" onClick={handleVerify} sx={{ mr: 2 }}>
           Verify 
         </Button>
-        <Button variant="contained" color="secondary" onClick={handleComplete} sx={{ mr: 2 }}>
-          Complete Record
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleFeedback}>
+        <Button variant="contained" color="primary" onClick={handleFeedback} sx={{ mr: 2 }}>
           Give Feedback
+        </Button>
+        <Button variant="contained" color="secondary" onClick={handleComplete} >
+          Complete Record
         </Button>
       </Box>
     </Box>
