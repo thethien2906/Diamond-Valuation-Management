@@ -159,21 +159,6 @@ export default function EarningChart() {
           </Typography>
           <Grid container direction="column" alignItems="center" spacing={2}>
             <Grid item>
-              <FormControl sx={{ minWidth: 120 }}>
-                <Select
-                  native
-                  value={selectedMonth}
-                  onChange={handleMonthChange}
-                  inputProps={{ 'aria-label': 'Select Month' }}
-                  sx={{ borderRadius: 16, minWidth: 120 }}
-                >
-                  {monthNames.map((month, index) => (
-                    <option key={index + 1} value={index + 1}>{month}</option>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item>
               <Paper elevation={3} sx={{ p: 2, display: 'flex', alignItems: 'center', borderRadius: 16, backgroundColor: '#f0f0f0' }}>
                 <MonetizationOnIcon sx={{ mr: 1 }} />
                 <Typography variant="body1">
