@@ -157,7 +157,7 @@ export default function EarningChart() {
           <Typography variant="h6" component="div" gutterBottom>
             Monthly Earnings
           </Typography>
-          <Grid container direction="column" alignItems="center" spacing={2}>
+          <Grid container direction="column" alignItems="center" spacing={2}> 
             <Grid item>
               <Paper elevation={3} sx={{ p: 2, display: 'flex', alignItems: 'center', borderRadius: 16, backgroundColor: '#f0f0f0' }}>
                 <MonetizationOnIcon sx={{ mr: 1 }} />
