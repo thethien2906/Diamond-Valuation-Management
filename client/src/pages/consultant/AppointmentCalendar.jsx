@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/userContext";
 import axios from "axios";
 import {
@@ -17,6 +17,11 @@ import {
   useTheme,
   IconButton,
   TablePagination,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import RefreshIcon from '@mui/icons-material/Refresh';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -26,15 +31,15 @@ const AppointmentCalendar = () => {
   const [approvedBookings, setApprovedBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5); // Adjust rows per page as needed
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
   const navigate = useNavigate();
   const theme = useTheme();
 
   const fetchApprovedBookings = async () => {
     try {
-      const response = await axios.get(
-        `/api/consultants/${user._id}/appointments`
-      );
+      const response = await axios.get(`/api/consultants/${user._id}/appointments`);
       setApprovedBookings(response.data);
     } catch (error) {
       console.error("Error fetching appointments:", error);
@@ -65,6 +70,22 @@ const AppointmentCalendar = () => {
     setPage(0);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+    setPage(0);
+  };
+
+  const handleStatusFilterChange = (event) => {
+    setStatusFilter(event.target.value);
+    setPage(0);
+  };
+
+  const filteredBookings = approvedBookings.filter((booking) => {
+    const matchesName = booking.name.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesStatus = statusFilter === '' || booking.status === statusFilter;
+    return matchesName && matchesStatus;
+  });
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', p: 3 }}>
       <Box
@@ -93,6 +114,37 @@ const AppointmentCalendar = () => {
           Refresh
         </Button>
       </Box>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 2,
+        }}
+      >
+        <TextField
+          label="Search by Name"
+          variant="outlined"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          sx={{ mr: 2 }}
+        />
+        <FormControl variant="outlined" sx={{ minWidth: 120 }}>
+          <InputLabel>Status</InputLabel>
+          <Select
+            value={statusFilter}
+            onChange={handleStatusFilterChange}
+            label="Status"
+          >
+            <MenuItem value=""><em>All</em></MenuItem>
+            <MenuItem value="pending">Pending</MenuItem>
+            <MenuItem value="approved">Approved</MenuItem>
+            <MenuItem value="rejected">Rejected</MenuItem>
+            <MenuItem value="valuating">Valuating</MenuItem>
+            <MenuItem value="completed">Completed</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
           <CircularProgress />
@@ -105,17 +157,23 @@ const AppointmentCalendar = () => {
                 <TableCell sx={{ fontWeight: 'bold' }}>No</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>Name</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>Phone</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Date</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Time</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {approvedBookings
+              {filteredBookings
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((booking, index) => (
                   <TableRow key={booking._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
-                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                     <TableCell>{booking.name}</TableCell>
                     <TableCell>{booking.phoneNumber}</TableCell>
+                    <TableCell>{booking.date}</TableCell>
+                    <TableCell>{booking.time}</TableCell>
+                    <TableCell>{booking.status}</TableCell>
                     <TableCell>
                       <IconButton
                         color="black"
@@ -131,7 +189,7 @@ const AppointmentCalendar = () => {
           <TablePagination
             rowsPerPageOptions={[6, 12, 24]}
             component="div"
-            count={approvedBookings.length}
+            count={filteredBookings.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

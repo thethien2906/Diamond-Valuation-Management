@@ -110,5 +110,4 @@ const rejectBooking = async (req, res) => {
 };
 
 
-
 module.exports = { createCheckoutSession, rejectBooking, cancelBooking };

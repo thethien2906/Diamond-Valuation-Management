@@ -157,6 +157,12 @@ const ManagerDashboard = ({ children }) => {
             </ListItemIcon>
             <Typography variant="inherit" sx={{ color: '#fff' }}>Service Packages</Typography>
           </ListItemButton>
+          <ListItemButton onClick={toggleDrawer} component={Link} to="/manager/records">
+            <ListItemIcon>
+              <ConfirmationNumberIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <Typography variant="inherit" sx={{ color: '#fff' }}>Records</Typography>
+          </ListItemButton>
         </List>
         <Divider sx={{ bgcolor: '#6c757d' }} />
         <Box sx={{ p: 2, mt: 'auto', textAlign: 'center', bgcolor: '#343a40', color: '#717e87' }}>
@@ -212,6 +218,12 @@ const ManagerDashboard = ({ children }) => {
               <ConfirmationNumberIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <Typography variant="inherit" sx={{ color: '#fff' }}>Blog</Typography>
+          </ListItemButton>
+          <ListItemButton component={Link} to="/manager/records">
+            <ListItemIcon>
+              <ConfirmationNumberIcon sx={{ color: '#fff' }} />
+            </ListItemIcon>
+            <Typography variant="inherit" sx={{ color: '#fff' }}>Records</Typography>
           </ListItemButton>
         </List>
         <Box sx={{ p: 2, mt: 'auto', textAlign: 'center', bgcolor: '#343a40', color: '#717e87' }}>

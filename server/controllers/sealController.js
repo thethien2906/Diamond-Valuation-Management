@@ -91,11 +91,16 @@ const updateSealRequestStatus = async (req, res) => {
           });
 
           const mailOptions = {
-              from: 'your-email@gmail.com',
-              to: customerEmail,
-              subject: 'Seal Request Approved',
-              text: `Dear Customer,\n\nYour seal request has been approved. The valuation record is now sealed.\n\nBest regards,\nYour Company`,
-          };
+            from: 'your-email@gmail.com',
+            to: customerEmail,
+            subject: 'Seal Request Approved',
+            html: `
+              <p>Dear Customer,</p>
+              <p>Seal request has been approved. The valuation record is now sealed.</p>
+              <p>Best regards,</p>
+              <p>Your Company</p>
+            `,
+        };
 
           transporter.sendMail(mailOptions, (error, info) => {
               if (error) {
@@ -150,6 +155,13 @@ const unsealRecord = async (req, res) => {
     // Delete the seal
     await Seal.findByIdAndDelete(sealId);
 
+    // add actions to record
+    const record = await ValuationRecord.findById(seal.recordId);
+    record.actions.push({
+      action: 'Record Unsealed',
+      timestamp: Date.now(),
+    });
+    await record.save();
     res.json({ message: 'Record unsealed and seal deleted' });
   } catch (error) {
     console.error('Error unsealing record:', error);

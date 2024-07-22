@@ -222,7 +222,7 @@ const updateCommitStatus = async (req, res) => {
           <h2 style="color: #fff;">Commitment Request Denied</h2>
           <p style="color: #fff; font-size: 18px;">Dear ${customer.name},</p>
           <p style="color: #fff; font-size: 18px;">Your commitment request has been denied by our consultant.</p>
-          <p style="color: #fff; font-size: 18px;">We apologize for any inconvenience this may cause. Please contact us for further assistance or to discuss alternative options.</p>
+          <p style="color: #fff; font-size: 18px;">We apologize for any inconvenience this may cause. Please visit our store for further assistance or to discuss alternative options.</p>
           <p style="color: #fff; font-size: 18px;">Thank you for your understanding.</p>
           </div>
       `
@@ -230,6 +230,16 @@ const updateCommitStatus = async (req, res) => {
   
       await transporter.sendMail(mailOptions); // Send the email
       await Commit.findByIdAndDelete(commitId);
+      //add action to record actions
+      const record = await ValuationRecord.findById(commit.recordId);
+      const actions = record.actions;
+      const newAction = {
+        action: 'Commitment Request Denied by Manager',
+        timestamp: Date.now(),
+      };
+      actions.push(newAction);
+      record.actions = actions;
+      await record.save();
       res.json({ message: 'Commitment request denied and email sent to customer' });
     } catch (error) {
       console.error('Error denying commitment request:', error);
