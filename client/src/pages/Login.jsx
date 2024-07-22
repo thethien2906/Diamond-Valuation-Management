@@ -75,13 +75,13 @@ export default function SignInSide() {
   const navigateToDashboard = (role) => {
     switch (role) {
       case "admin":
-        navigate("/admin");
+        navigate("/admin/users");
         break;
       case "consultant":
         navigate("/consultant");
         break;
       case "appraiser":
-        navigate("/appraiser");
+        navigate("/appraiser/task-view");
         break;
       case "manager":
         navigate("/manager/dashboard");

@@ -35,7 +35,7 @@ const ViewStaffEdit = () => {
   const handleSave = async () => {
     try {
       await axios.put(`/api/users/${staffId}`, staff);
-      navigate('/admin/view-staff');
+      navigate('/admin/staff');
     } catch (error) {
       console.error('Error updating staff data:', error);
     }
