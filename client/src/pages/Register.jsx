@@ -64,9 +64,30 @@ export default function Register() {
     password: '',
   });
 
+  const validateEmail = (email) => {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(email);
+  };
+
   const registerUser = async (e) => {
     e.preventDefault();
     const { name, email, password } = data;
+
+    if (!name || !email || !password) {
+      toast.error("All fields are required.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      toast.error("Invalid email address.");
+      return;
+    }
+
+    if (password.length < 6) {
+      toast.error("Password must be at least 6 characters long.");
+      return;
+    }
+
     try {
       const response = await axios.post('/auth/register', { name, email, password });
       if (response.data.error) {
@@ -122,7 +143,7 @@ export default function Register() {
               <CloseIcon />
             </IconButton>
             <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <DiamondIcon/>
+              <DiamondIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
               Register
@@ -219,6 +240,7 @@ export default function Register() {
                 InputProps={{
                   style: { color: '#FFFFFF', backgroundColor: 'transparent' }, // White text, transparent background
                   disableUnderline: true, // Disable the underline to make it look cleaner
+                  minLength: 6,
                 }}
                 InputLabelProps={{
                   style: { color: '#B0C4DE' }, // Light blue text for the label
@@ -248,14 +270,14 @@ export default function Register() {
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, bgcolor: '#00BFFF' }}
+                sx={{ mt: 3, mb: 2 }}
               >
                 Register
               </Button>
               <Grid container>
                 <Grid item>
-                  <Link href="/login" variant="body2" sx={{ color: '#B0C4DE' }}>
-                    {"Already have an account? Sign in"}
+                  <Link href="/login" variant="body2">
+                    {"Already have an account? Sign In"}
                   </Link>
                 </Grid>
               </Grid>

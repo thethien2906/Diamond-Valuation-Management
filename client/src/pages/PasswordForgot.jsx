@@ -1,5 +1,6 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Box, Button, Container, CssBaseline, Paper, TextField, Typography } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { Box, Button, Container, CssBaseline, IconButton, Paper, TextField, Typography } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
@@ -63,8 +64,21 @@ const ForgotPassword = () => {
             padding: 3,
             borderRadius: 2,
             boxShadow: 3,
+            position: 'relative',
           }}
         >
+          <IconButton
+            aria-label="back"
+            onClick={() => navigate(-1)}
+            sx={{
+              position: 'absolute',
+              top: 16,
+              right: 16,
+              color: 'primary.main',
+            }}
+          >
+            <CloseIcon/>
+          </IconButton>
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
