@@ -11,17 +11,22 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  IconButton
+  IconButton,
+  TablePagination
 } from '@mui/material';
 import { Visibility } from '@mui/icons-material';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
+
 const TaskView = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+
   useEffect(() => {
     const fetchRecords = async () => {
       if (!user || !user._id) {
@@ -30,7 +35,6 @@ const TaskView = () => {
       }
       try {
         const response = await axios.get(`/api/records/appraiser/${user._id}`);
-        // Ensure the response is an array
         if (Array.isArray(response.data)) {
           setRecords(response.data);
         } else {
@@ -51,6 +55,15 @@ const TaskView = () => {
     navigate(`/appraiser/valuation-records/${recordId}`);
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
@@ -68,36 +81,47 @@ const TaskView = () => {
         <Table>
           <TableHead sx={{ backgroundColor: '#212529' }}>
             <TableRow>
-              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Record Number</TableCell>
-              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Customer Name</TableCell>
-              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Status</TableCell>
-              <TableCell sx={{color:'white',fontWeight: 'bold'}}>Actions</TableCell>
+              <TableCell sx={{color:'white', fontWeight: 'bold'}}>Record Number</TableCell>
+              <TableCell sx={{color:'white', fontWeight: 'bold'}}>Customer Name</TableCell>
+              <TableCell sx={{color:'white', fontWeight: 'bold'}}>Status</TableCell>
+              <TableCell sx={{color:'white', fontWeight: 'bold'}}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {Array.isArray(records) && records.map((record) => (
-              <TableRow key={record._id}>
-                <TableCell>{record.recordNumber}</TableCell>
-                <TableCell>{record.customerName}</TableCell>
-                <TableCell>{record.status}</TableCell>
-                <TableCell>
-                  <IconButton
-                    color="black"
-                    onClick={() => handleViewRecord(record._id)}
-                  >
-                    <Visibility />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            ))}
-            {!Array.isArray(records) && (
+            {Array.isArray(records) && records.length > 0 ? (
+              records.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((record) => (
+                <TableRow key={record._id}>
+                  <TableCell>{record.recordNumber}</TableCell>
+                  <TableCell>{record.customerName}</TableCell>
+                  <TableCell>{record.status}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="black"
+                      onClick={() => handleViewRecord(record._id)}
+                    >
+                      <Visibility />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
               <TableRow>
                 <TableCell colSpan={4} sx={{ textAlign: 'center' }}>No records found</TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
+        <TablePagination
+        rowsPerPageOptions={[6, 10, 25]}
+        component="div"
+        count={records.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
       </TableContainer>
+
     </Box>
   );
 };
