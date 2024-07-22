@@ -30,7 +30,7 @@ const BlogDetailPage = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minheight: '100vh' }}>
         <CircularProgress />
       </Box>
     );
@@ -45,18 +45,15 @@ const BlogDetailPage = () => {
   }
 
   return (
-    <GuestLayout sx={{ backgroundColor: '#f0f0f0' }}>
-      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '89%', backgroundColor: 'white' }} />
+    <GuestLayout>
+      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '89%' }} />
       {/* Large background image */}
       <Box
         sx={{
           position: 'relative',
           overflow: 'hidden',
           height: '400px',
-          marginTop: '-103px',
-          marginLeft: '-99px',
-          marginRight: '-98px',
-          zIndex: 0,
+
         }}
       >
         <img
@@ -82,7 +79,6 @@ const BlogDetailPage = () => {
           }}
         >
           <Typography variant="h3" component="h2" gutterBottom style={{ fontFamily: 'Times New Roman', fontWeight: 'bold' }}>
-            Blogs
           </Typography>
         </Box>
       </Box>
