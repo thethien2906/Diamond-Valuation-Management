@@ -136,8 +136,18 @@ export default function EarningChart() {
   };
 
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit', timeZone: 'UTC' };
-    return new Date(dateString).toLocaleString('sv-SE', options).replace(' ', 'T') + 'Z';
+    const date = new Date(dateString);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+  };
+
+  const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    const hours = ('0' + date.getHours()).slice(-2);
+    const minutes = ('0' + date.getMinutes()).slice(-2);
+    return `${hours}:${minutes}`;
   };
 
   return (
@@ -167,7 +177,7 @@ export default function EarningChart() {
               <Paper elevation={3} sx={{ p: 2, display: 'flex', alignItems: 'center', borderRadius: 16, backgroundColor: '#f0f0f0' }}>
                 <MonetizationOnIcon sx={{ mr: 1 }} />
                 <Typography variant="body1">
-                  Total Payments: ${monthlyEarnings[selectedMonth - 1].toLocaleString()}
+                  Total Payments for the Year: ${totalPayments.toLocaleString()}
                 </Typography>
               </Paper>
             </Grid>
@@ -225,7 +235,7 @@ export default function EarningChart() {
                   .map((transaction, index) => (
                     <TableRow key={index}>
                       <TableCell>{formatDate(transaction.created)}</TableCell>
-                      <TableCell>{transaction.time}</TableCell>
+                      <TableCell>{formatTime(transaction.created)}</TableCell>
                       <TableCell>${transaction.amount.toLocaleString()}</TableCell>
                       <TableCell>{transaction.currency}</TableCell>
                       <TableCell>{transaction.customerEmail}</TableCell>
