@@ -126,5 +126,4 @@ const BlogDetailPageCustomer = () => {
     </CustomerLayout>
   );
 };
-
 export default BlogDetailPageCustomer;
