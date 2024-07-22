@@ -5,7 +5,7 @@ const sendEmail = async (to, subject, text) => {
     from: process.env.SMTP_USER,
     to,
     subject,
-    text,
+    html,
   };
 
   try {
