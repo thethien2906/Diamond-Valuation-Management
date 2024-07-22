@@ -137,42 +137,41 @@ const updateCommitStatus = async (req, res) => {
       commit.status = status;
       await commit.save();
       
-      // Send email based on status change
+     
       const emailHtml = status === 'Approved' ? 
-    `
-    <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
-      <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
-        <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+      `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
+        <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
+          <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+        </div>
+        <h2 style="color: #fff;">Commitment Request Approved</h2>
+        <p style="color: #fff;">Dear ${commit.customerName},</p>
+        <p style="color: #fff;">Your commitment request has been approved.</p>
+        <p style="color: #fff;">Thank you for your patience and cooperation.</p>
+        <p style="color: #fff;">Best regards,</p>
+        <p style="color: #fff;">Your Company Team</p>
       </div>
-      <h2 style="color: #fff;">Commitment Request Approved</h2>
-      <p style="color: #fff;">Dear ${commit.customerName},</p>
-      <p style="color: #fff;">Your commitment request has been approved.</p>
-      <p style="color: #fff;">Thank you for your patience and cooperation.</p>
-      <p style="color: #fff;">Best regards,</p>
-      <p style="color: #fff;">Your Company Team</p>
-    </div>
-    ` :
-    `
-    <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
-      <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
-        <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+      ` :
+      `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
+        <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
+          <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+        </div>
+        <h2 style="color: #fff;">Commitment Request Denied</h2>
+        <p style="color: #fff;">Dear ${commit.customerName},</p>
+        <p style="color: #fff;">Your commitment request has been denied.</p>
+        <p style="color: #fff;">We apologize for any inconvenience this may cause. Please come to our store to collect your receipt and pay a penalty of $10. You may present the receipt to receive your diamonds and report.</p>
+        <p style="color: #fff;">Thank you for your understanding.</p>
+        <p style="color: #fff;">Best regards,</p>
+        <p style="color: #fff;">Your Company Team</p>
       </div>
-
-      <h2 style="color: #fff;">Commitment Request Denied</h2>
-      <p style="color: #fff;">Dear ${commit.customerName},</p>
-      <p style="color: #fff;">Your commitment request has been denied.</p>
-      <p style="color: #fff;">We apologize for any inconvenience this may cause. Please contact us for further assistance or to discuss alternative options.</p>
-      <p style="color: #fff;">Thank you for your understanding.</p>
-      <p style="color: #fff;">Best regards,</p>
-      <p style="color: #fff;">Your Company Team</p>
-    </div>
-    `;
-
-    sendEmail(commit.email, `Commitment Request ${status}`, emailHtml);
-
-      // populate recordId from commit and add new action "Commitment Request Approved" to actions array
+      `;
+  
+      await sendEmail(commit.email, `Commitment Request ${status}`, emailHtml);
+  
+    
       const record = await ValuationRecord.findById(commit.recordId);
-      const actions = record.actions;
+      const actions = record.actions || [];
       const newAction = {
         action: `Commitment Request ${status} by Manager`,
         timestamp: Date.now(),
@@ -180,9 +179,7 @@ const updateCommitStatus = async (req, res) => {
       actions.push(newAction);
       record.actions = actions;
       await record.save();
-      
-
-
+  
       res.status(200).json({ message: 'Commitment request status updated successfully', commit });
     } catch (error) {
       console.error('Error updating commitment request status:', error);

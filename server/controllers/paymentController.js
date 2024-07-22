@@ -85,8 +85,7 @@ const rejectBooking = async (req, res) => {
     await booking.save();
 
     // Send email
-    await sendEmail(
-      booking.email,`
+    const emailHtml = `
       <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
         <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
           <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
@@ -99,14 +98,17 @@ const rejectBooking = async (req, res) => {
         <p style="color: #fff;">Best regards,</p>
         <p style="color: #fff;">Your Company Team</p>
       </div>
-    `
-    );
+    `;
+
+    await sendEmail(booking.email, 'Booking Rejected and Refunded', emailHtml, 'html');
+    
     res.json({ message: 'Booking rejected and payment refunded', refund });
   } catch (error) {
     console.error('Error rejecting booking and processing refund:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 
 
 
