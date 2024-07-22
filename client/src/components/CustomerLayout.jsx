@@ -73,7 +73,7 @@ const theme = useTheme();
           <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-start', padding: '10px' }}>
             <img
               style={{ width: '80px', height: 'auto' }}
-              src="LogoHeader.jpg"
+              src="/LogoHeader.jpg"
               alt="Logo"
             />
           </div>
@@ -112,7 +112,7 @@ const theme = useTheme();
             {isMdUp ? (
               <>
                 <Typography variant="h6" sx={{ fontSize: '14px', color: 'white', cursor: 'pointer' }} onClick={handleMenu}>
-                  {user ? user.name : 'Sign In'}
+                  {user.name}
                 </Typography>
                 <Menu
                   id="menu-appbar"
@@ -194,7 +194,7 @@ const theme = useTheme();
               <div style={{ display: 'flex', justifyContent: 'center', paddingRight: '350px', paddingTop: '50px' }}>
                 <img
                   style={{ width: '120px', height: 'auto' }}
-                  src="LogoHeader.jpg"
+                  src="/LogoHeader.jpg"
                   alt="Logo"
                 />
               </div>
@@ -222,13 +222,10 @@ const theme = useTheme();
                 Contact Us
               </Typography>
               <Typography variant="body2">
-                Hotline: +1 (234) 567-890
+                Hotline: +64 (073) 432-190
               </Typography>
               <Typography variant="body2">
-                Email: info@diamondappraisals.com
-              </Typography>
-              <Typography variant="h5" sx={{ marginTop: '10px' }}>
-                Showrooms
+                Email: TheThien1234@gmail.com
               </Typography>
             </Grid>
           </Grid>

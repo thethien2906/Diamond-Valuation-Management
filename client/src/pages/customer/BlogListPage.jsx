@@ -42,8 +42,8 @@ const BlogListPageCustomer = () => {
   }
 
   return (
-    <CustomerLayout sx={{ backgroundColor: '#f0f0f0' }}>
-      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', minHeight: '198vh', backgroundColor: 'white' }} />
+    <CustomerLayout>
+      <Box sx={{ position: 'absolute', width: '100%', minHeight: '100vh', backgroundColor: 'white' }} />
 
       {/* Large background image */}
       <Box
@@ -51,10 +51,6 @@ const BlogListPageCustomer = () => {
           position: 'relative',
           overflow: 'hidden',
           height: '400px',
-          marginTop: '-103px',
-          marginLeft: '-99px',
-          marginRight: '-98px',
-          zIndex: 0,
         }}
       >
         <img
@@ -80,7 +76,6 @@ const BlogListPageCustomer = () => {
           }}
         >
           <Typography variant="h3" component="h2" gutterBottom style={{ fontFamily: 'Times New Roman', fontWeight: 'bold' }}>
-            Blogs
           </Typography>
         </Box>
       </Box>
@@ -184,7 +179,7 @@ const BlogListPageCustomer = () => {
                   <Button
                     size="small"
                     component={Link}
-                    to={`/blogs/${blog._id}`}
+                    to={`/blog/${blog._id}`}
                     sx={{
                       backgroundColor: '#033F63',
                       color: '#ffffff',
@@ -209,5 +204,4 @@ const BlogListPageCustomer = () => {
     </CustomerLayout>
   );
 };
-
 export default BlogListPageCustomer;

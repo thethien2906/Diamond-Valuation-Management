@@ -5,20 +5,62 @@ const Service = require('../models/Service');
 const createBooking = async (req, res) => {
   try {
     const bookingData = req.body;
-    const consultant = await User.findOne({ userID: bookingData.consultantId });
-    if (!consultant) {
-      return res.status(404).json({ error: "Consultant not found." });
+
+    // Fetch all consultants
+    const consultants = await User.find({ role: 'consultant' });
+
+    if (!consultants || consultants.length === 0) {
+      return res.status(404).json({ error: "No consultants found." });
     }
+
+    // Get the pending bookings for each consultant
+    const consultantsWithPendingBookings = await Promise.all(
+      consultants.map(async (consultant) => {
+        const pendingBookingsCount = await Booking.countDocuments({
+          consultantId: consultant._id,
+          status: "pending"
+        });
+        return {
+          consultant,
+          pendingBookingsCount
+        };
+      })
+    );
+
+    // Find the consultant with the least pending bookings
+    let leastPendingConsultants = [];
+    let minPendingCount = Infinity;
+
+    for (const consultantData of consultantsWithPendingBookings) {
+      if (consultantData.pendingBookingsCount < minPendingCount) {
+        leastPendingConsultants = [consultantData.consultant];
+        minPendingCount = consultantData.pendingBookingsCount;
+      } else if (consultantData.pendingBookingsCount === minPendingCount) {
+        leastPendingConsultants.push(consultantData.consultant);
+      }
+    }
+
+    // Randomly select one of the consultants if there is a tie
+    const selectedConsultant = leastPendingConsultants[Math.floor(Math.random() * leastPendingConsultants.length)];
+
+    // Get the service
     const service = await Service.findById(bookingData.serviceId);
+    if (!service) {
+      return res.status(404).json({ error: "Service not found." });
+    }
+
+    // Create the new booking
     const newBooking = new Booking({
       ...bookingData,
       status: "pending",
-      consultantId: consultant._id,
-      customerId: bookingData.customerId, 
+      consultantId: selectedConsultant._id,
+      customerId: bookingData.customerId,
       serviceId: service._id,
-      
     });
+
+    // Save the new booking
     await newBooking.save();
+
     res.status(201).json({
       message: "Booking created successfully",
       booking: newBooking,
@@ -29,7 +71,6 @@ const createBooking = async (req, res) => {
   }
 };
 
-module.exports = { createBooking };
 
 
 const getBookingById = async (req, res) => {
