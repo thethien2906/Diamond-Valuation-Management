@@ -53,7 +53,9 @@ const ValuationTool = () => {
   const handleClarityChange = (value) => {
     setFormData({ ...formData, clarity: value });
   };
-
+  const handleHistoricalPrice = () => {
+    navigate('/historical-prices');
+  };
   const validateForm = () => {
     const newErrors = {};
 
@@ -109,8 +111,8 @@ const ValuationTool = () => {
                   <Typography gutterBottom>Carat</Typography>
                   <Slider
                     value={formData.carat}
-                    min={0.00}
-                    max={3}
+                    min={0.1}
+                    max={5.0}
                     step={0.05}
                     onChange={handleSliderChange('carat')}
                     valueLabelDisplay="auto"
@@ -219,6 +221,11 @@ const ValuationTool = () => {
                   </Typography>
                 </Box>
               )}
+            </Grid>
+            <Grid item xs={12}>
+              <Button variant="outlined" onClick={handleHistoricalPrice} sx={{ width: '100%', borderColor: '#033F63', color: '#033F63', mt: 2, '&:hover': { backgroundColor: '#033F63', color: 'white' } }}>
+                View Historical Prices
+              </Button>
             </Grid>
           </Grid>
         </Paper>
