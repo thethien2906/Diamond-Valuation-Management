@@ -146,6 +146,7 @@ const updateCommitStatus = async (req, res) => {
           <h2 style="color: #fff;">Commitment Request Approved</h2>
           <p style="color: #fff;">Dear ${commit.customerName},</p>
           <p style="color: #fff;">Your commitment request has been approved.</p>
+          <p style="color: #fff;">Please visit our store to collect your receipt and pay a fine of $10. You can then use the receipt to reclaim your diamonds and file a report.</p>
           <p style="color: #fff;">Thank you for your patience and cooperation.</p>
           <p style="color: #fff;">Best regards,</p>
           <p style="color: #fff;">Your Company Team</p>
@@ -159,7 +160,7 @@ const updateCommitStatus = async (req, res) => {
           <h2 style="color: #fff;">Commitment Request Denied</h2>
           <p style="color: #fff;">Dear ${commit.customerName},</p>
           <p style="color: #fff;">Your commitment request has been denied.</p>
-          <p style="color: #fff;">We apologize for any inconvenience this may cause. Please contact us for further assistance or to discuss alternative options.</p>
+          <p style="color: #fff;">We apologize for any inconvenience this may cause. Please visit our store for further assistance or to discuss alternative options.</p>
           <p style="color: #fff;">Thank you for your understanding.</p>
           <p style="color: #fff;">Best regards,</p>
           <p style="color: #fff;">Your Company Team</p>

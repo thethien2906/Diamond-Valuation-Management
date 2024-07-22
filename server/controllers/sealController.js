@@ -55,45 +55,72 @@ const getSealRequestsById = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
 }}
 const updateSealRequestStatus = async (req, res) => {
-    try {
-        const sealId = req.params.sealId;
-        const { status } = req.body;
+  try {
+      const sealId = req.params.sealId;
+      const { status } = req.body;
 
-        // 1. Update Seal Request Status
-        const updatedSeal = await Seal.findByIdAndUpdate(
-            sealId,
-            { status },
-            { new: true }
-        );
-        if (!updatedSeal) {
-            return res.status(404).json({ error: 'Seal request not found' });
-        }
-        
-        // 2. Update Valuation Record Status if Approved
-        if (status === 'Approved') {
-            const valuationRecord = await ValuationRecord.findById(updatedSeal.recordId);
+      // 1. Update Seal Request Status
+      const updatedSeal = await Seal.findByIdAndUpdate(
+          sealId,
+          { status },
+          { new: true }
+      );
+      if (!updatedSeal) {
+          return res.status(404).json({ error: 'Seal request not found' });
+      }
+      
+      // 2. Update Valuation Record Status if Approved
+      if (status === 'Approved') {
+          const valuationRecord = await ValuationRecord.findById(updatedSeal.recordId);
 
-            if (!valuationRecord) {
-                return res.status(404).json({ error: 'Valuation record not found' });
-            }
-            
-            await valuationRecord.updateOne({ status: 'Sealed' });
-        }
+          if (!valuationRecord) {
+              return res.status(404).json({ error: 'Valuation record not found' });
+          }
+          
+          await valuationRecord.updateOne({ status: 'Sealed' });
 
-        // 3. Send Response
-        res.json({ message: 'Seal request updated successfully' });
-        // 4. Add Action to Valuation Record
-        const record = await ValuationRecord.findById(updatedSeal.recordId);
-        record.actions.push({
-            action: `Seal Request ${status === 'Approved' ? 'Approved' : 'Rejected'}`,
-            timestamp: Date.now(),
-        });
+          // 3. Send Email to Customer
+          const customerEmail = updatedSeal.customerEmail; // Assuming customerEmail is stored in the seal request
 
-        await record.save();
-    } catch (error) {
-        console.error('Error updating seal request:', error);
-        res.status(500).json({ error: 'Internal server error' });
-    }
+          const transporter = nodemailer.createTransport({
+              service: 'gmail', // or any other email service provider
+              auth: {
+                  user: 'your-email@gmail.com',
+                  pass: 'your-email-password',
+              },
+          });
+
+          const mailOptions = {
+              from: 'your-email@gmail.com',
+              to: customerEmail,
+              subject: 'Seal Request Approved',
+              text: `Dear Customer,\n\nYour seal request has been approved. The valuation record is now sealed.\n\nBest regards,\nYour Company`,
+          };
+
+          transporter.sendMail(mailOptions, (error, info) => {
+              if (error) {
+                  console.error('Error sending email:', error);
+              } else {
+                  console.log('Email sent:', info.response);
+              }
+          });
+      }
+
+      // 4. Send Response
+      res.json({ message: 'Seal request updated successfully' });
+
+      // 5. Add Action to Valuation Record
+      const record = await ValuationRecord.findById(updatedSeal.recordId);
+      record.actions.push({
+          action: `Seal Request ${status === 'Approved' ? 'Approved' : 'Rejected'}`,
+          timestamp: Date.now(),
+      });
+
+      await record.save();
+  } catch (error) {
+      console.error('Error updating seal request:', error);
+      res.status(500).json({ error: 'Internal server error' });
+  }
 };
 
 const getSealingRequestsByConsultant = async (req, res) => {
