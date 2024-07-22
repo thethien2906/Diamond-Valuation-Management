@@ -6,6 +6,7 @@ import {
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import CustomerLayout from '../../components/CustomerLayout';
 const BlogDetailPageCustomer = () => {
   const { blogId } = useParams();
   const [blog, setBlog] = useState(null);
@@ -36,7 +37,7 @@ const BlogDetailPageCustomer = () => {
 
   if (!blog) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minheight: '100vh' }}>
         <Typography variant="h6" component="h2">No blog found</Typography>
       </Box>
     );
@@ -44,17 +45,14 @@ const BlogDetailPageCustomer = () => {
 
   return (
     <CustomerLayout>
-      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '89%', backgroundColor: 'white' }} />
+      <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '89%' }} />
       {/* Large background image */}
       <Box
         sx={{
           position: 'relative',
           overflow: 'hidden',
           height: '400px',
-          marginTop: '-103px',
-          marginLeft: '-99px',
-          marginRight: '-98px',
-          zIndex: 0,
+
         }}
       >
         <img
@@ -80,7 +78,6 @@ const BlogDetailPageCustomer = () => {
           }}
         >
           <Typography variant="h3" component="h2" gutterBottom style={{ fontFamily: 'Times New Roman', fontWeight: 'bold' }}>
-            Blogs
           </Typography>
         </Box>
       </Box>
@@ -113,14 +110,14 @@ const BlogDetailPageCustomer = () => {
         />
       </Box>
 
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, alignItems: 'left', backgroundColor: 'white', p: 3, maxWidth: '740px', mx: 'auto', zIndex: 2, position: 'relative', marginTop: '-500px', marginLeft: '0px' }}>
-        <Typography variant="h4" component="h2" gutterBottom sx={{ fontFamily: 'Times New Roman, Times, serif', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0,0,0,0.6)' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'left', backgroundColor: 'white', p: 3, maxWidth: '740px', mx: 'auto', zIndex: 2, position: 'relative', marginTop: '-500px', marginLeft: '0px' }}>
+        <Typography variant="h4" component="h2" gutterBottom sx={{ fontFamily: 'Arial', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0,0,0,0.6)' }}>
           {blog.title.toUpperCase()}
         </Typography>
         <Typography variant="body2" color="textSecondary" gutterBottom>
           {new Date(blog.createdAt).toLocaleDateString()}
         </Typography>
-        <Typography variant="body1" sx={{ fontFamily: 'Times New Roman' }} dangerouslySetInnerHTML={{ __html: blog.content }}>
+        <Typography variant="body1" sx={{ fontFamily: 'Arial' }} dangerouslySetInnerHTML={{ __html: blog.content }}>
         </Typography>
       </Box>
     </CustomerLayout>
