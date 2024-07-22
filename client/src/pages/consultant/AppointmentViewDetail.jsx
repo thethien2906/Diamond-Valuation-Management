@@ -20,7 +20,8 @@ const AppointmentViewDetail = () => {
     const fetchBookingDetails = async () => {
       try {
         const response = await axios.get(`/api/bookings/${bookingId}`);
-        setBookingDetails(response.data);
+        const serviceResponse = await axios.get(`/api/services/${response.data.serviceId}`);
+        setBookingDetails({ ...response.data, service: serviceResponse.data.name });
       } catch (error) {
         console.error("Error fetching booking details:", error);
         toast.error("Failed to fetch booking details"); 
@@ -66,11 +67,7 @@ const AppointmentViewDetail = () => {
                 Phone Number: {bookingDetails.phoneNumber}
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="body1">
-                Identity Card: {bookingDetails.identityCard}
-              </Typography>
-            </Grid>
+            
             <Grid item xs={12} sm={6}>
               <Typography variant="body1">
                 Address: {bookingDetails.address}
@@ -84,6 +81,11 @@ const AppointmentViewDetail = () => {
             <Grid item xs={12} sm={6}>
               <Typography variant="body1">
                 Time: {bookingDetails.time}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1">
+                Service: {bookingDetails.service}
               </Typography>
             </Grid>
           </Grid>

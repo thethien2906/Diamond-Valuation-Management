@@ -174,7 +174,7 @@ const updateCommitStatus = async (req, res) => {
       const record = await ValuationRecord.findById(commit.recordId);
       const actions = record.actions;
       const newAction = {
-        action: `Commitment Request ${status}`,
+        action: `Commitment Request ${status} by Manager`,
         timestamp: Date.now(),
       };
       actions.push(newAction);
@@ -236,6 +236,16 @@ const updateCommitStatus = async (req, res) => {
   
       await transporter.sendMail(mailOptions); // Send the email
       await Commit.findByIdAndDelete(commitId);
+      //add action to record actions
+      const record = await ValuationRecord.findById(commit.recordId);
+      const actions = record.actions;
+      const newAction = {
+        action: 'Commitment Request Denied by Manager',
+        timestamp: Date.now(),
+      };
+      actions.push(newAction);
+      record.actions = actions;
+      await record.save();
       res.json({ message: 'Commitment request denied and email sent to customer' });
     } catch (error) {
       console.error('Error denying commitment request:', error);

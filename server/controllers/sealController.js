@@ -85,7 +85,7 @@ const updateSealRequestStatus = async (req, res) => {
         // 4. Add Action to Valuation Record
         const record = await ValuationRecord.findById(updatedSeal.recordId);
         record.actions.push({
-            action: `Seal Request ${status === 'Approved' ? 'Approved' : 'Rejected'}`,
+            action: `Seal Request ${status === 'Approved' ? 'Approved' : 'Rejected'} ny Manager`,
             timestamp: Date.now(),
         });
 
@@ -123,6 +123,13 @@ const unsealRecord = async (req, res) => {
     // Delete the seal
     await Seal.findByIdAndDelete(sealId);
 
+    // add actions to record
+    const record = await ValuationRecord.findById(seal.recordId);
+    record.actions.push({
+      action: 'Record Unsealed',
+      timestamp: Date.now(),
+    });
+    await record.save();
     res.json({ message: 'Record unsealed and seal deleted' });
   } catch (error) {
     console.error('Error unsealing record:', error);

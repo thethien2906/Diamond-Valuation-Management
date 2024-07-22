@@ -34,7 +34,21 @@ const PendingRequests = () => {
       const response = await axios.get(
         `/api/consultants/${user._id}/pending-bookings`
       );
-      setPendingBookings(response.data);
+
+      if (response.data && response.data.length > 0) {
+        const serviceResponse = await axios.get(
+          `/api/services/${response.data[0].serviceId}`
+        );
+
+        setPendingBookings([
+          {
+            ...response.data[0],
+            service: serviceResponse.data.name,
+          },
+        ]);
+      } else {
+        setPendingBookings([]);
+      }
     } catch (error) {
       console.error("Error fetching booking requests:", error);
       toast.error('Failed to fetch pending bookings');
@@ -94,49 +108,61 @@ const PendingRequests = () => {
           Refresh
         </Button>
       </Box>
-      <TableContainer component={Paper} sx={{ mt: 3, boxShadow: 3 }}>
-        <Table>
-          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold' }}>No</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Phone</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>View</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {(rowsPerPage > 0
-              ? pendingBookings.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              : pendingBookings
-            ).map((booking, index) => (
-              <TableRow key={booking._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{booking.name}</TableCell>
-                <TableCell>{booking.phoneNumber}</TableCell>
-                <TableCell>
-                  <IconButton
-                    color="black"
-                    component={Link}
-                    to={`/consultant/requests/${booking._id}`}
-                  >
-                    <RemoveRedEyeIcon />
-                  </IconButton>
-                </TableCell>
+      {pendingBookings.length > 0 ? (
+        <TableContainer component={Paper} sx={{ mt: 3, boxShadow: 3 }}>
+          <Table>
+            <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableRow>
+                <TableCell sx={{ fontWeight: 'bold' }}>No</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Phone</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Date</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Time</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Service Name</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>View</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[6, 12, 24]}
-          component="div"
-          count={pendingBookings.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-          labelRowsPerPage="Requests per page"
-        />
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {(rowsPerPage > 0
+                ? pendingBookings.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                : pendingBookings
+              ).map((booking, index) => (
+                <TableRow key={booking._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{booking.name}</TableCell>
+                  <TableCell>{booking.phoneNumber}</TableCell>
+                  <TableCell>{booking.date}</TableCell>
+                  <TableCell>{booking.time}</TableCell>
+                  <TableCell>{booking.service}</TableCell>
+                  <TableCell>
+                    <IconButton
+                      color="black"
+                      component={Link}
+                      to={`/consultant/requests/${booking._id}`}
+                    >
+                      <RemoveRedEyeIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[6, 12, 24]}
+            component="div"
+            count={pendingBookings.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            labelRowsPerPage="Requests per page"
+          />
+        </TableContainer>
+      ) : (
+        <Typography variant="body1" component="p" sx={{ mt: 3 }}>
+          No pending requests found.
+        </Typography>
+      )}
     </Box>
   );
 };

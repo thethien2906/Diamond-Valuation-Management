@@ -25,7 +25,9 @@ const ReceiptPrint = () => {
     const fetchReceiptData = async () => {
       try {
         const response = await axios.get(`/api/receipts/${receiptId}`);
-        setReceipt(response.data);
+        const consultantResponse = await axios.get(`/api/users/${response.data.consultantId}`);
+
+        setReceipt({ ...response.data, consultant: consultantResponse.data.name });
 
         if (response.data.serviceId) {
           const serviceResponse = await axios.get(`/api/services/${response.data.serviceId}`);
@@ -84,7 +86,7 @@ const ReceiptPrint = () => {
               <Typography variant="body1">Appointment Time: {receipt.appointmentTime}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="body1">Consultant ID: {receipt.consultantId}</Typography>
+              <Typography variant="body1">Consultant name: {receipt.consultant}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="body1">Service: {service.name}</Typography>

@@ -73,7 +73,7 @@ const createRecord = async (req, res) => {
 };
 const getRecordsByStatus = async (req, res) => {
   try {
-    const statuses = ['In Progress', 'Completed', 'Sealed','Valuated'];
+    const statuses = ['In Progress', 'Completed', 'Sealed','Valuated', 'Picked Up'];
     const records = await ValuationRecord.find({ status: { $in: statuses } });
     res.status(200).json(records); // Always return an array
   } catch (error) {
@@ -265,13 +265,15 @@ const updateRecordStatusToPickedUp = async (req, res) => {
     }
 
     record.status = 'Picked Up';
+    //add actions to record actions
+    record.actions.push({ action: 'Customer received diamond', timestamp: Date.now() });
     await record.save();
     //update the booking status to "completed" using receiptId
     const receipt = await Receipt.findById(record.receiptId);
     const booking = await Booking.findById(receipt.bookingId);
     booking.status = 'completed';
     await booking.save();
-
+    
     res.status(200).json({ message: 'Record status updated successfully' });
   } catch (error) {
     console.error('Error updating record status:', error);

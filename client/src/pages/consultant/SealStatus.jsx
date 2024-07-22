@@ -86,13 +86,15 @@ const ConsulatantSealStatus = () => {
                 <TableCell>{request.status}</TableCell>
                 <TableCell>{new Date(request.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleUnseal(request._id)}
-                  >
-                    Unseal
-                  </Button>
+                  {request.status !== 'Rejected' && (
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={() => handleUnseal(request._id)}
+                    >
+                      Unseal
+                    </Button>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

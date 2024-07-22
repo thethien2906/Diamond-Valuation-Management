@@ -21,7 +21,10 @@ const ViewRequestDetail = () => {
     const fetchBookingDetails = async () => {
       try {
         const response = await axios.get(`/api/bookings/${bookingId}`);
-        setBookingDetails(response.data);
+        const serviceResposne = await axios.get(`/api/services/${response.data.serviceId}`);
+
+        setBookingDetails({ ...response.data, service: serviceResposne.data.name });
+        
       } catch (error) { 
         console.error("Error fetching booking details:", error);
       }
@@ -64,7 +67,7 @@ const ViewRequestDetail = () => {
           <Typography variant="h6">Name: {bookingDetails.name}</Typography>
           <Typography variant="body1">Email: {bookingDetails.email}</Typography>
           <Typography variant="body1">Phone Number: {bookingDetails.phoneNumber}</Typography>
-          <Typography variant="body1">Identity Card: {bookingDetails.identityCard}</Typography>
+          <Typography variant="body1">Service Name: {bookingDetails.service}</Typography>
           <Typography variant="body1">Address: {bookingDetails.address}</Typography>
           <Typography variant="body1">Date: {bookingDetails.date}</Typography>
           <Typography variant="body1">Time: {bookingDetails.time}</Typography>
