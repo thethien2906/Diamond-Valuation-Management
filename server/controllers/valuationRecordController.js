@@ -29,14 +29,47 @@ const createRecord = async (req, res) => {
       return res.status(404).json({ error: 'Receipt not found' });
     }
 
-    // Find an available appraiser
-    const appraiser = await User.findOne({ role: 'appraiser' });
-    if (!appraiser) {
-      return res.status(503).json({ error: 'No appraiser available' }); // Use 503 Service Unavailable
+    // Fetch all appraisers
+    const appraisers = await User.find({ role: 'appraiser' });
+
+    if (!appraisers || appraisers.length === 0) {
+      return res.status(503).json({ error: 'No appraisers available' });
     }
 
+    // Get the "In Progress" records for each appraiser
+    const appraisersWithInProgressRecords = await Promise.all(
+      appraisers.map(async (appraiser) => {
+        const inProgressRecordsCount = await ValuationRecord.countDocuments({
+          appraiserId: appraiser._id,
+          status: 'In Progress',
+        });
+        return {
+          appraiser,
+          inProgressRecordsCount,
+        };
+      })
+    );
+
+    // Find the appraiser with the least "In Progress" records
+    let leastInProgressAppraisers = [];
+    let minInProgressCount = Infinity;
+
+    for (const appraiserData of appraisersWithInProgressRecords) {
+      if (appraiserData.inProgressRecordsCount < minInProgressCount) {
+        leastInProgressAppraisers = [appraiserData.appraiser];
+        minInProgressCount = appraiserData.inProgressRecordsCount;
+      } else if (appraiserData.inProgressRecordsCount === minInProgressCount) {
+        leastInProgressAppraisers.push(appraiserData.appraiser);
+      }
+    }
+
+    // Randomly select one of the appraisers if there is a tie
+    const selectedAppraiser = leastInProgressAppraisers[Math.floor(Math.random() * leastInProgressAppraisers.length)];
+
+    // Generate the record number
     const recordNumber = await generateRecordNumber();
 
+    // Create the new valuation record
     const newValuationRecord = new ValuationRecord({
       recordNumber,
       customerName: receipt.customerName,
@@ -48,16 +81,19 @@ const createRecord = async (req, res) => {
       serviceId: receipt.serviceId,
       consultantId: receipt.consultantId,
       customerId: receipt.customerId,
-      appraiserId: appraiser._id,
+      appraiserId: selectedAppraiser._id,
       status: 'In Progress',
     });
 
+    // Save the new valuation record
     const savedValuationRecord = await newValuationRecord.save();
+
+    // Update the booking status to 'valuating'
     const bookingId = receipt.bookingId;
     if (!mongoose.Types.ObjectId.isValid(bookingId)) {
       return res.status(400).json({ error: 'Invalid booking ID' });
     }
-    
+
     const booking = await Booking.findById(bookingId);
     if (!booking) {
       return res.status(404).json({ error: 'Booking not found' });
@@ -65,12 +101,14 @@ const createRecord = async (req, res) => {
 
     booking.status = 'valuating';
     await booking.save();
+
     res.status(201).json(savedValuationRecord);
   } catch (error) {
     console.error('Error creating valuation record:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 const getRecordsByStatus = async (req, res) => {
   try {
     const statuses = ['In Progress', 'Completed', 'Sealed','Valuated', 'Picked Up'];
@@ -109,16 +147,13 @@ const getRecordsCompleted = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
-const getRecordsvaluated = async (req, res) => {
+const getRecordsvaluatedByApprasierId = async (req, res) => {
   try {
-    const statuses = ['Valuated','Completed'];
-    const records = await ValuationRecord.find({ status: { $in: statuses } });
-    if (records.length === 0) {
-      return res.status(200).json({ message: 'No records found' }); // Return a 200 with the message
-    }
+    const appraiserId = req.params.appraiserId;
+    const records = await ValuationRecord.find({ appraiserId , status: ['Valuated', 'Completed'] });
     res.status(200).json(records);
-  } catch (error) {
-    console.error('Error fetching records with status "Completed":', error);
+  } catch (error) { 
+    console.error('Error fetching records by appraiser ID:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
@@ -312,19 +347,51 @@ const getNamesByIds = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+const getRecordsByConsultantId = async (req, res) => {
+  try {
+    const consultantId = req.params.consultantId;
+
+    if (!mongoose.Types.ObjectId.isValid(consultantId)) {
+      return res.status(400).json({ error: 'Invalid consultant ID' });
+    }
+
+    const records = await ValuationRecord.find({ consultantId });
+
+    if (!records || records.length === 0) {
+      return res.status(404).json({ error: 'No records found for this consultant' });
+    }
+
+    res.status(200).json(records);
+  } catch (error) {
+    console.error('Error fetching records by consultant ID:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
 const getRecordsByAppraiserId = async (req, res) => {
   try {
-    const { appraiserId } = req.params;
+    const appraiserId = req.params.appraiserId;
 
-    // Fetch the count of records with status "In Progress"
-    const count = await ValuationRecord.countDocuments({ appraiserId, status: "In Progress" });
+    if (!mongoose.Types.ObjectId.isValid(appraiserId)) {
+      return res.status(400).json({ error: 'Invalid appraiser ID' });
+    }
+    //check if the records status is "In Progress"
 
-    res.status(200).json({ count }); // Send count in the response
+    const records = await ValuationRecord.find({ appraiserId, status: 'In Progress' });
+
+    
+
+    if (!records || records.length === 0) {
+      return res.status(404).json({ error: 'No records found for this appraiser' });
+    }
+
+    res.status(200).json(records);
   } catch (error) {
     console.error('Error fetching records by appraiser ID:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 module.exports = { 
   createRecord, 
   getRecordsByStatus, 
@@ -332,10 +399,11 @@ module.exports = {
   updateRecordById, 
   getRecordsInProgress, 
   getRecordsCompleted, 
-  getRecordsvaluated,
+  getRecordsvaluatedByApprasierId,
   getRecordsByUserId, 
   requestCommitment, 
   updateRecordStatusToCompleted,
   updateRecordStatusToPickedUp,
   getNamesByIds,
-  getRecordsByAppraiserId, };
+  getRecordsByAppraiserId, 
+  getRecordsByConsultantId};

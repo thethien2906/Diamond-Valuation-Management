@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import {
   Box,
@@ -23,7 +23,7 @@ import {
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-
+import { UserContext } from '../../context/userContext';
 const RecordView = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,11 +32,16 @@ const RecordView = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const navigate = useNavigate();
-
+  const { user } = useContext(UserContext);
   useEffect(() => {
     const fetchRecords = async () => {
+      if (!user || !user._id) {
+        toast.error('User not logged in');
+        return;
+      }
+
       try {
-        const response = await axios.get('/api/valuation-records');
+        const response = await axios.get(`/api/records/consultant/${user._id}`);
         // Ensure the response is an array
         if (Array.isArray(response.data)) {
           setRecords(response.data);
@@ -52,7 +57,7 @@ const RecordView = () => {
     };
 
     fetchRecords();
-  }, []);
+  }, [user]);
 
   const handleViewRecord = (recordId) => {
     navigate(`/consultant/valuation-records/${recordId}`);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import {
   Box,
@@ -16,16 +16,16 @@ import {
 import { Visibility } from '@mui/icons-material';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-
+import { UserContext } from '../../context/userContext';
 const TaskView = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  const { user } = useContext(UserContext);
   useEffect(() => {
     const fetchRecords = async () => {
       try {
-        const response = await axios.get('/api/valuation-records-valuated');
+        const response = await axios.get(`/api/valuation-records-valuated/${user._id}`);
         setRecords(response.data);
       } catch (error) {
         console.error('Error fetching records:', error);

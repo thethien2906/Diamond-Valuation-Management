@@ -8,11 +8,12 @@ router.get('/valuation-records/:recordId', valuationRecordController.getRecordBy
 router.put('/valuation-records/:recordId', valuationRecordController.updateRecordById);
 router.get('/valuation-records-in-progress', valuationRecordController.getRecordsInProgress); // Add this line
 router.get('/valuation-records-completed', valuationRecordController.getRecordsCompleted); 
-router.get('/valuation-records-valuated', valuationRecordController.getRecordsvaluated);
+router.get('/valuation-records-valuated/:appraiserId', valuationRecordController.getRecordsvaluatedByApprasierId);
 router.get('/valuation-records/user/:customerId', valuationRecordController.getRecordsByUserId);
 router.post('/valuation-records/request-commitment/:recordId', valuationRecordController.requestCommitment); // Add this line
 router.get('/valuation-records/details/:recordId', valuationRecordController.getNamesByIds);
 router.put('/valuation-records/:recordId/complete', valuationRecordController.updateRecordStatusToCompleted);
 router.put('/valuation-records/:recordId/picked-up', valuationRecordController.updateRecordStatusToPickedUp);
-router.get('/valuationrecords/:appraiserId', valuationRecordController.getRecordsByAppraiserId);
+router.get('/records/appraiser/:appraiserId', valuationRecordController.getRecordsByAppraiserId);
+router.get('/records/consultant/:consultantId', valuationRecordController.getRecordsByConsultantId);
 module.exports = router;

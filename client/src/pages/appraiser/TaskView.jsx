@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import {
   Box,
@@ -16,17 +16,26 @@ import {
 import { Visibility } from '@mui/icons-material';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
-
+import { UserContext } from '../../context/userContext';
 const TaskView = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
+  const { user } = useContext(UserContext);
   useEffect(() => {
     const fetchRecords = async () => {
+      if (!user || !user._id) {
+        toast.error('User not logged in');
+        return;
+      }
       try {
-        const response = await axios.get('/api/valuation-records-in-progress');
-        setRecords(response.data);
+        const response = await axios.get(`/api/records/appraiser/${user._id}`);
+        // Ensure the response is an array
+        if (Array.isArray(response.data)) {
+          setRecords(response.data);
+        } else {
+          throw new Error('Invalid data format');
+        }
       } catch (error) {
         console.error('Error fetching records:', error);
         toast.error('Failed to fetch records');
@@ -36,7 +45,7 @@ const TaskView = () => {
     };
 
     fetchRecords();
-  }, []);
+  }, [user]);
 
   const handleViewRecord = (recordId) => {
     navigate(`/appraiser/valuation-records/${recordId}`);
