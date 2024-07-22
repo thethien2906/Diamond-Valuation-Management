@@ -159,10 +159,10 @@ const RecordViewDetail = () => {
         </AccordionDetails>
       </Accordion>
       <Box sx={{ mt: 3 }}>
-        <Button variant="contained" color="secondary" onClick={handleSeal} sx={{ mr: 2 }}>
-          Seal
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleVerify} sx={{ mr: 2 }}>
+          <Button variant="contained" color="info" onClick={handleSeal} sx={{ mr: 2 }}>
+            Seal
+          </Button>
+        <Button variant="contained" color="success" onClick={handleVerify} sx={{ mr: 2 }}>
           Verify 
         </Button>
         <Button variant="contained" color="secondary" onClick={handleComplete} sx={{ mr: 2 }}>
