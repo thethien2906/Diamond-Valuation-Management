@@ -209,5 +209,4 @@ const BlogListPage = () => {
     </GuestLayout>
   );
 };
-
 export default BlogListPage;

@@ -128,5 +128,4 @@ const BlogDetailPage = () => {
     </GuestLayout>
   );
 };
-
 export default BlogDetailPage;
