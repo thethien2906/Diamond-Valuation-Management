@@ -28,9 +28,11 @@ const TaskDoneViewDetail = () => {
         const serviceResponse = await axios.get(`/api/services/${response.data.serviceId}`);
         const consultantResponse = await axios.get(`/api/users/${response.data.consultantId}`);
         const appraiserResponse = await axios.get(`/api/users/${response.data.appraiserId}`);
-        const feedbackResponse = await axios.get(`/api/feedback/${response.data.feedbackId}`);
+        if (response.data.feedbackId) {
+          const feedbackResponse = await axios.get(`/api/feedback/${response.data.feedbackId}`);
+          setFeedback(feedbackResponse.data);
+        }
         setRecord({ ...response.data, serviceName: serviceResponse.data.name, appraiserName: appraiserResponse.data.name, consultantName: consultantResponse.data.name });
-        setFeedback(feedbackResponse.data);
       } catch (error) {
         console.error('Error fetching valuation record data:', error);
         toast.error('Failed to fetch valuation record data');
@@ -218,7 +220,7 @@ const TaskDoneViewDetail = () => {
           </form>
         </Paper>
       </div>
-      {feedback && (
+      {record.feedbackId && feedback && (
         <Box sx={{ mt: 3 }}>
           <Typography variant="h6" component="h2" gutterBottom>Feedback from Consultant</Typography>
           <Paper sx={{ p: 3, mt: 2 }}>

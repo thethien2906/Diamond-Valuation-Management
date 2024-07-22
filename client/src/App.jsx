@@ -73,6 +73,11 @@ import ManagerServices from './pages/manager/ServiceManage';
 import BlogCRUD from './pages/manager/BlogManage';
 import BlogListPageGuest from './pages/guest/BlogListPage';
 import BlogDetailPageGuest from './pages/guest/BlogDetailPage';
+import RecordMonitoring from './pages/manager/RecordMonitoring';
+import RecordDetails from './pages/manager/RecordDetails';
+
+
+
 import Protected from './ProtectedRoute';
 import EarningChart from './pages/manager/EarningChart';
 import HomeCus from './pages/customer/HomeCus';
@@ -93,6 +98,7 @@ axios.defaults.withCredentials = true;
 
 function App() {
   return (
+
     <UserContextProvider>
       <ConsultantContextProvider>
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
@@ -154,6 +160,8 @@ function App() {
           <Route path="seal-requests/:sealId" element={<ManagerSealRequestDetail />} />
           <Route path="services" element={<ManagerServices />} />
           <Route path="blogs-manage" element={<BlogCRUD />} />
+          <Route path="records" element={<RecordMonitoring />} />
+          <Route path="records/:recordId" element={<RecordDetails />} />
           </Route>
 
           <Route path="/about-us-guest" element={<AboutUsGuest />} />

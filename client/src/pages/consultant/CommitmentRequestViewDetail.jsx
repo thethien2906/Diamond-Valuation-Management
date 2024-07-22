@@ -57,9 +57,10 @@ const CommitmentRequestViewDetail = () => {
       navigate('/consultant/commit-requests'); // Redirect after deleting
     } catch (error) {
       console.error('Error denying commitment request:', error);
+      toast.error('Failed to deny commitment request');
     }
   };
-  
+
   const handlePrintReceipt = async () => {
     try {
       // Fetch the record using the recordId from the commitment details
@@ -73,7 +74,7 @@ const CommitmentRequestViewDetail = () => {
       toast.error('Failed to fetch receipt details');
     }
   };
-  
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
@@ -113,25 +114,38 @@ const CommitmentRequestViewDetail = () => {
           </Grid>
         </Grid>
         <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
-          <Button variant="contained" color="primary" onClick={handleUpdateStatus}>
-            Submit
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handleDenyRequest}
-            sx={{ ml: 2 }}
-          >
-            Deny
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={handlePrintReceipt}
-            sx={{ ml: 2 }}
-          >
-            Print
-          </Button>
+          {commit.status === 'Approved' ? (
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={handlePrintReceipt}
+              sx={{ ml: 2 }}
+            >
+              Print
+            </Button>
+          ) : commit.status !== 'Rejected' ? (
+            <>
+              <Button variant="contained" color="primary" onClick={handleUpdateStatus}>
+                Submit
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleDenyRequest}
+                sx={{ ml: 2 }}
+              >
+                Deny
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={handlePrintReceipt}
+                sx={{ ml: 2 }}
+              >
+                Print
+              </Button>
+            </>
+          ) : null}
         </Box>
       </Paper>
     </Box>
