@@ -24,6 +24,7 @@ import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { UserContext } from '../../context/userContext';
+
 const RecordView = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,7 @@ const RecordView = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+
   useEffect(() => {
     const fetchRecords = async () => {
       if (!user || !user._id) {
@@ -50,7 +52,9 @@ const RecordView = () => {
         }
       } catch (error) {
         console.error('Error fetching records:', error);
-        toast.error('Failed to fetch records');
+        if (error.response && error.response.status !== 404) {
+          toast.error('Failed to fetch records');
+        }
       } finally {
         setLoading(false);
       }
@@ -77,18 +81,13 @@ const RecordView = () => {
   };
 
   const getStatusColor = (status) => {
-    if (status === 'Completed') {
-      return 'green';
-    } else if (status === 'In Progress') {
-      return 'red';
-    } else if (status === 'Valuated') {
-      return 'yellow';
-    } else if (status === 'Sealed') {
-      return 'purple';
-    } else if (status === 'Completed') {
-      return 'blue';
-    } else {
-      return 'gray';
+    switch (status) {
+      case 'Completed': return 'green';
+      case 'In Progress': return 'red';
+      case 'Valuated': return 'yellow';
+      case 'Sealed': return 'purple';
+      case 'Picked Up': return 'blue';
+      default: return 'gray';
     }
   };
 
@@ -152,71 +151,79 @@ const RecordView = () => {
           </Select>
         </FormControl>
       </Box>
-      <TableContainer component={Paper} sx={{ mt: 3, boxShadow: 3 }}>
-        <Table>
-          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold' }}>Record Number</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>View</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredRecords
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((record) => (
-                <TableRow key={record._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
-                  <TableCell>{record.recordNumber}</TableCell>
-                  <TableCell>{record.customerName}</TableCell>
-                  <TableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Box
-                        sx={{
-                          width: 10,
-                          height: 10,
-                          borderRadius: '50%',
-                          backgroundColor: getStatusColor(record.status),
-                          mr: 1
-                        }}
-                      />
-                      <Button
-                        variant="text"
-                        size="small"
-                        onClick={() => handleViewStatus(record._id)}
-                        sx={{
-                          textTransform: 'none',
-                          padding: 0,
-                          minWidth: 'auto',
-                          color: 'black'
-                        }}
-                      >
-                        {record.status}
-                      </Button>
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    <IconButton
-                      color="black"
-                      onClick={() => handleViewRecord(record._id)}
-                    >
-                      <RemoveRedEyeIcon />
-                    </IconButton>
-                  </TableCell>
+      {filteredRecords.length === 0 ? (
+        <Typography variant="h6" align="center" sx={{ mt: 3 }}>
+          No records found
+        </Typography>
+      ) : (
+        <>
+          <TableContainer component={Paper} sx={{ mt: 3, boxShadow: 3 }}>
+            <Table>
+              <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Record Number</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>View</TableCell>
                 </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[6, 12, 24]}
-          component="div"
-          count={filteredRecords.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </TableContainer>
+              </TableHead>
+              <TableBody>
+                {filteredRecords
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((record) => (
+                    <TableRow key={record._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
+                      <TableCell>{record.recordNumber}</TableCell>
+                      <TableCell>{record.customerName}</TableCell>
+                      <TableCell>
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <Box
+                            sx={{
+                              width: 10,
+                              height: 10,
+                              borderRadius: '50%',
+                              backgroundColor: getStatusColor(record.status),
+                              mr: 1
+                            }}
+                          />
+                          <Button
+                            variant="text"
+                            size="small"
+                            onClick={() => handleViewStatus(record._id)}
+                            sx={{
+                              textTransform: 'none',
+                              padding: 0,
+                              minWidth: 'auto',
+                              color: 'black'
+                            }}
+                          >
+                            {record.status}
+                          </Button>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        <IconButton
+                          color="black"
+                          onClick={() => handleViewRecord(record._id)}
+                        >
+                          <RemoveRedEyeIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+            <TablePagination
+              rowsPerPageOptions={[6, 12, 24]}
+              component="div"
+              count={filteredRecords.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </TableContainer>
+        </>
+      )}
     </Box>
   );
 };

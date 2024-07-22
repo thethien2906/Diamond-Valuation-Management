@@ -11,17 +11,22 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  IconButton
+  IconButton,
+  TablePagination
 } from '@mui/material';
 import { Visibility } from '@mui/icons-material';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
+
 const TaskView = () => {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
+
   useEffect(() => {
     const fetchRecords = async () => {
       try {
@@ -36,10 +41,19 @@ const TaskView = () => {
     };
 
     fetchRecords();
-  }, []);
+  }, [user._id]);
 
   const handleViewRecord = (recordId) => {
     navigate(`/appraiser/task-view/${recordId}`);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   if (loading) {
@@ -67,7 +81,7 @@ const TaskView = () => {
           </TableHead>
           <TableBody>
             {Array.isArray(records) && records.length > 0 ? (
-              records.map((record) => (
+              records.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((record) => (
                 <TableRow key={record._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                   <TableCell>{record.recordNumber}</TableCell>
                   <TableCell>{record.customerName}</TableCell>
@@ -89,7 +103,17 @@ const TaskView = () => {
             )}
           </TableBody>
         </Table>
+        <TablePagination
+        rowsPerPageOptions={[6, 10, 25]}
+        component="div"
+        count={records.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
       </TableContainer>
+
     </Box>
   );
 };

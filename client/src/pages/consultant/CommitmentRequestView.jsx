@@ -63,48 +63,54 @@ const CommitmentRequests = () => {
       <Typography variant="h6" component="h2" gutterBottom>
         Commitment Requests
       </Typography>
-      <TableContainer component={Paper} sx={{ mt: 3, boxShadow: 3 }}>
-        <Table>
-          <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 'bold' }}>Record ID</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Date Issued</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {requests
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((request) => (
-                <TableRow key={request._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
-                  <TableCell>{request.recordId}</TableCell>
-                  <TableCell>{request.customerName}</TableCell>
-                  <TableCell>{request.status}</TableCell>
-                  <TableCell>{new Date(request.dateIssued).toLocaleDateString()}</TableCell>
-                  <TableCell>
-                    <IconButton
-                      color="black"
-                      onClick={() => handleViewDetail(request._id)}
-                    >
-                      <RemoveRedEyeIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-          </TableBody>
-        </Table>
-        <TablePagination
-          rowsPerPageOptions={[6, 12, 24]}
-          component="div"
-          count={requests.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </TableContainer>
+      {requests.length === 0 ? (
+        <Typography variant="h6" align="center">
+          There are no commitment requests.
+        </Typography>
+      ) : (
+        <TableContainer component={Paper} sx={{ mt: 3, boxShadow: 3 }}>
+          <Table>
+            <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
+              <TableRow>
+                <TableCell sx={{ fontWeight: 'bold' }}>Record ID</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Date Issued</TableCell>
+                <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {requests
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((request) => (
+                  <TableRow key={request._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
+                    <TableCell>{request.recordId}</TableCell>
+                    <TableCell>{request.customerName}</TableCell>
+                    <TableCell>{request.status}</TableCell>
+                    <TableCell>{new Date(request.dateIssued).toLocaleDateString()}</TableCell>
+                    <TableCell>
+                      <IconButton
+                        color="black"
+                        onClick={() => handleViewDetail(request._id)}
+                      >
+                        <RemoveRedEyeIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+            rowsPerPageOptions={[6, 12, 24]}
+            component="div"
+            count={requests.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </TableContainer>
+      )}
     </Box>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, IconButton } from '@mui/material';
+import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, IconButton, TablePagination } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -8,6 +8,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 const ManagerSealingRequests = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +30,15 @@ const ManagerSealingRequests = () => {
 
   const handleViewDetail = (sealId) => {
     navigate(`/manager/seal-requests/${sealId}`);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
   };
 
   if (loading) {
@@ -64,7 +75,7 @@ const ManagerSealingRequests = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {requests.map((request) => (
+            {requests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((request) => (
               <TableRow key={request._id}>
                 <TableCell>{request.recordId.recordNumber}</TableCell>
                 <TableCell>{request.customerName}</TableCell>
@@ -84,6 +95,15 @@ const ManagerSealingRequests = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[6, 10, 25]}
+        component="div"
+        count={requests.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </Box>
   );
 };

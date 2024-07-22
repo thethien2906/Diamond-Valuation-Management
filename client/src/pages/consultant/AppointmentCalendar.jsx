@@ -14,7 +14,6 @@ import {
   TableRow,
   Paper,
   CircularProgress,
-  useTheme,
   IconButton,
   TablePagination,
   TextField,
@@ -35,7 +34,6 @@ const AppointmentCalendar = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
   const navigate = useNavigate();
-  const theme = useTheme();
 
   const fetchApprovedBookings = async () => {
     try {
@@ -149,6 +147,10 @@ const AppointmentCalendar = () => {
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
           <CircularProgress />
         </Box>
+      ) : filteredBookings.length === 0 ? (
+        <Typography variant="h6" align="center">
+          There are no appointments.
+        </Typography>
       ) : (
         <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3 }}>
           <Table>
