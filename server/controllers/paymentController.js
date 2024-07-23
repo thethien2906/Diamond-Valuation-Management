@@ -1,7 +1,7 @@
 const Stripe = require('stripe');
 const Booking = require('../models/Booking');
 const Service = require('../models/Service');
-const { sendEmail } = require('../config/emailService');
+const transporter = require('../config/nodemailer');
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const Transaction = require('../models/Transaction');
 const createCheckoutSession = async (req, res) => {
@@ -85,24 +85,28 @@ const rejectBooking = async (req, res) => {
     await booking.save();
 
     // Send email
-    await sendEmail(
-      booking.email,
-      'Booking Rejected and Refunded', // Email subject
+    const mailOptions = {
+      from: process.env.SMTP_USER,
+      to: booking.email, // Assuming you have customer's email in booking
+      subject: 'Booking Rejected',
+      html: `
+        <h1>Booking Rejected</h1>
+        <p>Dear ${booking.customerName},</p>
+        <p>We regret to inform you that your booking with DiamondScope has been rejected.</p>
+        <p>The payment has been refunded to your account.</p>
+        <p>Thank you for understanding.</p>
+        <p>Best regards,</p>
+        <p>DiamondScope</p>
       `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
-        <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
-          <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
-        </div>
-        <h2 style="color: #fff;">Booking Rejected and Refunded</h2>
-        <p style="color: #fff;">Dear ${booking.name},</p>
-        <p style="color: #fff;">Your booking for ${booking.serviceId.name} has been rejected and your payment has been refunded.</p>
-        <p style="color: #fff;">If you have any questions, please contact us.</p>
-        <p style="color: #fff;">Thank you for your understanding.</p>
-        <p style="color: #fff;">Best regards,</p>
-        <p style="color: #fff;">Your Company Team</p>
-      </div>
-    `
-    );
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+      } else {
+        console.log('Email sent:', info.response);
+      }
+    });
     res.json({ message: 'Booking rejected and payment refunded', refund });
   } catch (error) {
     console.error('Error rejecting booking and processing refund:', error);

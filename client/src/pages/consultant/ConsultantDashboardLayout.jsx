@@ -172,7 +172,7 @@ const ConsultantDashboardLayout = () => {
               <PendingActionsIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Pending Requests" />
-            <Badge badgeContent={pendingRequestsCount} color="error" />
+            
           </ListItemButton>
           <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant/valuation-records">
             <ListItemIcon>
@@ -185,7 +185,7 @@ const ConsultantDashboardLayout = () => {
               <EditOffIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Commitment Requests" />
-            <Badge badgeContent={commitmentRequestsCount} color="error" />
+            
           </ListItemButton>
           <ListItemButton onClick={toggleDrawer} component={Link} to="/consultant/seal-status">
             <ListItemIcon>
@@ -232,7 +232,7 @@ const ConsultantDashboardLayout = () => {
               <PendingActionsIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Pending Requests" />
-            <Badge badgeContent={pendingRequestsCount} color="error" />
+            
           </ListItemButton>
           <ListItemButton component={Link} to="/consultant/valuation-records">
             <ListItemIcon>

@@ -27,7 +27,10 @@ import { axisClasses } from '@mui/x-charts/ChartsAxis';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import SearchIcon from '@mui/icons-material/Search';
 
-const valueFormatter = (value) => `$${value?.toLocaleString()}`;
+const valueFormatter = (value) => {
+  const formattedValue = value.toFixed(2);
+  return `$${formattedValue.padStart(6, '0')}`;
+};
 
 const RightAlignedBox = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -106,8 +109,8 @@ export default function EarningChart() {
   };
 
   const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June', 
-    'July', 'August', 'September', 'October', 'November', 'December'
+    'January', 'February', 'March', 'April', 'May', 'June',
+'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
   const dataset = monthlyEarnings.map((value, index) => ({
@@ -119,7 +122,7 @@ export default function EarningChart() {
     yAxis: [
       {
         position: 'right',
-        valueFormatter: (value) => `$${value.toLocaleString()}`,
+        valueFormatter,
       },
     ],
     series: [{ dataKey: 'earnings', label: 'Monthly Earnings', valueFormatter }],
@@ -162,7 +165,7 @@ export default function EarningChart() {
               <Paper elevation={3} sx={{ p: 2, display: 'flex', alignItems: 'center', borderRadius: 16, backgroundColor: '#f0f0f0' }}>
                 <MonetizationOnIcon sx={{ mr: 1 }} />
                 <Typography variant="body1">
-                  Total Payments for the Year: ${totalPayments.toLocaleString()}
+                  Total Payments for the Year: ${totalPayments.toFixed(2).padStart(6, '0')}
                 </Typography>
               </Paper>
             </Grid>
@@ -196,7 +199,7 @@ export default function EarningChart() {
                       </IconButton>
                     </InputAdornment>
                   ),
-                }}
+}}
               />
             </Grid>
           </Grid>
@@ -221,7 +224,7 @@ export default function EarningChart() {
                     <TableRow key={index}>
                       <TableCell>{formatDate(transaction.created)}</TableCell>
                       <TableCell>{formatTime(transaction.created)}</TableCell>
-                      <TableCell>${transaction.amount.toLocaleString()}</TableCell>
+                      <TableCell>{valueFormatter(transaction.amount)}</TableCell>
                       <TableCell>{transaction.currency}</TableCell>
                       <TableCell>{transaction.customerEmail}</TableCell>
                       <TableCell>{transaction.customerName}</TableCell>

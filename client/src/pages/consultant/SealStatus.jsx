@@ -86,7 +86,7 @@ const ConsulatantSealStatus = () => {
                 <TableCell>{request.status}</TableCell>
                 <TableCell>{new Date(request.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell>
-                  {request.status !== 'Rejected' && (
+                  {request.status === 'Approved' && (
                     <Button
                       variant="contained"
                       color="secondary"

@@ -202,9 +202,9 @@ const AppraiserDashboard = () => {
         <List>
           <ListItemButton component={Link} to="/appraiser/task-view">
             <ListItemIcon>
-              <Badge badgeContent={inProgressCount} color="error">
+              
                 <CalendarTodayIcon sx={{ color: '#fff' }} />
-              </Badge>
+             
             </ListItemIcon>
             <ListItemText primary="View Assigned Task" />
           </ListItemButton>

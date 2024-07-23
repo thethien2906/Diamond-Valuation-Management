@@ -114,7 +114,7 @@ function App() {
           <Route path="/reset-password" element={<PasswordMailVerify />} />
           <Route path="/reset-password/:userId" element={<ResetPassword />} />
           {/* Nested routes under AdminDashboard */}
-          <Route path="/admin" element={<Protected allowedRoles={['admin']}><AdminDashboard /></Protected>}>
+          <Route path="/admin" element={<AdminDashboard />}>
             <Route path="users" element={<ViewUsers />} />
             <Route path="staff" element={<ViewStaffs />} />
             <Route path="edit/:staffId" element={<ViewStaffEdit />} />
@@ -122,7 +122,7 @@ function App() {
           </Route>
 
           {/* Nested routes under ConsultantDashboard */}
-          <Route path="/consultant" element={<Protected allowedRoles={['consultant']}><ConsultantDashboardLayout /></Protected>}>
+          <Route path="/consultant" element={<ConsultantDashboardLayout />}>
             <Route index element={<PendingRequests />} />
             <Route path="requestView/:bookingId" element={<RequestView/>}/>
             <Route path="receipt" element={<Receipt/>}/>
@@ -143,7 +143,7 @@ function App() {
           </Route>
 
           {/* Nested routes under AppraiserDashboard */}
-          <Route path="/appraiser" element={<Protected allowedRoles={['appraiser']}><AppraiserDashboard /></Protected>}>
+          <Route path="/appraiser" element={<AppraiserDashboard />}>
             <Route index element={<AppraiserDashboard />} />
             <Route path="task-view" element={<TaskView />} />
             <Route path="valuation-records/:recordId" element={<ValuationRecordAppraiserDetail />} />
@@ -152,7 +152,7 @@ function App() {
             <Route path="diamond-classify" element={<DiamondClassify />} />
           </Route>
 
-          <Route path="/manager" element={<Protected allowedRoles={['manager']}><ManagerLayout /></Protected>}>
+          <Route path="/manager" element={<ManagerLayout />}>
           <Route path="dashboard" element={<EarningChart/>}/>
           <Route path="commit-requests" element={<ManagerCommitRequests />} />
           <Route path="commit-requests/:commitId" element={<ManagerCommitRequestDetail />} />

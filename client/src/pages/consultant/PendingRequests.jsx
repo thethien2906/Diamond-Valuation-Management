@@ -31,21 +31,20 @@ const PendingRequests = () => {
 
   const fetchPendingBookings = async () => {
     try {
-      const response = await axios.get(
-        `/api/consultants/${user._id}/pending-bookings`
-      );
+      const response = await axios.get(`/api/consultants/${user._id}/pending-bookings`);
+      const bookings = response.data;
 
-      if (response.data && response.data.length > 0) {
-        const serviceResponse = await axios.get(
-          `/api/services/${response.data[0].serviceId}`
+      if (bookings && bookings.length > 0) {
+        const updatedBookings = await Promise.all(
+          bookings.map(async (booking) => {
+            const serviceResponse = await axios.get(`/api/services/${booking.serviceId}`);
+            return {
+              ...booking,
+              service: serviceResponse.data.name,
+            };
+          })
         );
-
-        setPendingBookings([
-          {
-            ...response.data[0],
-            service: serviceResponse.data.name,
-          },
-        ]);
+        setPendingBookings(updatedBookings);
       } else {
         setPendingBookings([]);
       }
@@ -109,7 +108,7 @@ const PendingRequests = () => {
         </Button>
       </Box>
       {pendingBookings.length > 0 ? (
-        <TableContainer component={Paper} sx={{ mt: 3, boxShadow: 3 }}>
+<TableContainer component={Paper} sx={{ mt: 3, boxShadow: 3 }}>
           <Table>
             <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
               <TableRow>
@@ -128,7 +127,7 @@ const PendingRequests = () => {
                 : pendingBookings
               ).map((booking, index) => (
                 <TableRow key={booking._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
-                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                   <TableCell>{booking.name}</TableCell>
                   <TableCell>{booking.phoneNumber}</TableCell>
                   <TableCell>{booking.date}</TableCell>

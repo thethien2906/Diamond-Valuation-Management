@@ -130,7 +130,7 @@ const BookingForm = () => {
             Please fill out this form to book an appointment.
           </Typography>
           <Typography variant="body1" paragraph sx={{ textAlign: "center", color: '#B0C4DE' }}>
-            We need your contact information to confirm your booking.
+            PLEASE MAKE SURE YOUR INFORMATION IS CORRECT. YOU CAN NOT CHANGE LATER.
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%', display: "flex", flexDirection: "column", gap: 2 }}>
             <TextField
@@ -312,7 +312,11 @@ const BookingForm = () => {
                 value={formData.time}
                 onChange={handleChange}
                 InputLabelProps={{ shrink: true, style: { color: '#B0C4DE' } }}
-                inputProps={{ style: { color: '#FFFFFF' } }}
+                inputProps={{
+                  style: { color: '#FFFFFF' },
+                  min: "09:00", // Minimum time
+                  max: "16:00"  // Maximum time
+                }}
                 sx={{
                   flex: 1,
                   '& .MuiOutlinedInput-root': {

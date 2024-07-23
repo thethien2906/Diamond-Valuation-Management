@@ -108,22 +108,22 @@ const updateCommitStatus = async (req, res) => {
       res.status(500).json({ error: 'Internal server error' });
     }
   };
-  const sendEmail = (email, subject, text) => {
+  const sendEmail = async (to, subject, html) => {
     const mailOptions = {
       from: process.env.SMTP_USER,
-      to: email,
-      subject: subject,
-      text: text
+      to,
+      subject,
+      html,
     };
   
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending email:', error);
-      } else {
-        console.log('Email sent:', info.response);
-      }
-    });
+    try {
+      await transporter.sendMail(mailOptions);
+      console.log(`Email sent to ${to}`);
+    } catch (error) {
+      console.error(`Error sending email to ${to}:`, error);
+    }
   };
+  
   const updateCommitStatusByManager = async (req, res) => {
     try {
       const { commitId } = req.params;
@@ -137,36 +137,37 @@ const updateCommitStatus = async (req, res) => {
       commit.status = status;
       await commit.save();
   
-      // Send email based on status change
-      const emailHtml = status === 'Approved' ? 
-      `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
-        <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
-          <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+      // Prepare email HTML based on status change
+      const emailHtml = status === 'Approved' ?
+        `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
+          <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
+            <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+          </div>
+          <h2 style="color: #fff;">Commitment Request Approved</h2>
+          <p style="color: #fff;">Dear ${commit.customerName},</p>
+          <p style="color: #fff;">Your commitment request has been approved.</p>
+          <p style="color: #fff;">Thank you for your patience and cooperation.</p>
+          <p style="color: #fff;">Best regards,</p>
+          <p style="color: #fff;">Your Company Team</p>
         </div>
-        <h2 style="color: #fff;">Commitment Request Approved</h2>
-        <p style="color: #fff;">Dear ${commit.customerName},</p>
-        <p style="color: #fff;">Your commitment request has been approved.</p>
-        <p style="color: #fff;">Thank you for your patience and cooperation.</p>
-        <p style="color: #fff;">Best regards,</p>
-        <p style="color: #fff;">Your Company Team</p>
-      </div>
-      ` :
-      `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
-        <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
-          <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+        ` :
+        `
+        <div style="font-family: Arial, sans-serif; line-height: 1.6; text-align: center; border: 1px solid #ddd; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 20px; max-width: 600px; margin: auto; color: #fff; background-color: rgb(0, 27, 56);">
+          <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
+            <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+          </div>
+          <h2 style="color: #fff;">Commitment Request Denied</h2>
+          <p style="color: #fff;">Dear ${commit.customerName},</p>
+          <p style="color: #fff;">Your commitment request has been denied.</p>
+          <p style="color: #fff;">We apologize for any inconvenience this may cause. Please contact us for further assistance or to discuss alternative options.</p>
+          <p style="color: #fff;">Thank you for your understanding.</p>
+          <p style="color: #fff;">Best regards,</p>
+          <p style="color: #fff;">Your Company Team</p>
         </div>
-        <h2 style="color: #fff;">Commitment Request Denied</h2>
-        <p style="color: #fff;">Dear ${commit.customerName},</p>
-        <p style="color: #fff;">Your commitment request has been denied.</p>
-        <p style="color: #fff;">We apologize for any inconvenience this may cause. Please contact us for further assistance or to discuss alternative options.</p>
-        <p style="color: #fff;">Thank you for your understanding.</p>
-        <p style="color: #fff;">Best regards,</p>
-        <p style="color: #fff;">Your Company Team</p>
-      </div>
-      `;
+        `;
   
+      // Send the email
       await sendEmail(commit.email, `Commitment Request ${status}`, emailHtml);
   
       // Populate recordId from commit and add new action "Commitment Request Approved" to actions array

@@ -3,6 +3,7 @@ const Receipt = require('../models/Receipt');
 const User = require('../models/User');
 const Booking = require('../models/Booking');
 const mongoose = require('mongoose');
+const transporter = require('../config/nodemailer');
 
 let currentRecordNumber = 1;
 
@@ -251,6 +252,21 @@ const requestCommitment = async (req, res) => {
   }
 };
 
+const sendEmail = async (to, subject, html) => {
+  try {
+    await transporter.sendMail({
+      from: process.env.SMTP_USER, // sender address
+      to, // list of receivers
+      subject, // Subject line
+      html, // html body
+    });
+    console.log('Email sent successfully');
+  } catch (error) {
+    console.error('Error sending email:', error);
+  }
+};
+
+// API function to update record status to "Completed"
 const updateRecordStatusToCompleted = async (req, res) => {
   try {
     const { recordId } = req.params;
@@ -285,12 +301,32 @@ const updateRecordStatusToCompleted = async (req, res) => {
       caratWeight: updatedRecord.caratWeight.toString()
     };
 
+    // Send email notification
+    await sendEmail(
+      updatedRecord.email, 
+      'Certificate Ready for Collection',
+      `
+      <div style="border: 5px solid rgb(0, 27, 56); padding: 10px; background-color: rgb(0, 27, 56); text-align: center;">
+        <img src="https://i.pinimg.com/736x/6d/b4/ba/6db4ba2f50ba7a23197ff001b696538e.jpg" alt="Company Logo" style="width: 100px; border: 5px solid #fff;"/>
+      </div>
+      <h2>Certificate Ready for Collection</h2>
+      <p>Dear ${updatedRecord.customerName},</p>
+      <p>Your diamond and its certificate are now ready for collection.</p>
+      <p>Please visit our store to receive your diamond and its certificate.</p>
+      <p>Thank you for your trust in our services.</p>
+      <p>Best regards,</p>
+      <p>Your Company Team</p>
+      `
+    );
+
     res.status(200).json(recordData);
   } catch (error) {
     console.error('Error updating record status:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
+
 const updateRecordStatusToPickedUp = async (req, res) => {
   try {
     const { recordId } = req.params;

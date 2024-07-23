@@ -139,8 +139,8 @@ const ValuationRecordAppraiserDetail = () => {
         <Typography variant="body1">Appointment Date: {new Date(record.appointmentDate).toLocaleDateString()}</Typography>
         <Typography variant="body1">Appointment Time: {record.appointmentTime}</Typography>
         <Typography variant="body1">Service: {record.serviceName || 'Service not found'}</Typography>
-        <Typography variant="body1">Consultant ID: {record.consultantName}</Typography>
-        <Typography variant="body1">Appraiser ID: {record.appraiserName || 'Not assigned yet'}</Typography>
+        <Typography variant="body1">Consultant Name: {record.consultantName}</Typography>
+        <Typography variant="body1">Appraiser Name: {record.appraiserName || 'Not assigned yet'}</Typography>
 
         <form onSubmit={handleSubmit}>
           
