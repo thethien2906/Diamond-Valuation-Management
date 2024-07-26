@@ -66,7 +66,7 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
             customerName: charge.billing_details.name,
             bookingId: charge.metadata.bookingId, // Assuming bookingId is stored in metadata
             paymentMethod: charge.payment_method_details.type,
-            isLiveMode: charge.livemode,
+            paymentStatus: charge.payment_status,
           });
   
           await transaction.save();
@@ -81,7 +81,12 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
           try {
             const bookingId = refund.metadata.bookingId;
             await Booking.findByIdAndUpdate(bookingId, { paymentStatus: 'Refunded' });
-            await Transaction.findOneAndDelete({ bookingId: refund.metadata.bookingId });
+            //find transaction with bookingId and update paymentstatus to refuneded
+            const transaction = await Transaction.findOne({ bookingId: refund.metadata.bookingId });
+            if (transaction) {
+              transaction.paymentStatus = 'Refunded';
+              await transaction.save();
+            }
             console.log(`Payment status updated to refunded for booking ${bookingId}`);
           } catch (error) {
             console.error('Error updating refund status:', error);
@@ -195,6 +200,23 @@ app.use('/api', feedbackRoutes);
 //     }
 // });
 
+
+
+
+
+
+
+
+
+// remove all bookings endpoint
+app.delete('/api/transactions', async (req, res) => {
+  try {
+    await Transaction.deleteMany({});
+    res.status(200).json({ message: 'All bookings deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred while deleting bookings' });
+  }
+})
 
 
 

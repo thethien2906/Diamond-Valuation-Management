@@ -17,7 +17,7 @@ const valuationRecordSchema = new Schema({
   customerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   appraiserId: { type: Schema.Types.ObjectId, ref: 'User' },
   shapeAndCut: { type: String },
-  caratWeight: { type: mongoose.SchemaTypes.Decimal },
+  caratWeight: { type: String },
   clarity: { type: String },
   cutGrade: { type: String },
   colour: { type: String },

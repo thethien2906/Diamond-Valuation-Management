@@ -245,7 +245,6 @@ const ConsultantDashboardLayout = () => {
               <EditOffIcon sx={{ color: '#fff' }} />
             </ListItemIcon>
             <ListItemText primary="Commitment Requests" />
-            <Badge badgeContent={commitmentRequestsCount} color="error" />
           </ListItemButton>
           <ListItemButton component={Link} to="/consultant/seal-status">
             <ListItemIcon>

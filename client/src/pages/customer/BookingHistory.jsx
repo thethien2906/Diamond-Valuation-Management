@@ -11,7 +11,7 @@ import {
   TableHead,
   TableRow,
   CircularProgress,
-  Button,
+  Button
 } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { UserContext } from '../../context/userContext';
@@ -30,7 +30,7 @@ const BookingHistory = () => {
       return;
     }
     try {
-      const response = await axios.get(`/api/bookings/${user._id}`);
+      const response = await axios.get(`/api/bookings-customer/${user._id}`);
       setBookings(response.data);
     } catch (error) {
       console.error('Error fetching bookings:', error);
@@ -44,9 +44,7 @@ const BookingHistory = () => {
     fetchBookings();
   }, [user]);
 
-  const handleViewDetails = (bookingId) => {
-    navigate(`/booking-details/${bookingId}`);
-  };
+ 
 
   if (loading) {
     return (
@@ -61,7 +59,7 @@ const BookingHistory = () => {
       <Box sx={{ p: 3, marginTop: '100px', minHeight: '50vh' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="h4" component="h2" gutterBottom>
-            Booking History
+            Bookings
           </Typography>
         </Box>
         {bookings.length === 0 ? (
@@ -75,31 +73,29 @@ const BookingHistory = () => {
                 <TableRow>
                   <TableCell>Booking ID</TableCell>
                   <TableCell>Service Name</TableCell>
-                  <TableCell>Status</TableCell>
                   <TableCell>Date</TableCell>
                   <TableCell>Time</TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableCell>Status</TableCell>
+                  {/* <TableCell>Actions</TableCell> */}
                 </TableRow>
               </TableHead>
               <TableBody>
                 {bookings.map((booking) => (
-                  <TableRow key={booking.id}>
-                    <TableCell>{booking.id}</TableCell>
-                    <TableCell>{booking.serviceId}</TableCell>
-                    <TableCell>{booking.status}</TableCell>
+                  <TableRow key={booking._id}>
+                    <TableCell>{booking._id}</TableCell>
+                    <TableCell>{booking.serviceId.name}</TableCell>
                     <TableCell>{new Date(booking.date).toLocaleDateString()}</TableCell>
                     <TableCell>{booking.time}</TableCell>
-                    <TableCell>
-                      {(booking.status === 'valuating' || booking.status === 'completed') && (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          onClick={() => handleViewDetails(booking.id)}
-                        >
-                          View Details
-                        </Button>
-                      )}
-                    </TableCell>
+                    <TableCell>{booking.status}</TableCell>
+                    {/* <TableCell>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => handleBookingDetail(booking._id)}
+                      >
+                        View Details
+                      </Button>
+                    </TableCell> */}
                   </TableRow>
                 ))}
               </TableBody>

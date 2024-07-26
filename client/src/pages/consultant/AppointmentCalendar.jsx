@@ -161,7 +161,6 @@ const AppointmentCalendar = () => {
                 <TableCell sx={{ fontWeight: 'bold' }}>Phone</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>Date</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>Time</TableCell>
-                <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
                 <TableCell sx={{ fontWeight: 'bold' }}>Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -175,7 +174,6 @@ const AppointmentCalendar = () => {
                     <TableCell>{booking.phoneNumber}</TableCell>
                     <TableCell>{booking.date}</TableCell>
                     <TableCell>{booking.time}</TableCell>
-                    <TableCell>{booking.status}</TableCell>
                     <TableCell>
                       <IconButton
                         color="black"

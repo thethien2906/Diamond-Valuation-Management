@@ -189,7 +189,7 @@ function App() {
           <Route path="/payment/cancel" element={<Cancel />} />
           <Route path="/blog" element={<BlogListPageCustomer />} />
           <Route path="/blog/:blogId" element={<BlogDetailPageCustomer />} />
-          <Route path="/booking-history" element={<BookingHistory />} />
+           <Route path="/booking-history" element={<BookingHistory />} />
 
       
         </Routes>

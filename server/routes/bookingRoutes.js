@@ -12,5 +12,5 @@ router.get('/approved-appointments', bookingController.getApprovedAppointments);
 router.get('/consultants/:consultantId/appointments', bookingController.getConsultantAppointments);
 router.get('/bookings', bookingController.getAllBookings);
 router.get('/booking-count', bookingController.countPendingBookings);
-router.get('/bookings/:userId', bookingController.getBookingIdByUserId);
+router.get('/bookings-customer/:userId', bookingController.getBookingIdByUserId);
 module.exports = router;

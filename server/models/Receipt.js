@@ -21,8 +21,8 @@ const receiptSchema = new Schema({
     ref: 'Booking',
     required: true,
   },
-  
-  
+  diamondCarat: { type: String, required: true },
+  diamondMeasurements: { type: String, required: true },
 });
 
 const Receipt = mongoose.model('Receipt', receiptSchema);

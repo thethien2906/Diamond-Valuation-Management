@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const generateReceipt = async (req, res) => {
     try {
       const bookingId = req.params.bookingId;
-      
+      const { carat, measurement } = req.body;
       const booking = await Booking.findById(bookingId).populate("consultantId", "name");
   
       if (!booking) {
@@ -24,7 +24,9 @@ const generateReceipt = async (req, res) => {
         consultantId: booking.consultantId._id,
         customerId: booking.customerId,
         serviceId: booking.serviceId,
-        bookingId: booking._id
+        bookingId: booking._id,
+        diamondCarat: carat,
+        diamondMeasurements: measurement
       });
   
       const savedReceipt = await newReceipt.save();

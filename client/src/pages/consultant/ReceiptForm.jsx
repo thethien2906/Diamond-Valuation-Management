@@ -8,6 +8,7 @@ import {
   Paper,
   CircularProgress,
   Grid,
+  TextField,
 } from '@mui/material';
 import { toast } from 'react-hot-toast';
 
@@ -15,6 +16,8 @@ const GenerateReceiptForm = () => {
   const { bookingId } = useParams();
   const [booking, setBooking] = useState(null);
   const [service, setService] = useState(null);
+  const [carat, setCarat] = useState('');
+  const [measurement, setMeasurement] = useState('');
   const [receiptGenerated, setReceiptGenerated] = useState(false); // State to track if receipt has been generated
   const navigate = useNavigate();
 
@@ -42,7 +45,10 @@ const GenerateReceiptForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`/api/generate-receipt/${bookingId}`);
+      const response = await axios.post(`/api/generate-receipt/${bookingId}`, {
+        carat,
+        measurement,
+      });
       toast.success('Receipt generated successfully');
       navigate(`/consultant/receipts/${response.data._id}`);
       setReceiptGenerated(true); // Mark receipt as generated
@@ -87,6 +93,26 @@ const GenerateReceiptForm = () => {
           </Grid>
           <Grid item xs={12} sm={6}>
             <Typography variant="body1">Service: {service.name}</Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Carat"
+              variant="outlined"
+              value={carat}
+              onChange={(e) => setCarat(e.target.value)}
+              sx={{ mb: 2 }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Measurement"
+              variant="outlined"
+              value={measurement}
+              onChange={(e) => setMeasurement(e.target.value)}
+              sx={{ mb: 2 }}
+            />
           </Grid>
         </Grid>
         <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>

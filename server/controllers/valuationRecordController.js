@@ -84,6 +84,8 @@ const createRecord = async (req, res) => {
       customerId: receipt.customerId,
       appraiserId: selectedAppraiser._id,
       status: 'In Progress',
+      caratWeight: receipt.diamondCarat,
+      measurements: receipt.diamondMeasurements,
     });
 
     // Save the new valuation record
@@ -165,11 +167,7 @@ const getRecordById = async (req, res) => {
     if (!record) {
       return res.status(404).json({ error: 'Record not found' });
     }
-    const recordData = record.toObject();
-    if (record.caratWeight !== undefined) {
-      recordData.caratWeight = record.caratWeight.toString();
-    }
-    res.status(200).json(recordData);
+    res.status(200).json(record);
   } catch (error) {
     console.error('Error fetching record:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -296,10 +294,7 @@ const updateRecordStatusToCompleted = async (req, res) => {
       { new: true }
     );
 
-    const recordData = {
-      ...updatedRecord.toObject(),
-      caratWeight: updatedRecord.caratWeight.toString()
-    };
+    
 
     // Send email notification
     await sendEmail(
@@ -319,7 +314,7 @@ const updateRecordStatusToCompleted = async (req, res) => {
       `
     );
 
-    res.status(200).json(recordData);
+    res.status(200).json(updatedRecord);
   } catch (error) {
     console.error('Error updating record status:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -366,9 +361,6 @@ const getNamesByIds = async (req, res) => {
       return res.status(404).json({ error: 'Record not found' });
     }
     const recordData = record.toObject();
-    if (record.caratWeight !== undefined) {
-      recordData.caratWeight = record.caratWeight.toString();
-    }
     
     const { serviceId, consultantId, customerId, appraiserId } = record;
     res.json({

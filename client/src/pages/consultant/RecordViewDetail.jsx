@@ -54,6 +54,23 @@ const RecordViewDetail = () => {
   };
 
   const handleVerify = async () => {
+    if (
+      !record.shapeAndCut ||
+      !record.caratWeight ||
+      !record.clarity ||
+      !record.cutGrade ||
+      !record.measurements ||
+      !record.polish ||
+      !record.symmetry ||
+      !record.fluorescence ||
+      !record.estimatedValue ||
+      !record.valuationMethod ||
+      !record.certificateNumber
+    ) {
+      toast.error('All diamond fields must be fully filled out before verification');
+      return;
+    }
+
     try {
       const response = await axios.put(`/api/valuation-records/${recordId}/complete`);
       setRecord(response.data); // Update the record in the state
@@ -63,8 +80,14 @@ const RecordViewDetail = () => {
       toast.error('Failed to update record status');
     }
   };
+
   const handleComplete = async () => {
     try {
+      //Complete Record need to have exception where the record status need to be Verified
+      if (record.status !== 'Verified') {
+        toast.error('Record status must be Verified before it can be picked up');
+        return;
+      }
       const response = await axios.put(`/api/valuation-records/${recordId}/picked-up`);
       setRecord(response.data); // Update the record in the state
       toast.success('Record status updated to picked up');
@@ -159,9 +182,9 @@ const RecordViewDetail = () => {
         </AccordionDetails>
       </Accordion>
       <Box sx={{ mt: 3 }}>
-          <Button variant="contained" color="info" onClick={handleSeal} sx={{ mr: 2 }}>
-            Seal
-          </Button>
+        <Button variant="contained" color="info" onClick={handleSeal} sx={{ mr: 2 }}>
+          Seal
+        </Button>
         <Button variant="contained" color="success" onClick={handleVerify} sx={{ mr: 2 }}>
           Verify 
         </Button>

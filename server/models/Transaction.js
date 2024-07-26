@@ -13,7 +13,7 @@ const transactionSchema = new Schema({
     ref: 'Booking',
   },
   paymentMethod: { type: String },                     
-  isLiveMode: { type: Boolean, default: false },
+  paymentStatus: { type: String },
 });
 
 module.exports = mongoose.model('Transaction', transactionSchema);
