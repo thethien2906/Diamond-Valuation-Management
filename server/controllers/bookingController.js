@@ -257,6 +257,21 @@ const countPendingBookings = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while counting bookings' });
   }
 };
+
+const getBookingIdByUserId = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const booking = await Booking.findOne({ userId });
+    //if there is no booking then return no booking found but no error
+    if (!booking) {
+      return res.status(404).json({ error: 'Booking not found' });
+    }
+    res.json({ bookingId: booking._id });
+  } catch (error) {
+    console.error('Error finding booking:', error);
+    res.status(500).json({ error: 'Internal server error' });
+}
+}
 module.exports = {
   createBooking,
   getBookingById,
@@ -267,5 +282,6 @@ module.exports = {
   getApprovedAppointments,
   getConsultantAppointments,
   getAllBookings,
-  countPendingBookings
+  countPendingBookings,
+  getBookingIdByUserId
 };

@@ -39,6 +39,7 @@ import RecordTracking from './pages/customer/RecordTracking';
 import CommitRequest from './pages/customer/CommitRequest';
 import BlogListPageCustomer from './pages/customer/BlogListPage';
 import BlogDetailPageCustomer from './pages/customer/BlogDetailPage';
+import BookingHistory from './pages/customer/BookingHistory';
 
 import CommitmentRequests from './pages/consultant/CommitmentRequestView';
 import CommitmentRequestDetail from './pages/consultant/CommitmentRequestViewDetail';
@@ -188,6 +189,8 @@ function App() {
           <Route path="/payment/cancel" element={<Cancel />} />
           <Route path="/blog" element={<BlogListPageCustomer />} />
           <Route path="/blog/:blogId" element={<BlogDetailPageCustomer />} />
+          <Route path="/booking-history" element={<BookingHistory />} />
+
       
         </Routes>
       </ConsultantContextProvider>

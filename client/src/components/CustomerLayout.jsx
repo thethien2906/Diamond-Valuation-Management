@@ -55,6 +55,9 @@ const CustomerLayout = ({ children }) => {
 const handleRecordTracking = () => {
 navigate('/record-tracking');
 }  
+const handleBookingHistory = () => {
+  navigate('/booking-history');
+}
 const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
@@ -133,6 +136,7 @@ const theme = useTheme();
                   {user && (
                     <>
                       <MenuItem onClick={handleRecordTracking}>Record Tracking</MenuItem>
+                      <MenuItem onClick={handleBookingHistory}>Booking History</MenuItem>
                       <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
                     </>
                   )}

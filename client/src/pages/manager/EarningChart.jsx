@@ -214,7 +214,6 @@ export default function EarningChart() {
                   <TableCell>Customer Email</TableCell>
                   <TableCell>Customer Name</TableCell>
                   <TableCell>Payment Method</TableCell>
-                  <TableCell>Is Live Mode</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -229,7 +228,6 @@ export default function EarningChart() {
                       <TableCell>{transaction.customerEmail}</TableCell>
                       <TableCell>{transaction.customerName}</TableCell>
                       <TableCell>{transaction.paymentMethod}</TableCell>
-                      <TableCell>{transaction.isLiveMode ? 'Yes' : 'No'}</TableCell>
                     </TableRow>
                   ))}
               </TableBody>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import {
   Box,
@@ -12,7 +12,8 @@ import {
   Divider
 } from '@mui/material';
 import GuestLayout from '../../components/GuestLayout';
-
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/userContext';
 const ValuationTool = () => {
   const [formData, setFormData] = useState({
     carat: 0.5,
@@ -26,7 +27,8 @@ const ValuationTool = () => {
 
   const [predictedPrice, setPredictedPrice] = useState(null);
   const [errors, setErrors] = useState({});
-
+  const navigate = useNavigate();
+  const { user } = useContext(UserContext);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -54,8 +56,13 @@ const ValuationTool = () => {
     setFormData({ ...formData, clarity: value });
   };
   const handleHistoricalPrice = () => {
-    navigate('/historical-prices');
-  };
+    
+      if (user) {
+        navigate("/historical-prices");
+      } else {
+        navigate("/login");
+      }
+    }
   const validateForm = () => {
     const newErrors = {};
 
