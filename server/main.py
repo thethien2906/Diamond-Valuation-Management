@@ -293,6 +293,13 @@ label_encoders = {
   'fluorescence': joblib.load(os.path.join(models_folder, 'label_encoder_fluorescence.pkl'))
 }
 
+MIN_VALUE = 0.0
+MAX_VALUE = 10.0  
+
+def clamp(value, min_value=MIN_VALUE, max_value=MAX_VALUE):
+    if np.isnan(value) or np.isinf(value):
+        return min_value  # or any default value you prefer for invalid cases
+    return max(min(value, max_value), min_value)
 # Preprocess image
 def preprocess_image(image):
     data_transforms = transforms.Compose([
@@ -314,6 +321,9 @@ def predict(image):
         outputs = model(image)
         _, preds = torch.max(outputs, 1)
         label = label_encoders[feature].inverse_transform(preds.cpu().numpy())[0]
+        # Apply clamping if necessary
+        if isinstance(label, float):
+            label = clamp(label)
         predictions[feature] = label
     return predictions
 

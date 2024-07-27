@@ -40,6 +40,7 @@ import CommitRequest from './pages/customer/CommitRequest';
 import BlogListPageCustomer from './pages/customer/BlogListPage';
 import BlogDetailPageCustomer from './pages/customer/BlogDetailPage';
 import BookingHistory from './pages/customer/BookingHistory';
+import UserProfile from './pages/customer/UserProfile';
 
 import CommitmentRequests from './pages/consultant/CommitmentRequestView';
 import CommitmentRequestDetail from './pages/consultant/CommitmentRequestViewDetail';
@@ -189,7 +190,10 @@ function App() {
           <Route path="/payment/cancel" element={<Cancel />} />
           <Route path="/blog" element={<BlogListPageCustomer />} />
           <Route path="/blog/:blogId" element={<BlogDetailPageCustomer />} />
-           <Route path="/booking-history" element={<BookingHistory />} />
+          <Route path="/booking-history" element={<BookingHistory />} />
+          <Route path="/users/:userId" element={<UserProfile />} />
+          
+
 
       
         </Routes>

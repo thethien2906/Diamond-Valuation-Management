@@ -28,6 +28,8 @@ const userSchema = new Schema({
     verificationToken: String,
     verificationTokenExpiry: Date,
     resetPasswordCode: { type: String, default: null },
+    phoneNumber: { type: String , unique: true},
+    address: String,
 });
 
 const UserModel = mongoose.model('User', userSchema);

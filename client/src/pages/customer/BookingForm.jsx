@@ -36,6 +36,8 @@ const BookingForm = () => {
         ...prevData,
         name: user.name,
         email: user.email,
+        phoneNumber: user.phoneNumber,
+        address: user.address,
       }));
     }
 

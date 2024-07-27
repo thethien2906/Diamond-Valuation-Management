@@ -161,7 +161,7 @@ const RecordView = () => {
             <Table>
               <TableHead sx={{ backgroundColor: '#f5f5f5' }}>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold' }}>Record Number</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold' }}>No</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
                   <TableCell sx={{ fontWeight: 'bold' }}>View</TableCell>
@@ -170,9 +170,10 @@ const RecordView = () => {
               <TableBody>
                 {filteredRecords
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((record) => (
+                  .map((record,index) => (
                     <TableRow key={record._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
-                      <TableCell>{record.recordNumber}</TableCell>
+                    <TableCell>{page * rowsPerPage + index + 1}</TableCell>
+
                       <TableCell>{record.customerName}</TableCell>
                       <TableCell>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>

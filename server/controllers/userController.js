@@ -79,21 +79,41 @@ const getUserById = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+
 const updateUserById = async (req, res) => {
   try {
     const userId = req.params.userId;
-    const updates = req.body;
-    const user = await User.findByIdAndUpdate(userId, updates, { new: true });
+    const { name, email, phoneNumber, address, currentPassword, newPassword } = req.body;
+
+    const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
-    res.json(user);
+
+    // Check if current password matches
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Current password is incorrect' });
+    }
+
+    // Update user information
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.phoneNumber = phoneNumber || user.phoneNumber;
+    user.address = address || user.address;
+
+    // Update password if provided
+    if (newPassword) {
+      user.password = await bcrypt.hash(newPassword, 10);
+    }
+
+    const updatedUser = await user.save();
+    res.json(updatedUser);
   } catch (error) {
     console.error('Error updating user:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-}
-
+};
 module.exports = {
   getUsers,
   createUser,

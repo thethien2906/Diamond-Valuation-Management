@@ -22,12 +22,13 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import axios from 'axios';
 import { UserContext } from '../context/userContext';
-
+import UserProfile from '../pages/customer/UserProfile';
 const CustomerLayout = ({ children }) => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
+
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -57,6 +58,9 @@ navigate('/record-tracking');
 }  
 const handleBookingHistory = () => {
   navigate('/booking-history');
+}
+const handleViewProfile = () => {
+  navigate(`/users/${user._id}`);
 }
 const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
@@ -137,6 +141,7 @@ const theme = useTheme();
                     <>
                       <MenuItem onClick={handleRecordTracking}>Record Tracking</MenuItem>
                       <MenuItem onClick={handleBookingHistory}>Booking History</MenuItem>
+                      <MenuItem onClick={handleViewProfile}>View Profile</MenuItem>
                       <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
                     </>
                   )}

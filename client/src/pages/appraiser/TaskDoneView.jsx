@@ -81,9 +81,9 @@ const TaskView = () => {
           </TableHead>
           <TableBody>
             {Array.isArray(records) && records.length > 0 ? (
-              records.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((record) => (
+              records.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((record, index) => (
                 <TableRow key={record._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell>{record.recordNumber}</TableCell>
+                  <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                   <TableCell>{record.customerName}</TableCell>
                   <TableCell>{record.status}</TableCell>
                   <TableCell>
