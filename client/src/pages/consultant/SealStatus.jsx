@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Button, TablePagination } from '@mui/material';
+import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { UserContext } from '../../context/userContext';
 
@@ -10,6 +10,8 @@ const ConsulatantSealStatus = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [open, setOpen] = useState(false);
+  const [selectedReason, setSelectedReason] = useState('');
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -19,7 +21,6 @@ const ConsulatantSealStatus = () => {
       }
 
       try {
-        // Fetch requests for the consultant's ID
         const response = await axios.get(`/api/seal-requests/${user._id}/status`);
         setRequests(response.data);
       } catch (error) {
@@ -29,7 +30,7 @@ const ConsulatantSealStatus = () => {
         setLoading(false);
       }
     };
-    // Only fetch if user exists
+
     if (user && user._id) {
       fetchRequests();
     }
@@ -53,6 +54,16 @@ const ConsulatantSealStatus = () => {
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const handleOpenDialog = (reason) => {
+    setSelectedReason(reason);
+    setOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpen(false);
+    setSelectedReason('');
   };
 
   if (loading) {
@@ -95,7 +106,11 @@ const ConsulatantSealStatus = () => {
                 <TableRow key={request._id}>
                   <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                   <TableCell>{request.customerName}</TableCell>
-                  <TableCell>{request.reason}</TableCell>
+                  <TableCell>
+                    <Button variant="outlined" onClick={() => handleOpenDialog(request.reason)}>
+                      View Reason
+                    </Button>
+                  </TableCell>
                   <TableCell>{request.status}</TableCell>
                   <TableCell>{new Date(request.createdAt).toLocaleDateString()}</TableCell>
                   <TableCell>
@@ -123,6 +138,18 @@ const ConsulatantSealStatus = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </TableContainer>
+
+      <Dialog open={open} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+        <DialogTitle>Reason</DialogTitle>
+        <DialogContent sx={{ minHeight: '300px' }}>
+          <Typography>{selectedReason}</Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
