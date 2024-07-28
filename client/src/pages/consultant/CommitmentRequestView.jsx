@@ -82,9 +82,9 @@ const CommitmentRequests = () => {
             <TableBody>
               {requests
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((request) => (
+                .map((request, index) => (
                   <TableRow key={request._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
-                    <TableCell>{request.recordId}</TableCell>
+                    <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                     <TableCell>{request.customerName}</TableCell>
                     <TableCell>{request.status}</TableCell>
                     <TableCell>{new Date(request.dateIssued).toLocaleDateString()}</TableCell>

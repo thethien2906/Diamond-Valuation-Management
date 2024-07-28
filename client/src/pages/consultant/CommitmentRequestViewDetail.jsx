@@ -125,7 +125,7 @@ const CommitmentRequestViewDetail = () => {
             </Button>
           ) : commit.status !== 'Rejected' ? (
             <>
-              <Button variant="contained" color="primary" onClick={handleUpdateStatus}>
+              <Button variant="contained" color="primary" onClick={handleUpdateStatus} sx={{ ml: 2 }} disabled={commit.status === 'Pending by Consultant'}>
                 Submit
               </Button>
               <Button
@@ -133,6 +133,8 @@ const CommitmentRequestViewDetail = () => {
                 color="secondary"
                 onClick={handleDenyRequest}
                 sx={{ ml: 2 }}
+                //disable if the commit status is pending by consultant
+                disabled={commit.status === 'Pending by Consultant'}
               >
                 Deny
               </Button>
@@ -141,6 +143,8 @@ const CommitmentRequestViewDetail = () => {
                 color="secondary"
                 onClick={handlePrintReceipt}
                 sx={{ ml: 2 }}
+                //disable if the commit status is pending by customer
+                disabled={commit.status === 'Pending by Customer' || commit.status === 'Pending by Consultant'}
               >
                 Print
               </Button>

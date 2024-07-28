@@ -24,6 +24,8 @@ const createSealRequest = async (req, res) => {
       action: 'Seal Requested by Consultant',
       timestamp: Date.now(),
     });
+    //add sealId to sealId field in record
+    record.sealId = newSeal._id;
     await record.save();
 
     res.status(201).json({ message: 'Seal request created successfully', seal: newSeal });
@@ -154,9 +156,10 @@ const unsealRecord = async (req, res) => {
     // Update the record status
     await ValuationRecord.findByIdAndUpdate(seal.recordId, { status: 'Completed' });
 
-    // Delete the seal
-    await Seal.findByIdAndDelete(sealId);
+    // update seal status to cancelled
+    await Seal.findByIdAndUpdate(sealId, { status: 'Cancelled' });
 
+    
     // add actions to record
     const record = await ValuationRecord.findById(seal.recordId);
     record.actions.push({

@@ -36,6 +36,7 @@ const valuationRecordSchema = new Schema({
   completedAt: { type: Date},
   actions: [actionSchema],
   feedbackId: { type: Schema.Types.ObjectId, ref: 'Feedback' },
+  sealId: { type: Schema.Types.ObjectId, ref: 'Seal' },
 });
 
 const ValuationRecord = mongoose.model('ValuationRecord', valuationRecordSchema);

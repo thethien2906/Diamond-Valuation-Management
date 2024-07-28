@@ -127,21 +127,7 @@ const AppointmentCalendar = () => {
           onChange={handleSearchChange}
           sx={{ mr: 2 }}
         />
-        <FormControl variant="outlined" sx={{ minWidth: 120 }}>
-          <InputLabel>Status</InputLabel>
-          <Select
-            value={statusFilter}
-            onChange={handleStatusFilterChange}
-            label="Status"
-          >
-            <MenuItem value=""><em>All</em></MenuItem>
-            <MenuItem value="pending">Pending</MenuItem>
-            <MenuItem value="approved">Approved</MenuItem>
-            <MenuItem value="rejected">Rejected</MenuItem>
-            <MenuItem value="valuating">Valuating</MenuItem>
-            <MenuItem value="completed">Completed</MenuItem>
-          </Select>
-        </FormControl>
+        
       </Box>
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>

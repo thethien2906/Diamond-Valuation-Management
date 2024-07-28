@@ -10,7 +10,7 @@ const sealSchema = new Schema({
   customerName: { type: String, required: true },
   reason: { type: String, required: true },
   notes: { type: String },
-  status: { type: String, enum: ['Pending', 'Approved', 'Rejected'], default: 'Pending' },
+  status: { type: String, enum: ['Pending', 'Approved', 'Rejected', 'Cancelled'], default: 'Pending' },
   createdAt: { type: Date, default: Date.now },
   consultantId: {
     type: Schema.Types.ObjectId,

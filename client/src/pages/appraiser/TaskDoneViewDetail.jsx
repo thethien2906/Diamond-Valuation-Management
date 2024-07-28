@@ -216,6 +216,16 @@ const TaskDoneViewDetail = () => {
                   sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
                 />
               </Box>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="body1" sx={{ width: '150px' }}>Estimated Value:</Typography>
+                <TextField
+                  name="certificateNumber"
+                  value={record.estimatedValue || ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  sx={{ flexGrow: 1, textAlign: 'right', '& .MuiInput-underline:before': { borderBottom: '1px dotted gray' }, '& .MuiInput-underline:after': { borderBottom: '1px dotted gray' }, input: { textAlign: 'right' } }}
+                />
+              </Box>
             </Box>
           </form>
         </Paper>

@@ -31,13 +31,27 @@ const RecordViewDetail = () => {
         // Fetch the receipt data
         const receiptResponse = await axios.get(`/api/receipts/${response.data.receiptId}`);
         
+        
+        //check if there is sealId in the record
+        if (response.data.sealId) {
+          const sealResponse = await axios.get(`/api/seal-requests/${response.data.sealId}`);
+          setRecord({
+            ...response.data,
+          serviceName: serviceResponse.data.name,
+          appraiserName: appraiserResponse.data.name,
+          consultantName: consultantResponse.data.name,
+          receiptIssuedAt: receiptResponse.data.issueDate,
+          sealStatus: sealResponse.data.status
+          });
+        } else {
         setRecord({
           ...response.data,
           serviceName: serviceResponse.data.name,
           appraiserName: appraiserResponse.data.name,
           consultantName: consultantResponse.data.name,
           receiptIssuedAt: receiptResponse.data.issueDate
-        });
+        })}
+
       } catch (error) {
         console.error('Error fetching valuation record data:', error);
         toast.error('Failed to fetch valuation record data');
@@ -83,9 +97,9 @@ const RecordViewDetail = () => {
 
   const handleComplete = async () => {
     try {
-      //Complete Record need to have exception where the record status need to be Verified
-      if (record.status !== 'Verified') {
-        toast.error('Record status must be Verified before it can be picked up');
+      // Complete Record needs to have exception where the record status needs to be Verified
+      if (record.status !== 'Completed') {
+        toast.error('Record status must be verified before it can be annouced to customer');
         return;
       }
       const response = await axios.put(`/api/valuation-records/${recordId}/picked-up`);
@@ -182,16 +196,41 @@ const RecordViewDetail = () => {
         </AccordionDetails>
       </Accordion>
       <Box sx={{ mt: 3 }}>
-        <Button variant="contained" color="info" onClick={handleSeal} sx={{ mr: 2 }}>
+        <Button 
+          variant="contained" 
+          color="info" 
+          onClick={handleSeal} 
+          sx={{ mr: 2 }}
+          disabled={record.status !== 'Completed' || record.sealStatus === 'Pending'}  // Disable if status is not Completed
+        >
           Seal
         </Button>
-        <Button variant="contained" color="success" onClick={handleVerify} sx={{ mr: 2 }}>
+        <Button 
+          variant="contained" 
+          color="success" 
+          onClick={handleVerify} 
+          sx={{ mr: 2 }}
+          // disable if status is Picked Up and Sealed
+          disabled={record.status === 'Picked Up' || record.status === 'Sealed' || record.sealStatus !== 'Cancelled'}
+        >
           Verify 
         </Button>
-        <Button variant="contained" color="primary" onClick={handleFeedback} sx={{ mr: 2 }}>
+        <Button 
+          variant="contained" 
+          color="primary" 
+          onClick={handleFeedback} 
+          sx={{ mr: 2 }}
+          disabled={record.status !== 'Valuated'}  // Disable if status is not Valuated
+        >
           Give Feedback
         </Button>
-        <Button variant="contained" color="secondary" onClick={handleComplete} >
+        <Button 
+          variant="contained" 
+          color="secondary" 
+          onClick={handleComplete}
+          //disable if status is Completed
+          disabled={record.status === 'Picked Up' || record.status === 'Sealed' || record.sealStatus !== 'Cancelled'}
+        >
           Complete Record
         </Button>
       </Box>

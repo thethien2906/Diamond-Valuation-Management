@@ -84,7 +84,7 @@ const ReceiptDetail = () => {
             <Typography variant="body1">Consultant Name: {receipt.consultant}</Typography>
             <Typography variant="body1">Service: {service.name}</Typography>
             <Typography variant="body1">Carat: {receipt.diamondCarat}</Typography>
-            <Typography variant="body1">Rate: {receipt.diamondMeasurements}</Typography>
+            <Typography variant="body1">Measurements: {receipt.diamondMeasurements}</Typography>
           </Box>
         </Paper>
       </div>
