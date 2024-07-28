@@ -3,6 +3,7 @@ import axios from 'axios';
 import { UserContext } from '../../context/userContext';
 import { Container, Box, TextField, Button, Typography, Grid } from '@mui/material';
 import CustomerLayout from '../../components/CustomerLayout';
+
 const UserProfile = () => {
   const { user, setUser } = useContext(UserContext);
   const [formData, setFormData] = useState({
@@ -51,100 +52,103 @@ const UserProfile = () => {
 
   return (
     <CustomerLayout>
-    <Container maxWidth="sm">
-      <Box
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        minHeight="100vh"
-      >
-        <Typography variant="h4" gutterBottom>
-          Edit Profile
-        </Typography>
-        <form onSubmit={handleSubmit} style={{ width: '100%' }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Name"
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-              />
+      <Container maxWidth="lg">
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          minHeight="100vh"
+        >
+          <Typography variant="h4" gutterBottom>
+            Edit Profile
+          </Typography>
+          <form onSubmit={handleSubmit} style={{ width: '100%' }}>
+            <Typography variant="h6" gutterBottom color="textSecondary">
+              Profile
+            </Typography>
+            <Grid container spacing={2}sx={{marginTop: '10px' }}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Email"
+                  name="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={8}>
+                <TextField
+                  fullWidth
+                  label="Address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  fullWidth
+                  label="Phone Number"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
+            <Typography variant="h6" gutterBottom color="textSecondary" sx={{ marginTop: '50px' }}>
+              Change Password
+            </Typography>
+            <Grid container spacing={2} sx={{ marginTop: '10px' }}>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  fullWidth
+                  label="Current Password"
+                  name="currentPassword"
+                  type="password"
+                  value={formData.currentPassword}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  fullWidth
+                  label="New Password"
+                  name="newPassword"
+                  type="password"
+                  value={formData.newPassword}
+                  onChange={handleChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={4}>
+                <TextField
+                  fullWidth
+                  label="Confirm New Password"
+                  name="confirmNewPassword"
+                  type="password"
+                  value={formData.confirmNewPassword}
+                  onChange={handleChange}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Phone Number"
-                name="phoneNumber"
-                value={formData.phoneNumber}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Current Password"
-                name="currentPassword"
-                type="password"
-                value={formData.currentPassword}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="New Password"
-                name="newPassword"
-                type="password"
-                value={formData.newPassword}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Confirm New Password"
-                name="confirmNewPassword"
-                type="password"
-                value={formData.confirmNewPassword}
-                onChange={handleChange}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                fullWidth
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
+            <Box display="flex" justifyContent="flex-end" sx={{ marginTop: '20px' }}>
+              <Button variant="contained" color="primary" type="submit">
                 Update Profile
               </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </Box>
-    </Container>
+            </Box>
+          </form>
+        </Box>
+      </Container>
     </CustomerLayout>
   );
 };
