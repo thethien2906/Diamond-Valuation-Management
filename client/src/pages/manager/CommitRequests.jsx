@@ -66,7 +66,7 @@ const ManagerCommitRequests = () => {
         <Table>
           <TableHead sx={{ backgroundColor: '#212529' }}>
             <TableRow>
-              <TableCell sx={{ color: 'white' }}>Record ID</TableCell>
+              <TableCell sx={{ color: 'white' }}>No</TableCell>
               <TableCell sx={{ color: 'white' }}>Customer Name</TableCell>
               <TableCell sx={{ color: 'white' }}>Status</TableCell>
               <TableCell sx={{ color: 'white' }}>Date Issued</TableCell>
@@ -76,7 +76,7 @@ const ManagerCommitRequests = () => {
           <TableBody>
             {requests.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((request) => (
               <TableRow key={request._id}>
-                <TableCell>{request.recordId}</TableCell>
+                <TableCell>{page * rowsPerPage + requests.indexOf(request) + 1}</TableCell>
                 <TableCell>{request.customerName}</TableCell>
                 <TableCell>{request.status}</TableCell>
                 <TableCell>{new Date(request.dateIssued).toLocaleDateString()}</TableCell>

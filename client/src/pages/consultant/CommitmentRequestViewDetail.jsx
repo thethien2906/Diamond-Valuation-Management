@@ -94,9 +94,7 @@ const CommitmentRequestViewDetail = () => {
       </Typography>
       <Paper sx={{ p: 3, mt: 2, boxShadow: 3, borderRadius: 2, maxWidth: 600, mx: 'auto' }}>
         <Grid container spacing={2} textAlign={'center'}>
-          <Grid item xs={12}>
-            <Typography variant="body1">Record ID: {commit.recordId}</Typography>
-          </Grid>
+          
           <Grid item xs={12}>
             <Typography variant="body1">Customer Name: {commit.customerName}</Typography>
           </Grid>

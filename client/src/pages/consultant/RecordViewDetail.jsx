@@ -201,7 +201,7 @@ const RecordViewDetail = () => {
           color="info" 
           onClick={handleSeal} 
           sx={{ mr: 2 }}
-          disabled={record.status !== 'Completed' || record.sealStatus == 'Pending'}  // Disable if status is not Completed
+          disabled={record.status == 'Valuated' || record.status == 'Sealed' || record.status == 'Picked Up' || record.status == 'In Progress' }  // Disable if status is not Completed
         >
           Seal
         </Button>

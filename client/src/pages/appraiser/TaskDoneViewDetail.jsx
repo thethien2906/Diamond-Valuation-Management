@@ -219,7 +219,7 @@ const TaskDoneViewDetail = () => {
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <Typography variant="body1" sx={{ width: '150px' }}>Estimated Value:</Typography>
                 <TextField
-                  name="certificateNumber"
+                  name="estimatedValue"
                   value={record.estimatedValue || ''}
                   onChange={handleChange}
                   variant="standard"
@@ -241,7 +241,7 @@ const TaskDoneViewDetail = () => {
       )}
       <Box sx={{ mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
         <Button variant="contained" color="primary" onClick={handlePrint} sx={{ mr: 2 }}>
-          Print Receipt
+          Print Certificate
         </Button>
         <Button
           variant="contained"

@@ -310,7 +310,7 @@ const updateRecordStatusToCompleted = async (req, res) => {
       <p>Please visit our store to receive your diamond and its certificate.</p>
       <p>Thank you for your trust in our services.</p>
       <p>Best regards,</p>
-      <p>Your Company Team</p>
+      <p>DiamondScope</p>
       `
     );
 

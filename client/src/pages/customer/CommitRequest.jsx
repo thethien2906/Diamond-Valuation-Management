@@ -72,7 +72,6 @@ const CommitRequest = () => {
         Request Commitment Statement
       </Typography>
       <Paper sx={{ p: 3, mt: 2 }}>
-        <Typography variant="body1">Record Id: {recordId}</Typography>
         <Typography variant="body1">Name: {formData.customerName}</Typography>
         <Typography variant="body1">Phone Number: {formData.phoneNumber}</Typography>
         <Typography variant="body1">Email: {formData.email}</Typography>

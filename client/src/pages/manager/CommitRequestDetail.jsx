@@ -59,7 +59,6 @@ const ManagerCommitRequestDetail = () => {
         <Typography variant="h4" component="h2" gutterBottom align="center">
           Commitment Request Detail
         </Typography>
-        <Typography variant="body1" textAlign="center">Record Id: {commitRequest.recordId}</Typography>
         <Typography variant="body1" textAlign="center">Customer Name: {commitRequest.customerName}</Typography>
         <Typography variant="body1" textAlign="center">Phone Number: {commitRequest.phoneNumber}</Typography>
         <Typography variant="body1" textAlign="center">Email: {commitRequest.email}</Typography>
