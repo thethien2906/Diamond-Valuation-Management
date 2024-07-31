@@ -21,9 +21,9 @@ const ViewRequestDetail = () => {
     const fetchBookingDetails = async () => {
       try {
         const response = await axios.get(`/api/bookings/${bookingId}`);
-        const serviceResposne = await axios.get(`/api/services/${response.data.serviceId}`);
+        const serviceResponse = await axios.get(`/api/services/${response.data.serviceId}`);
 
-        setBookingDetails({ ...response.data, service: serviceResposne.data.name });
+        setBookingDetails({ ...response.data, service: serviceResponse.data.name });
         
       } catch (error) { 
         console.error("Error fetching booking details:", error);
@@ -63,14 +63,14 @@ const ViewRequestDetail = () => {
         Booking Details
       </Typography>
       {bookingDetails ? (
-        <Paper sx={{ p: 3, mt: 2, minWidth: 500,textAlign:'center' }}>
-          <Typography variant="h6">Name: {bookingDetails.name}</Typography>
-          <Typography variant="body1">Email: {bookingDetails.email}</Typography>
-          <Typography variant="body1">Phone Number: {bookingDetails.phoneNumber}</Typography>
-          <Typography variant="body1">Service Name: {bookingDetails.service}</Typography>
-          <Typography variant="body1">Address: {bookingDetails.address}</Typography>
-          <Typography variant="body1">Date: {bookingDetails.date}</Typography>
-          <Typography variant="body1">Time: {bookingDetails.time}</Typography>
+        <Paper sx={{ p: 3, mt: 2, minWidth: 500, maxWidth: 600 }}>
+          <Typography variant="h6" sx={{ textAlign: 'left',marginLeft:'120px' }}>Name: {bookingDetails.name}</Typography>
+          <Typography variant="body1" sx={{ textAlign: 'left',marginLeft:'120px' }}>Email: {bookingDetails.email}</Typography>
+          <Typography variant="body1" sx={{ textAlign: 'left',marginLeft:'120px' }}>Phone Number: {bookingDetails.phoneNumber}</Typography>
+          <Typography variant="body1" sx={{ textAlign: 'left',marginLeft:'120px' }}>Service Name: {bookingDetails.service}</Typography>
+          <Typography variant="body1" sx={{ textAlign: 'left',marginLeft:'120px' }}>Address: {bookingDetails.address}</Typography>
+          <Typography variant="body1" sx={{ textAlign: 'left',marginLeft:'120px' }}>Date: {bookingDetails.date}</Typography>
+          <Typography variant="body1" sx={{ textAlign: 'left',marginLeft:'120px' }}>Time: {bookingDetails.time}</Typography>
           <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center' }}>
             <Button
               variant="contained"
