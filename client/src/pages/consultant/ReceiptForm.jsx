@@ -19,6 +19,7 @@ const GenerateReceiptForm = () => {
   const [carat, setCarat] = useState('');
   const [measurement, setMeasurement] = useState('');
   const [receiptGenerated, setReceiptGenerated] = useState(false); // State to track if receipt has been generated
+  const [errors, setErrors] = useState({ carat: false, measurement: false }); // Error state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -42,19 +43,42 @@ const GenerateReceiptForm = () => {
     fetchBookingData();
   }, [bookingId]);
 
+  const validateMeasurement = (measurement) => {
+    // Regex to match numberxnumberxnumber format
+    const measurementRegex = /^\d+x\d+x\d+$/;
+    return measurementRegex.test(measurement);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post(`/api/generate-receipt/${bookingId}`, {
-        carat,
-        measurement,
-      });
-      toast.success('Receipt generated successfully');
-      navigate(`/consultant/receipts/${response.data._id}`);
-      setReceiptGenerated(true); // Mark receipt as generated
-    } catch (error) {
-      console.error('Error generating receipt:', error);
-      toast.error('Failed to generate receipt');
+
+    let valid = true;
+    let errors = { carat: false, measurement: false };
+
+    if (!carat) {
+      errors.carat = true;
+      valid = false;
+    }
+    if (!measurement || !validateMeasurement(measurement)) {
+      errors.measurement = true;
+      valid = false;
+    }
+
+    setErrors(errors);
+
+    if (valid) {
+      try {
+        const response = await axios.post(`/api/generate-receipt/${bookingId}`, {
+          carat,
+          measurement,
+        });
+        toast.success('Receipt generated successfully');
+        navigate(`/consultant/receipts/${response.data._id}`);
+        setReceiptGenerated(true); // Mark receipt as generated
+      } catch (error) {
+        console.error('Error generating receipt:', error);
+        toast.error('Failed to generate receipt');
+      }
     }
   };
 
@@ -67,7 +91,7 @@ const GenerateReceiptForm = () => {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
       <Typography variant="h4" component="h2" gutterBottom>
         Generate Receipt
       </Typography>
@@ -102,16 +126,22 @@ const GenerateReceiptForm = () => {
               value={carat}
               onChange={(e) => setCarat(e.target.value)}
               sx={{ mb: 2 }}
+              required
+              error={errors.carat}
+              helperText={errors.carat ? "Please input Carat" : ""}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label="Measurement"
+              label="Measurement (e.g., 3x4x5)"
               variant="outlined"
               value={measurement}
               onChange={(e) => setMeasurement(e.target.value)}
               sx={{ mb: 2 }}
+              required
+              error={errors.measurement}
+              helperText={errors.measurement ? "Please input Measurement in format numberxnumberxnumber" : ""}
             />
           </Grid>
         </Grid>

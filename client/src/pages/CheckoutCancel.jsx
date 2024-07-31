@@ -25,7 +25,7 @@ const Cancel = () => {
   }, [location.search]);
 
   const handleGoBack = () => {
-    navigate('/dashboard');
+    navigate('/');
   };
 
   return (
@@ -37,7 +37,7 @@ const Cancel = () => {
         Your payment was cancelled. If you have any questions, please contact us.
       </Typography>
       <Button variant="contained" color="primary" onClick={handleGoBack}>
-        Go to Dashboard
+        Go back Home
       </Button>
     </Container>
   );

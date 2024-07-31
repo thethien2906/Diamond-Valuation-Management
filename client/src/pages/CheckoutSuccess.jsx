@@ -6,7 +6,7 @@ const Success = () => {
   const navigate = useNavigate();
 
   const handleGoBack = () => {
-    navigate('/about-us-customer');
+    navigate('/');
   };
 
   return (
@@ -18,7 +18,7 @@ const Success = () => {
         Thank you for your booking. Your payment has been processed successfully.
       </Typography>
       <Button variant="contained" color="primary" onClick={handleGoBack}>
-        Go to Dashboard
+        Go back Home
       </Button>
     </Container>
   );

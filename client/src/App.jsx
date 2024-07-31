@@ -4,7 +4,6 @@ import { Routes, Route } from 'react-router-dom';
 import Success from './pages/CheckoutSuccess';
 import Cancel from './pages/CheckoutCancel';
 
-import Home from './pages/guest/Home';
 import Register from './pages/Register';
 import Login from './pages/Login';
 import Verify from './pages/MailVerify';
@@ -25,12 +24,8 @@ import ViewUsers from './pages/admin/ViewUsers';
 import ViewStaffs from './pages/admin/ViewStaffs';
 import AddingForm from './pages/admin/AddingForm';
 
-import AboutUsGuest from './pages/guest/AboutUsGuest';
-import ConsultingServicesGuest from './pages/guest/ConsultingServicesGuest';
-import ValuationTool from './pages/guest/ValuationTool';
 import ValuationToolCus from './pages/customer/ValuationToolCus';
-import BlogListPage from './pages/guest/BlogListPage';
-import BlogDetailPage from './pages/guest/BlogDetailPage';
+
 
 import BookingForm from './pages/customer/BookingForm';
 import AboutUsCustomer from './pages/customer/AboutUsCustomer';
@@ -73,14 +68,11 @@ import ManagerSealingRequests from './pages/manager/SealRequest';
 import ManagerSealRequestDetail from './pages/manager/SealRequestDetail';
 import ManagerServices from './pages/manager/ServiceManage';
 import BlogCRUD from './pages/manager/BlogManage';
-import BlogListPageGuest from './pages/guest/BlogListPage';
-import BlogDetailPageGuest from './pages/guest/BlogDetailPage';
 import RecordMonitoring from './pages/manager/RecordMonitoring';
 import RecordDetails from './pages/manager/RecordDetails';
 
 
 
-import Protected from './ProtectedRoute';
 import EarningChart from './pages/manager/EarningChart';
 import HomeCus from './pages/customer/HomeCus';
 import ViewStaffEdit from './pages/admin/ViewStaffEdit';
@@ -106,8 +98,7 @@ function App() {
         <Toaster position="bottom-right" toastOptions={{ duration: 2000 }} />
         <Routes>
           
-          <Route path="/" element={<Home />} />
-          <Route path="/home" element={<HomeCus />} />
+          <Route path="/" element={<HomeCus />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/verify/:token" element={<Verify />} />
@@ -165,14 +156,6 @@ function App() {
           <Route path="records" element={<RecordMonitoring />} />
           <Route path="records/:recordId" element={<RecordDetails />} />
           </Route>
-
-          <Route path="/about-us-guest" element={<AboutUsGuest />} />
-          <Route path="/consulting-services-guest" element={<ConsultingServicesGuest />} />
-          <Route path="/valuation-tool" element={<ValuationTool />} />
-          <Route path="/blogs" element={<BlogListPageGuest />} />
-          <Route path="/blogs/:blogId" element={<BlogDetailPageGuest />} />
-
-
 
           <Route path="/historical-prices/:shape" element={<HistoricalPricesGraph />} />
           <Route path="/historical-prices" element={<GraphLayout />} />
