@@ -96,7 +96,7 @@ const CustomerLayout = ({ children }) => {
 
           {isMdUp && (
             <div style={{ flex: '2', display: 'flex', justifyContent: 'center', gap: '50px' }}>
-              <MenuItem component={Link} to="/Home" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+              <MenuItem component={Link} to="/" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
                 <Typography sx={{ fontSize: '14px' }}>
                   HOME
                 </Typography>
@@ -194,7 +194,7 @@ const CustomerLayout = ({ children }) => {
               {user && (
                 <ListItemText primary={user.name} sx={{ textAlign: 'center' }} />
               )}
-              <ListItemButton component={Link} to="/Home" onClick={toggleDrawer}>
+              <ListItemButton component={Link} to="/" onClick={toggleDrawer}>
                 <ListItemText primary="HOME" />
               </ListItemButton>
               <ListItemButton component={Link} to="/about-us-customer" onClick={toggleDrawer}>
