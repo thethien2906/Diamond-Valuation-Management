@@ -114,6 +114,30 @@ const updateUserById = async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 };
+const updateStaffById = async (req, res) => {
+  const { name, email, password, role } = req.body;
+
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    // Update fields
+    if (name) user.name = name;
+    if (email) user.email = email;
+    if (password) user.password = await bcrypt.hash(password, 10); // Hash the new password
+    if (role) user.role = role;
+
+    await user.save();
+
+    res.send('User updated successfully');
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+};
+
 module.exports = {
   getUsers,
   createUser,
@@ -121,5 +145,6 @@ module.exports = {
   getAvailableConsultant,
   getAvailableAppraiser,
   getUserById,
-  updateUserById
+  updateUserById,
+  updateStaffById
 };

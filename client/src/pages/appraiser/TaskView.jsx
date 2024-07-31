@@ -42,7 +42,7 @@ const TaskView = () => {
         }
       } catch (error) {
         console.error('Error fetching records:', error);
-        toast.error('Failed to fetch records');
+        
       } finally {
         setLoading(false);
       }

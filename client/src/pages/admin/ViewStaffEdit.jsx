@@ -7,12 +7,14 @@ import {
   Button,
   Typography,
   Paper,
-  Box
+  Box,
+  MenuItem
 } from '@mui/material';
 
 const ViewStaffEdit = () => {
   const { staffId } = useParams();
-  const [staff, setStaff] = useState({ name: '', email: '' });
+  const [staff, setStaff] = useState({ name: '', email: '', password: '', role: '' });
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,9 +34,17 @@ const ViewStaffEdit = () => {
     setStaff({ ...staff, [e.target.name]: e.target.value });
   };
 
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
+
   const handleSave = async () => {
     try {
-      await axios.put(`/api/users/${staffId}`, staff);
+      const updateData = { ...staff };
+      if (password) {
+        updateData.password = password;
+      }
+      await axios.put(`/api/staffs/${staffId}`, updateData);
       navigate('/admin/staff');
     } catch (error) {
       console.error('Error updating staff data:', error);
@@ -66,6 +76,28 @@ const ViewStaffEdit = () => {
           value={staff.email}
           onChange={handleChange}
         />
+        <TextField
+          label="Password"
+          variant="outlined"
+          type="password"
+          name="password"
+          value={password}
+          onChange={handlePasswordChange}
+        />
+        <TextField
+          label="Role"
+          variant="outlined"
+          select
+          name="role"
+          value={staff.role}
+          onChange={handleChange}
+        >
+          {['consultant', 'appraiser', 'manager'].map((role) => (
+            <MenuItem key={role} value={role}>
+              {role}
+            </MenuItem>
+          ))}
+        </TextField>
         <Button variant="contained" color="primary" onClick={handleSave}>
           Save
         </Button>

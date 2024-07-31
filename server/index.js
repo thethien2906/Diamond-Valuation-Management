@@ -66,7 +66,8 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), async (request
             customerName: charge.billing_details.name,
             bookingId: charge.metadata.bookingId, // Assuming bookingId is stored in metadata
             paymentMethod: charge.payment_method_details.type,
-            paymentStatus: charge.payment_status,
+            paymentStatus: 'Paid',
+
           });
   
           await transaction.save();

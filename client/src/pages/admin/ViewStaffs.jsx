@@ -18,7 +18,10 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Button
+  Button,
+  TextField,
+  TablePagination,
+  Box,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -28,6 +31,9 @@ const ViewStaff = () => {
   const [staff, setStaff] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedStaffId, setSelectedStaffId] = useState(null);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -73,19 +79,57 @@ const ViewStaff = () => {
     navigate(`/admin/edit/${staffId}`);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+    setPage(0);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const filteredStaff = staff.filter((staffMember) => {
+    return staffMember.name.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h4" component="h2" sx={{ mb: 4 }}>
         Staff List
       </Typography>
-      <Fab
-        color="primary"
-        aria-label="add"
-        onClick={handleAddUser}
-        sx={{ mb: 2 }}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 2,
+          flexDirection: 'column',
+          width: '100%',
+          maxWidth: '500px'
+        }}
       >
-        <AddIcon />
-      </Fab>
+        <TextField
+          label="Search by Name"
+          variant="outlined"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          fullWidth
+          sx={{ mb: 2 }}
+        />
+        <Fab
+          color="primary"
+          aria-label="add"
+          onClick={handleAddUser}
+          sx={{ mb: 2, alignSelf: 'flex-start' }}
+        >
+          <AddIcon />
+        </Fab>
+      </Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead sx={{ bgcolor:"#212529" }}>
@@ -97,31 +141,42 @@ const ViewStaff = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {staff.map(staffMember => (
-              <TableRow key={staffMember._id}>
-                <TableCell>{staffMember.name}</TableCell>
-                <TableCell>{staffMember.email}</TableCell>
-                <TableCell>{staffMember.role}</TableCell>
-                <TableCell>
-                  <IconButton
-                    color="primary"
-                    onClick={() => handleEditUser(staffMember._id)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  {staffMember.role !== 'admin' && (
+            {filteredStaff
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map(staffMember => (
+                <TableRow key={staffMember._id}>
+                  <TableCell>{staffMember.name}</TableCell>
+                  <TableCell>{staffMember.email}</TableCell>
+                  <TableCell>{staffMember.role}</TableCell>
+                  <TableCell>
                     <IconButton
-                      color="secondary"
-                      onClick={() => handleOpen(staffMember._id)}
+                      color="primary"
+                      onClick={() => handleEditUser(staffMember._id)}
                     >
-                      <DeleteIcon />
+                      <EditIcon />
                     </IconButton>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+                    {staffMember.role !== 'admin' && (
+                      <IconButton
+                        color="secondary"
+                        onClick={() => handleOpen(staffMember._id)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
+        <TablePagination
+          rowsPerPageOptions={[6, 12, 24]}
+          component="div"
+          count={filteredStaff.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
       </TableContainer>
       
       <Dialog

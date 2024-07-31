@@ -211,7 +211,7 @@ const RecordViewDetail = () => {
           onClick={handleVerify} 
           sx={{ mr: 2 }}
           // disable if status is Picked Up and Sealed
-          disabled={record.status == 'Picked Up' || record.status == 'Sealed' || record.sealStatus !== 'Cancelled'}
+          disabled={record.status == 'Picked Up' || record.status == 'Sealed' || record.status == 'Completed' ||  record.status == 'In Progress' || record.sealStatus == 'Approved' || record.sealStatus == 'Rejected'}
         >
           Verify 
         </Button>
@@ -229,7 +229,7 @@ const RecordViewDetail = () => {
           color="secondary" 
           onClick={handleComplete}
           //disable if status is Completed
-          disabled={record.status == 'Picked Up' || record.status == 'Sealed' || record.sealStatus !== 'Cancelled'}
+          disabled={record.status == 'Picked Up' || record.status == 'Sealed' || record.status == 'In Progress' || record.status == 'Valuated'  || record.sealStatus == 'Approved' || record.sealStatus == 'Rejected' || record.sealStatus == 'Pending'}
         >
           Complete Record
         </Button>

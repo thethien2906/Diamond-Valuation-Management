@@ -8,4 +8,5 @@ router.get('/consultants/available', userController.getAvailableConsultant);
 router.get('/appraiser/available', userController.getAvailableAppraiser);
 router.get('/users/:userId', userController.getUserById);
 router.put('/users/:userId', userController.updateUserById);
+router.put('/staffs/:id', userController.updateStaffById);
 module.exports = router;

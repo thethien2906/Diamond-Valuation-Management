@@ -75,7 +75,6 @@ const ValuationRecordAppraiserDetail = () => {
       setRecord({
         ...record,
         shapeAndCut: prediction.shape,
-        caratWeight: prediction.carat, // Update if you have a carat model
         clarity: prediction.clarity,
         colour: prediction.color,
         cutGrade: prediction.cut,
@@ -156,7 +155,6 @@ const ValuationRecordAppraiserDetail = () => {
             label="Carat Weight"
             name="caratWeight"
             value={record.caratWeight || ''}
-            onChange={handleChange}
             fullWidth
             margin="normal"
           />
@@ -165,7 +163,6 @@ const ValuationRecordAppraiserDetail = () => {
             label="Measurements"
             name="measurements"
             value={record.measurements || ''}
-            onChange={handleChange}
             fullWidth
             margin="normal"
           />

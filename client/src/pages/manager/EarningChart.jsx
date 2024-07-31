@@ -28,8 +28,7 @@ import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import SearchIcon from '@mui/icons-material/Search';
 
 const valueFormatter = (value) => {
-  const formattedValue = value.toFixed(2);
-  return `$${formattedValue.padStart(6, '0')}`;
+  return `$${(value/100).toFixed(2)}`;
 };
 
 const RightAlignedBox = styled(Box)(({ theme }) => ({
@@ -165,7 +164,7 @@ export default function EarningChart() {
               <Paper elevation={3} sx={{ p: 2, display: 'flex', alignItems: 'center', borderRadius: 16, backgroundColor: '#f0f0f0' }}>
                 <MonetizationOnIcon sx={{ mr: 1 }} />
                 <Typography variant="body1">
-                  Total Payments for the Year: ${totalPayments.toFixed(2).padStart(6, '0')}
+                  Total Payments for the Year: {valueFormatter(totalPayments)}
                 </Typography>
               </Paper>
             </Grid>
@@ -210,7 +209,7 @@ export default function EarningChart() {
                   <TableCell>Created</TableCell>
                   <TableCell>Time</TableCell>
                   <TableCell>Amount</TableCell>
-                  <TableCell>Currency</TableCell>
+                  <TableCell>Payment Status</TableCell>
                   <TableCell>Customer Email</TableCell>
                   <TableCell>Customer Name</TableCell>
                   <TableCell>Payment Method</TableCell>
@@ -224,7 +223,7 @@ export default function EarningChart() {
                       <TableCell>{formatDate(transaction.created)}</TableCell>
                       <TableCell>{formatTime(transaction.created)}</TableCell>
                       <TableCell>{valueFormatter(transaction.amount)}</TableCell>
-                      <TableCell>{transaction.currency}</TableCell>
+                      <TableCell>{transaction.paymentStatus}</TableCell>
                       <TableCell>{transaction.customerEmail}</TableCell>
                       <TableCell>{transaction.customerName}</TableCell>
                       <TableCell>{transaction.paymentMethod}</TableCell>
