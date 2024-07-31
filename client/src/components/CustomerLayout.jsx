@@ -251,9 +251,8 @@ const CustomerLayout = ({ children }) => {
                 <Typography variant="h5" sx={{ marginBottom: '10px' }}>
                   Contact Information
                 </Typography>
-                <Typography>Email: example@example.com</Typography>
-                <Typography>Phone: (123) 456-7890</Typography>
-                <Typography>Address: 123 Street, City, Country</Typography>
+                <Typography>Email: thethien@gmail.com</Typography>
+                <Typography>Phone: (123) 343256-17890</Typography>
               </div>
             </Grid>
           </Grid>
