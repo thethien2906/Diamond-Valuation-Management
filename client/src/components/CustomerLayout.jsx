@@ -17,18 +17,15 @@ import {
   Box,
   Menu,
 } from '@mui/material';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import MenuIcon from '@mui/icons-material/Menu';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import axios from 'axios';
 import { UserContext } from '../context/userContext';
-import UserProfile from '../pages/customer/UserProfile';
+
 const CustomerLayout = ({ children }) => {
   const navigate = useNavigate();
   const { user, setUser } = useContext(UserContext);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
-
 
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
@@ -53,16 +50,28 @@ const CustomerLayout = ({ children }) => {
       // Handle logout errors here if needed
     }
   };
-const handleRecordTracking = () => {
-navigate('/record-tracking');
-}  
-const handleBookingHistory = () => {
-  navigate('/booking-history');
-}
-const handleViewProfile = () => {
-  navigate(`/users/${user._id}`);
-}
-const theme = useTheme();
+
+  const handleRecordTracking = () => {
+    navigate('/record-tracking');
+  };
+
+  const handleBookingHistory = () => {
+    navigate('/booking-history');
+  };
+
+  const handleViewProfile = () => {
+    navigate(`/users/${user._id}`);
+  };
+
+  const handleValuationTool = () => {
+    if (user) {
+      navigate('/valuation');
+    } else {
+      navigate('/login');
+    }
+  };
+
+  const theme = useTheme();
   const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
   return (
@@ -102,7 +111,7 @@ const theme = useTheme();
                   CONSULTING SERVICE
                 </Typography>
               </MenuItem>
-              <MenuItem component={Link} to="/Valuation" sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}>
+              <MenuItem sx={{ padding: '12px 12px', color: 'white', textDecoration: 'none', cursor: 'pointer' }} onClick={handleValuationTool}>
                 <Typography sx={{ fontSize: '14px' }}>
                   VALUATION TOOL
                 </Typography>
@@ -116,86 +125,97 @@ const theme = useTheme();
           )}
 
           <div style={{ flex: '1', display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '20px', marginRight: '50px' }}>
-            {isMdUp ? (
+            {user ? (
               <>
-                <Typography variant="h6" sx={{ fontSize: '14px', color: 'white', cursor: 'pointer' }} onClick={handleMenu}>
-                  {user.name}
-                </Typography>
-                <Menu
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                  }}
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                  sx={{ marginTop: '40px' }}
-                >
-                  {user && (
-                    <>
-                      <MenuItem onClick={handleRecordTracking}>Record Tracking</MenuItem>
-                      <MenuItem onClick={handleBookingHistory}>Booking History</MenuItem>
-                      <MenuItem onClick={handleViewProfile}>View Profile</MenuItem>
-                      <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
-                    </>
-                  )}
-                </Menu>
+                {isMdUp ? (
+                  <>
+                    <Typography variant="h6" sx={{ fontSize: '14px', color: 'white', cursor: 'pointer' }} onClick={handleMenu}>
+                      {user.name}
+                    </Typography>
+                    <Menu
+                      id="menu-appbar"
+                      anchorEl={anchorEl}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      keepMounted
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                      sx={{ marginTop: '40px' }}
+                    >
+                      {user && (
+                        <>
+                          <MenuItem onClick={handleRecordTracking}>Record Tracking</MenuItem>
+                          <MenuItem onClick={handleBookingHistory}>Booking History</MenuItem>
+                          <MenuItem onClick={handleViewProfile}>View Profile</MenuItem>
+                          <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
+                        </>
+                      )}
+                    </Menu>
+                  </>
+                ) : (
+                  <IconButton
+                    edge="end"
+                    aria-label="menu"
+                    onClick={toggleDrawer}
+                    sx={{ color: 'white' }}
+                  >
+                    <MenuIcon />
+                  </IconButton>
+                )}
               </>
             ) : (
-              <IconButton
-                edge="end"
-                aria-label="menu"
-                onClick={toggleDrawer}
-                sx={{ color: 'white' }}
-
+              <Typography
+                component={Link}
+                to="/login"
+                sx={{ fontSize: '14px', color: 'white', textDecoration: 'none', cursor: 'pointer' }}
               >
-                <MenuIcon />
-              </IconButton>
+                Login
+              </Typography>
             )}
           </div>
         </Toolbar>
       </AppBar>
 
-    {!isMdUp && (
-  <Drawer
-    anchor="right"
-    open={drawerOpen}
-    onClose={toggleDrawer}
-    sx={{ '& .MuiDrawer-paper': { width: '250px' } }}
-  >
-    <div onClick={toggleDrawer} onKeyDown={toggleDrawer}>
-      <List sx={{marginTop:'100px'}}>
-        {user && (
-            <ListItemText primary={user.name} sx={{textAlign:'center'}}/>
+      {!isMdUp && (
+        <Drawer
+          anchor="right"
+          open={drawerOpen}
+          onClose={toggleDrawer}
+          sx={{ '& .MuiDrawer-paper': { width: '250px' } }}
+        >
+          <div onClick={toggleDrawer} onKeyDown={toggleDrawer}>
+            <List sx={{ marginTop: '100px' }}>
+              {user && (
+                <ListItemText primary={user.name} sx={{ textAlign: 'center' }} />
+              )}
+              <ListItemButton component={Link} to="/Home" onClick={toggleDrawer}>
+                <ListItemText primary="HOME" />
+              </ListItemButton>
+              <ListItemButton component={Link} to="/about-us-customer" onClick={toggleDrawer}>
+                <ListItemText primary="ABOUT US" />
+              </ListItemButton>
+              <ListItemButton component={Link} to="/consulting-services-customer" onClick={toggleDrawer}>
+                <ListItemText primary="CONSULTING SERVICE" />
+              </ListItemButton>
+              <ListItemButton onClick={handleValuationTool}>
+                <ListItemText primary="VALUATION TOOL" />
+              </ListItemButton>
+              <ListItemButton component={Link} to="/blog" onClick={toggleDrawer}>
+                <ListItemText primary="BLOGS" />
+              </ListItemButton>
+            </List>
+          </div>
+        </Drawer>
+      )}
 
-        )}
-        <ListItemButton component={Link} to="/Home" onClick={toggleDrawer}>
-          <ListItemText primary="HOME" />
-        </ListItemButton>
-        <ListItemButton component={Link} to="/about-us-customer" onClick={toggleDrawer}>
-          <ListItemText primary="ABOUT US" />
-        </ListItemButton>
-        <ListItemButton component={Link} to="/consulting-services-customer" onClick={toggleDrawer}>
-          <ListItemText primary="CONSULTING SERVICE" />
-        </ListItemButton>
-        <ListItemButton component={Link} to="/valuation-tool" onClick={toggleDrawer}>
-          <ListItemText primary="VALUATION TOOL" />
-        </ListItemButton>
-        <ListItemButton component={Link} to="/blog" onClick={toggleDrawer}>
-          <ListItemText primary="BLOGS" />
-        </ListItemButton>
-        
-      </List>
-    </div>
-  </Drawer>
-)}
-        {children}
+      {children}
+
       <footer style={{ backgroundColor: '#021732', color: 'white', padding: '20px 0' }}>
         <Container maxWidth="lg">
           <Grid container spacing={4}>
@@ -220,27 +240,23 @@ const theme = useTheme();
                   <ListItemButton component={Link} to="/about-us-customer" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
                     <ListItemText primary="Why choose Us" />
                   </ListItemButton>
-                  <ListItemButton component={Link} to="/consulting-services-customer" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
-                    <ListItemText primary="Service" />
+                  <ListItemButton component={Link} to="/about-us-customer" sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+                    <ListItemText primary="Contact Us" />
                   </ListItemButton>
                 </List>
               </div>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Typography variant="h5" sx={{ marginBottom: '10px' }}>
-                Contact Us
-              </Typography>
-              <Typography variant="body2">
-                Hotline: +64 (073) 432-190
-              </Typography>
-              <Typography variant="body2">
-                Email: TheThien1234@gmail.com
-              </Typography>
+              <div>
+                <Typography variant="h5" sx={{ marginBottom: '10px' }}>
+                  Contact Information
+                </Typography>
+                <Typography>Email: example@example.com</Typography>
+                <Typography>Phone: (123) 456-7890</Typography>
+                <Typography>Address: 123 Street, City, Country</Typography>
+              </div>
             </Grid>
           </Grid>
-          <Typography variant="body2" align="center" gutterBottom sx={{ marginTop: '20px' }}>
-            © 2024 Diamond Appraisals. All rights reserved.
-          </Typography>
         </Container>
       </footer>
     </div>

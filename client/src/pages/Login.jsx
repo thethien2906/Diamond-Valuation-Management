@@ -87,7 +87,7 @@ export default function SignInSide() {
         navigate("/manager/dashboard");
         break;
       default:
-        navigate("/Home");
+        navigate("/");
     }
   };
 
