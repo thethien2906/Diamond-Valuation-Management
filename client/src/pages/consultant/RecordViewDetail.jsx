@@ -201,7 +201,7 @@ const RecordViewDetail = () => {
           color="info" 
           onClick={handleSeal} 
           sx={{ mr: 2 }}
-          disabled={record.status !== 'Completed' || record.sealStatus === 'Pending'}  // Disable if status is not Completed
+          disabled={record.status !== 'Completed' || record.sealStatus == 'Pending'}  // Disable if status is not Completed
         >
           Seal
         </Button>
@@ -211,7 +211,7 @@ const RecordViewDetail = () => {
           onClick={handleVerify} 
           sx={{ mr: 2 }}
           // disable if status is Picked Up and Sealed
-          disabled={record.status === 'Picked Up' || record.status === 'Sealed' || record.sealStatus !== 'Cancelled'}
+          disabled={record.status == 'Picked Up' || record.status == 'Sealed' || record.sealStatus !== 'Cancelled'}
         >
           Verify 
         </Button>
@@ -229,7 +229,7 @@ const RecordViewDetail = () => {
           color="secondary" 
           onClick={handleComplete}
           //disable if status is Completed
-          disabled={record.status === 'Picked Up' || record.status === 'Sealed' || record.sealStatus !== 'Cancelled'}
+          disabled={record.status == 'Picked Up' || record.status == 'Sealed' || record.sealStatus !== 'Cancelled'}
         >
           Complete Record
         </Button>
