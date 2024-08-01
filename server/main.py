@@ -188,7 +188,7 @@ num_classes = 1
 mlp_model = Net(input_size, num_classes)
 mlp_model.load_state_dict(torch.load(os.path.join(models_folder, 'diamond_price_prediction_model.pth')))
 mlp_model.eval()
-
+SCALE = 10
 @app.post("/predict-price/")
 def predict(features: DiamondFeatures):
     # Convert input data to DataFrame
@@ -221,7 +221,7 @@ def predict(features: DiamondFeatures):
     # Make prediction
     with torch.no_grad():
         prediction = mlp_model(input_tensor)
-        predicted_price = prediction.item() / 10
+        predicted_price = prediction.item() / SCALE
     
     return {"predicted_price": predicted_price}
 

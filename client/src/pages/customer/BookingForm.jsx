@@ -88,7 +88,7 @@ const BookingForm = () => {
         serviceId,
       });
 
-      if (response.status === 201) {
+      if (response.status == 201) {
         toast.success("Booking created successfully!");
 
         const stripe = await stripePromise;

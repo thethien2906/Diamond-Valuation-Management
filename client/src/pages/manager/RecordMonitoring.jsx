@@ -70,13 +70,13 @@ const RecordMonitoring = () => {
   const getStatusColor = (status) => {
     if (status === 'Completed') {
       return 'green';
-    } else if (status === 'In Progress') {
+    } else if (status == 'In Progress') {
       return 'red';
-    } else if (status === 'Valuated') {
+    } else if (status == 'Valuated') {
       return 'yellow';
-    } else if (status === 'Sealed') {
+    } else if (status == 'Sealed') {
       return 'purple';
-    } else if (status === 'Completed') {
+    } else if (status == 'Completed') {
       return 'blue';
     } else {
       return 'gray';

@@ -18,7 +18,8 @@ const createBooking = async (req, res) => {
       consultants.map(async (consultant) => {
         const pendingBookingsCount = await Booking.countDocuments({
           consultantId: consultant._id,
-          status: "pending"
+          status: "pending",
+          paymentStatus: "Paid"
         });
         return {
           consultant,

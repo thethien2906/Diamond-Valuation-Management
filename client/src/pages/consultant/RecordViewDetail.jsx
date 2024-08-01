@@ -201,12 +201,12 @@ const RecordViewDetail = () => {
           onClick={handleSeal}
           sx={{ mr: 2 }}
           disabled={
-            record.status === 'Valuated' ||
-            record.status === 'Sealed' ||
-            record.status === 'Picked Up' ||
-            record.status === 'In Progress' ||
-            (record.sealId && record.sealStatus === 'Approved') ||
-            (record.sealId && record.sealStatus === 'Pending')
+            record.status == 'Valuated' ||
+            record.status == 'Sealed' ||
+            record.status == 'Picked Up' ||
+            record.status == 'In Progress' ||
+            (record.sealId && record.sealStatus == 'Approved') ||
+            (record.sealId && record.sealStatus == 'Pending')
           }
         >
           Seal
@@ -217,13 +217,13 @@ const RecordViewDetail = () => {
           onClick={handleVerify}
           sx={{ mr: 2 }}
           disabled={
-            record.status === 'Picked Up' ||
-            record.status === 'Sealed' ||
-            record.status === 'Completed' ||
-            record.status === 'In Progress' ||
-            (record.sealId && record.sealStatus === 'Approved') ||
-            (record.sealId && record.sealStatus === 'Rejected') ||
-            (record.sealId && record.sealStatus === 'Pending')
+            record.status == 'Picked Up' ||
+            record.status == 'Sealed' ||
+            record.status == 'Completed' ||
+            record.status == 'In Progress' ||
+            (record.sealId && record.sealStatus == 'Approved') ||
+            (record.sealId && record.sealStatus == 'Rejected') ||
+            (record.sealId && record.sealStatus == 'Pending')
           }
         >
           Verify
@@ -243,9 +243,9 @@ const RecordViewDetail = () => {
           onClick={handleComplete}
           sx={{ mr: 2 }}
           disabled={
-            record.status === 'Picked Up' ||
-            record.status === 'In Progress' ||
-            record.status === 'Valuated' ||
+            record.status == 'Picked Up' ||
+            record.status == 'In Progress' ||
+            record.status == 'Valuated' ||
             record.sealId && record.sealStatus !== 'Cancelled'
           }
         >
