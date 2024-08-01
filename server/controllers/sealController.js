@@ -167,7 +167,7 @@ const unsealRecord = async (req, res) => {
       timestamp: Date.now(),
     });
     await record.save();
-    res.json({ message: 'Record unsealed and seal deleted' });
+    res.json({ message: 'Record unsealed' });
   } catch (error) {
     console.error('Error unsealing record:', error);
     res.status(500).json({ message: 'Failed to unseal record' });

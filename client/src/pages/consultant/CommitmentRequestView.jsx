@@ -1,6 +1,20 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, IconButton, TablePagination } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  CircularProgress,
+  IconButton,
+  TablePagination,
+  TextField
+} from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
@@ -11,6 +25,7 @@ const CommitmentRequests = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(6);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
 
@@ -22,7 +37,7 @@ const CommitmentRequests = () => {
       }
 
       try {
-        const response = await axios.get(`/api/commit-requests/${user._id}`); 
+        const response = await axios.get(`/api/commit-requests/${user._id}`);
         setRequests(response.data);
       } catch (error) {
         console.error('Error fetching commitment requests:', error);
@@ -50,6 +65,15 @@ const CommitmentRequests = () => {
     setPage(0);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+    setPage(0);
+  };
+
+  const filteredRequests = requests.filter((request) =>
+    request.customerName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
@@ -63,7 +87,26 @@ const CommitmentRequests = () => {
       <Typography variant="h6" component="h2" gutterBottom>
         Commitment Requests
       </Typography>
-      {requests.length === 0 ? (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          mb: 2,
+          flexDirection: 'column',
+          maxWidth: '300px'
+        }}
+      >
+        <TextField
+          label="Search by Customer Name"
+          variant="outlined"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          fullWidth
+          sx={{ mb: 2 }}
+        />
+      </Box>
+      {filteredRequests.length === 0 ? (
         <Typography variant="h6" align="center">
           There are no commitment requests.
         </Typography>
@@ -80,7 +123,7 @@ const CommitmentRequests = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {requests
+              {filteredRequests
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((request, index) => (
                   <TableRow key={request._id} sx={{ '&:nth-of-type(odd)': { backgroundColor: '#f9f9f9' } }}>
@@ -103,7 +146,7 @@ const CommitmentRequests = () => {
           <TablePagination
             rowsPerPageOptions={[6, 12, 24]}
             component="div"
-            count={requests.length}
+            count={filteredRequests.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

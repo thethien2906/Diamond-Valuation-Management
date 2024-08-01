@@ -1,6 +1,25 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
-import { Box, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, CircularProgress, Button, TablePagination, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  CircularProgress,
+  Button,
+  TablePagination,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  MenuItem
+} from '@mui/material';
 import { toast } from 'react-hot-toast';
 import { UserContext } from '../../context/userContext';
 
@@ -12,6 +31,8 @@ const ConsulatantSealStatus = () => {
   const [rowsPerPage, setRowsPerPage] = useState(6);
   const [open, setOpen] = useState(false);
   const [selectedReason, setSelectedReason] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('');
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -56,6 +77,16 @@ const ConsulatantSealStatus = () => {
     setPage(0);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+    setPage(0);
+  };
+
+  const handleStatusFilterChange = (event) => {
+    setStatusFilter(event.target.value);
+    setPage(0);
+  };
+
   const handleOpenDialog = (reason) => {
     setSelectedReason(reason);
     setOpen(true);
@@ -65,6 +96,11 @@ const ConsulatantSealStatus = () => {
     setOpen(false);
     setSelectedReason('');
   };
+
+  const filteredRequests = requests.filter((request) =>
+    request.customerName.toLowerCase().includes(searchQuery.toLowerCase()) &&
+    (statusFilter === '' || request.status === statusFilter)
+  );
 
   if (loading) {
     return (
@@ -87,6 +123,29 @@ const ConsulatantSealStatus = () => {
       <Typography variant="h4" component="h2" gutterBottom>
         My Sealed Records
       </Typography>
+      <Box sx={{ mb: 2, display: 'flex', justifyContent: 'space-between' }}>
+        <TextField
+          label="Search by Customer Name"
+          variant="outlined"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          sx={{ mr: 2 }}
+        />
+        <TextField
+          label="Filter by Status"
+          variant="outlined"
+          select
+          value={statusFilter}
+          onChange={handleStatusFilterChange}
+          sx={{ minWidth: 200 }}
+        >
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="Approved">Approved</MenuItem>
+          <MenuItem value="Rejected">Rejected</MenuItem>
+          <MenuItem value="Pending">Pending</MenuItem>
+          <MenuItem value="Cancelled">Cancelled</MenuItem>
+        </TextField>
+      </Box>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -100,7 +159,7 @@ const ConsulatantSealStatus = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {requests
+            {filteredRequests
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((request, index) => (
                 <TableRow key={request._id}>
@@ -131,7 +190,7 @@ const ConsulatantSealStatus = () => {
         <TablePagination
           rowsPerPageOptions={[6, 12, 24]}
           component="div"
-          count={requests.length}
+          count={filteredRequests.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
