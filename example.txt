@@ -13,3 +13,5 @@ post-push 3rd
 post-update
 
 post-push 4th
+
+post-commit
