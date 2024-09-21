@@ -15,3 +15,5 @@ post-update
 post-push 4th
 
 post-commit
+
+pre-push 2nd
