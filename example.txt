@@ -1,3 +1,5 @@
 git hooks
 
 post-receive
+
+post-push
