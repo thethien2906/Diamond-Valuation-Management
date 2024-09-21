@@ -6,4 +6,12 @@ post-push
 
 post-push 2nd
 
+<<<<<<< HEAD
 pre-push 
+=======
+pre-push 
+
+post-push 3rd
+
+post-update
+>>>>>>> 7904de0b (post-update)
