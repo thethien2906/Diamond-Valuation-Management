@@ -1,1 +1,22 @@
 git hooks
+
+post-receive
+
+post-push
+
+post-push 2nd
+
+pre-push 
+
+post-push 3rd
+
+post-update
+
+post-push 4th
+
+post-commit
+
+pre-push 2nd
+
+pre-receive
+
