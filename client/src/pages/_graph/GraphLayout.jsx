@@ -24,7 +24,7 @@ const GraphLayout = () => {
         <ArrowBackIcon />
       </IconButton>
       <Typography variant="h4" gutterBottom sx={{ textAlign: 'center', mb: 4 }}>
-        Diamond Historical Prices
+        Diamond Shapes Historical Prices hehe
       </Typography>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'center' }}>
         {shapes.map((shape) => (
