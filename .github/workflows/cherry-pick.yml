@@ -1,0 +1,33 @@
+name: Cherry-pick from bug-fix to dev
+
+on:
+  push:
+    branches:
+      - bug-fix
+
+jobs:
+  cherry-pick:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Fetch all branches
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "thethien2906"
+          git config --global user.email "thethien2906@example.com"
+
+      - name: Fetch dev branch
+        run: git fetch origin dev
+
+      - name: Checkout dev branch
+        run: git checkout dev
+
+      - name: Cherry-pick bug-fix commit
+        run: git cherry-pick ${{ github.sha }}
+
+      - name: Push changes to dev
+        run: git push origin dev
