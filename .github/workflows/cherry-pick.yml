@@ -18,7 +18,7 @@ jobs:
       - name: Setup Git
         run: |
           git config --global user.name "thethien2906"
-          git config --global user.email "thethien2906@example.com"
+          git config --global user.email "thethien2906@gmail.com"
 
       - name: Fetch dev branch
         run: git fetch origin dev
