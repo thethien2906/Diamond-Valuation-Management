@@ -29,5 +29,15 @@ jobs:
       - name: Cherry-pick bug-fix commit
         run: git cherry-pick ${{ github.sha }}
 
+      - name: Resolve merge conflicts automatically
+        if: failure()  # Only runs if cherry-pick fails
+        run: |
+          git add .
+          git cherry-pick --continue
+
       - name: Push changes to dev
-        run: git push origin dev
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}  # Use the PAT here
+        run: |
+          git remote set-url origin https://thethien2906:${{ secrets.GH_PAT }}@github.com/thethien2906/Diamond-Valuation-Management.git
+          git push origin dev
